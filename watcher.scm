@@ -2,80 +2,77 @@
   #:use-module (system foreign)
   #:use-module (rnrs bytevectors)
   #:use-module (ice-9 threads)
-  #:use-module (g-golf)
+  #:use-module (ice-9 atomic)
   #:export (start-file-watcher))
 
-;; --- Constantes ------------------------------------------------------
-
+;; inotify: só nos interessa o evento de escrita concluída
 (define IN_CLOSE_WRITE #x00000008)
 
-;; Tamanho mínimo garantido para um evento inotify:
-;; sizeof(inotify_event) = 16 bytes + NAME_MAX (255) + 1 = 272 bytes
-(define %inotify-buf-size 272)
+;; Threshold de debounce em segundos (0.2s)
+(define DEBOUNCE-THRESHOLD 0.2)
 
-;; Debounce: aguarda 300ms após o último evento antes de disparar on-change
-(define %debounce-ms 300)
+;; Retorna o tempo atual como número real em segundos (POSIX monotônico via gettimeofday)
+(define (current-time-seconds)
+  (let ((tv (gettimeofday)))
+    (+ (car tv) (/ (cdr tv) 1e6))))
 
-;; --- FFI: resolvidos uma vez no carregamento do módulo ---------------
+(define (start-file-watcher filename on-change)
+  (let* ((libc         (dynamic-link))
+         (inotify-init (pointer->procedure int
+                         (dynamic-func "inotify_init" libc) '()))
+         (inotify-add  (pointer->procedure int
+                         (dynamic-func "inotify_add_watch" libc)
+                         (list int '* uint32)))
+         (close-fd     (pointer->procedure int
+                         (dynamic-func "close" libc)
+                         (list int)))
+         (read-c       (pointer->procedure ssize_t
+                         (dynamic-func "read" libc)
+                         (list int '* size_t)))
+         (fd           (inotify-init)))
 
-(define %libc          (dynamic-link))
-
-(define %inotify-init
-  (pointer->procedure int
-    (dynamic-func "inotify_init" %libc) '()))
-
-(define %inotify-add-watch
-  (pointer->procedure int
-    (dynamic-func "inotify_add_watch" %libc)
-    (list int '* uint32)))
-
-(define %close
-  (pointer->procedure int
-    (dynamic-func "close" %libc)
-    (list int)))
-
-(define %read
-  (pointer->procedure ssize_t
-    (dynamic-func "read" %libc)
-    (list int '* size_t)))
-
-;; --- Implementação ---------------------------------------------------
-
-(define (start-file-watcher filepath on-change)
-  (let ((fd (%inotify-init)))
     (if (< fd 0)
         (begin
           (format (current-error-port)
-                  "ERRO: Falha ao iniciar inotify para ~a\n" filepath)
+                  "ERRO: Falha ao iniciar inotify para ~a\n" filename)
+          ;; Retorna um stop! inerte
           (lambda () #f))
-        (begin
-          (%inotify-add-watch fd (string->pointer filepath) IN_CLOSE_WRITE)
 
-          (let ((buf       (make-bytevector %inotify-buf-size))
-                (timer-id  #f)
-                (mu        (make-mutex)))
+        (begin
+          (inotify-add fd (string->pointer filename) IN_CLOSE_WRITE)
+
+          ;; Flag atômica: a thread de leitura checa antes de cada iteração.
+          ;; stop! seta #t e fecha o fd, fazendo read-c retornar <= 0.
+          (let* ((cancelled? (make-atomic-box #f))
+                 (buffer     (make-bytevector 1024))
+                 ;; Último instante em que on-change foi disparado
+                 (last-fired (make-atomic-box 0.0)))
 
             (make-thread
               (lambda ()
                 (let loop ()
-                  (let ((n (%read fd (bytevector->pointer buf) %inotify-buf-size)))
-                    (cond
-                      ((<= n 0)
-                       (format (current-error-port)
-                               "INFO: Watcher encerrado para ~a\n" filepath))
-                      (else
-                       (with-mutex mu
-                         ;; Cancela timer pendente e agenda novo — debounce
-                         (when timer-id
-                           (g-source-remove timer-id)
-                           (set! timer-id #f))
-                         (set! timer-id
-                               (g-timeout-add %debounce-ms
-                                 (lambda ()
-                                   (with-mutex mu (set! timer-id #f))
-                                   (on-change)
-                                   #f))))  ;; #f = não repetir
-                       (loop)))))))
+                  ;; Sai imediatamente se já foi cancelado antes do próximo read
+                  (unless (atomic-box-ref cancelled?)
+                    (let ((n (read-c fd (bytevector->pointer buffer) 1024)))
+                      (cond
+                        ;; fd fechado ou erro — encerra silenciosamente
+                        ((<= n 0)
+                         (unless (atomic-box-ref cancelled?)
+                           (format (current-error-port)
+                                   "AVISO: Watcher encerrado inesperadamente para ~a\n"
+                                   filename)))
+                        (else
+                         ;; Debounce por timestamp: só dispara se passou o threshold
+                         ;; desde o último disparo. Sem nenhum sleep aqui.
+                         (let* ((now   (current-time-seconds))
+                                (last  (atomic-box-ref last-fired))
+                                (delta (- now last)))
+                           (when (> delta DEBOUNCE-THRESHOLD)
+                             (atomic-box-set! last-fired now)
+                             (on-change)))
+                         (loop))))))))
 
+            ;; stop! — seguro chamar múltiplas vezes
             (lambda ()
-              (%close fd)))))))
+              (atomic-box-set! cancelled? #t)
+              (close-fd fd)))))))
