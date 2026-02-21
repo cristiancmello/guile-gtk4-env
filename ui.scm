@@ -1,3 +1,7 @@
+(use-modules 
+  (ice-9 popen)
+  (ice-9 rdelim))
+             
 (define (build-ui win)
   ;; --- 1. ESTILIZAÇÃO CSS ---
   (let ((provider (make <gtk-css-provider>))
@@ -21,18 +25,17 @@
           margin: 15px 15px 5px 20px;
        }")
     (gtk-style-context-add-provider-for-display display provider 600))
-
   ;; --- 2. ESTRUTURA DOS WIDGETS ---
-  (let* ((main-box (make <gtk-box> #:orientation 'vertical))
+  (let* ((main-box    (make <gtk-box> #:orientation 'vertical))
          (label-title (make <gtk-label> #:label "MONITOR DE AMBIENTE GRÁFICO"))
-         (scrolled (make <gtk-scrolled-window> #:min-content-height 400 #:vexpand #t))
-         (text-view (make <gtk-text-view> #:editable #f #:cursor-visible #f))
-         (buffer (slot-ref text-view 'buffer)))
-    
+         (scrolled    (make <gtk-scrolled-window> #:min-content-height 400 #:vexpand #t))
+         (text-view   (make <gtk-text-view> #:editable #f #:cursor-visible #f))
+         (buffer      (slot-ref text-view 'buffer)))
+
     (gtk-widget-add-css-class label-title "header-label")
-    (gtk-widget-add-css-class text-view "log-text")
-    (gtk-widget-add-css-class scrolled "scrolled-frame")
-    
+    (gtk-widget-add-css-class text-view   "log-text")
+    (gtk-widget-add-css-class scrolled    "scrolled-frame")
+
     (set-child win main-box)
     (append main-box label-title)
     (set-child scrolled text-view)
@@ -47,7 +50,8 @@
     (define (exec cmd)
       (catch #t
         (lambda ()
-          (let* ((port (open-input-pipe (string-append cmd " 2>/dev/null")))
+          (let* ((port (open-input-pipe
+                         (string-append "/bin/sh -c \"" cmd " 2>/dev/null\"")))
                  (line (read-line port)))
             (close-pipe port)
             (if (or (eof-object? line) (string=? line "")) "N/A" line)))
@@ -55,30 +59,25 @@
 
     ;; --- 4. EXECUÇÃO DO DIAGNÓSTICO ---
     (log-info "=== VERIFICAÇÃO DE DISPLAY SERVER ===")
-    
-    ;; Detectando Wayland vs X11
-    (let ((session (or (getenv "XDG_SESSION_TYPE") "Não detectado")))
+
+    (let* ((session (or (getenv "XDG_SESSION_TYPE") "Não detectado"))
+           (backend (cond
+                      ((string-contains (string-downcase session) "wayland") "Wayland Backend")
+                      ((string-contains (string-downcase session) "x11")     "X11/Xorg Backend")
+                      (else "Desconhecido"))))
       (log-info (string-append "Sessão atual: " (string-upcase session)))
-      
-      ;; Detalhe extra: Backend do GDK (o que o GTK está usando de fato)
-      (let ((backend (cond 
-                       ((string-contains (string-downcase session) "wayland") "Wayland Backend")
-                       ((string-contains (string-downcase session) "x11") "X11/Xorg Backend")
-                       (else "Desconhecido"))))
-        (log-info (string-append "Backend GTK: " backend))
-        ))
+      (log-info (string-append "Backend GTK: "  backend)))
 
     (log-info "--------------------------------")
-    (log-info (string-append "Kernel: " (exec "uname -r")))
+    (log-info (string-append "Kernel: "   (exec "uname -r")))
     (log-info (string-append "Hostname: " (exec "hostname")))
-    
-    ;; Tenta identificar a GPU
-    (let ((gpu (exec "lspci | grep -i vga | cut -d ':' -f3")))
-      (if (string=? gpu "N/A")
-          (log-info "GPU: Hardware info via lspci indisponível")
-          (log-info (string-append "GPU: " (string-trim-both gpu)))))
+
+    (let ((gpu (exec "/usr/bin/lspci | grep -i vga | cut -d ':' -f3")))
+      (log-info (string-append "GPU: "
+                               (if (string=? gpu "N/A")
+                                   "Hardware info via lspci indisponível"
+                                   (string-trim-both gpu)))))
 
     (log-info "--------------------------------")
     (log-info "Fim do relatório.")
-
     (present win)))

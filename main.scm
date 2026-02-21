@@ -1,30 +1,18 @@
 (use-modules (g-golf)
-             (oop goops)
-             (ice-9 popen)
-             (ice-9 rdelim)
              (watcher))
 
 ;; 1. Configuração do GTK4
 (g-irepository-require "Gtk" #:version "4.0")
 
 ;; Importação das classes essenciais
-(for-each (lambda (name) (gi-import-by-name "Gtk" name))
-          '("Application" 
-            "ApplicationWindow" 
-            "Box" 
-            "Label" 
-            "ScrolledWindow" 
-            "TextView" 
-            "TextBuffer" 
-            "TextIter" 
-            "ProgressBar"
-            "CssProvider" 
-            "StyleContext"))
+(gi-import "Gtk")
+(gi-import "Gdk")
+(gi-import "Gio")
 
 ;; 2. Estado Global
 (define *win* #f)
 
-;; Carrega o arquivo UI (que agora não deve ter referências a gi-struct-new)
+;; Carrega o arquivo UI
 (primitive-load "ui.scm")
 
 (define (reload-ui-action)
