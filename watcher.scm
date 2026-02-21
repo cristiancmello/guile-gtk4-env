@@ -1,60 +1,38 @@
-(use-modules (g-golf)
-             (oop goops)
-             (ice-9 threads)
-             (system foreign)
-             (rnrs bytevectors))
+(define-module (watcher)
+  #:use-module (system foreign)  ;; <--- Adicione isso para habilitar pointer->procedure
+  #:use-module (ice-9 binary-ports)
+  #:use-module (rnrs bytevectors)
+  #:use-module (ice-9 threads)
+  #:export (start-file-watcher))
 
-;; Globais protegidas
-(define *win* #f)
-(define *app* #f)
-
-;; Inicialização do GTK
-(g-irepository-require "Gtk" #:version "4.0")
-(for-each (lambda (name) (gi-import-by-name "Gtk" name))
-          '("Application" "ApplicationWindow" "Button" "Box" "Label"))
-
-;; Carrega a UI inicial (certifique-se que o arquivo ui.scm existe)
-(load "ui.scm")
-
-(define (reload-ui)
-  (g-idle-add (lambda ()
-                (if (and *win* (is-a? *win* <gtk-application-window>))
-                    (catch #t
-                      (lambda ()
-                        (set-child *win* #f)
-                        (load "ui.scm")
-                        (build-ui *win*)
-                        (display "=> UI Atualizada!\n"))
-                      (lambda (k . a) 
-                        (format #t "Erro no ui.scm: ~a ~s\n" k a)))
-                    (display "Aguardando janela...\n"))
-                #f)))
-
-(define (start-inotify)
+(define (start-file-watcher filename on-change)
   (let* ((libc (dynamic-link))
+         ;; Importando funções da libc para usar o inotify
          (init (pointer->procedure int (dynamic-func "inotify_init" libc) '()))
          (add (pointer->procedure int (dynamic-func "inotify_add_watch" libc) (list int '* uint32)))
          (read-c (pointer->procedure ssize_t (dynamic-func "read" libc) (list int '* size_t)))
          (fd (init))
          (buffer (make-bytevector 1024)))
+    
+    ;; Função interna para re-adicionar o watch caso o editor substitua o arquivo
+    (define (add-watch)
+      (add fd (string->pointer filename) 8)) ;; 8 = IN_CLOSE_WRITE
+
     (if (< fd 0)
-        (display "Falha ao iniciar inotify\n")
+        (display "Erro: Falha ao iniciar inotify no kernel.\n")
         (begin
-          (add fd (string->pointer "ui.scm") 8) ;; 8 = IN_CLOSE_WRITE
+          (add-watch) ;; Watch inicial
           (make-thread (lambda ()
                          (let loop ()
+                           ;; Bloqueia a thread até que o arquivo seja escrito e fechado
                            (read-c fd (bytevector->pointer buffer) 1024)
-                           (usleep 100000) ;; 0.1s de folga para o disco
-                           (reload-ui)
+                           
+                           ;; Re-adiciona o watch (essencial para editores que salvam via rename)
+                           (add-watch)
+                           
+                           ;; Pequena pausa para o sistema de arquivos estabilizar
+                           (usleep 100000)
+                           
+                           ;; Chama o callback de reload (reload-ui-action no main.scm)
+                           (on-change)
                            (loop))))))))
-
-(define (activate app)
-  (set! *win* (make <gtk-application-window> #:application app))
-  (set-default-size *win* 400 300)
-  (build-ui *win*))
-
-(display "=== Motor de Live Reload Ativo ===\n")
-(set! *app* (make <gtk-application> #:application-id "org.guile.watcher"))
-(connect *app* 'activate activate)
-(start-inotify)
-(run *app* '())

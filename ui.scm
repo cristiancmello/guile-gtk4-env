@@ -1,4 +1,84 @@
 (define (build-ui win)
-  (let ((btn (make <gtk-button> #:label "Funciona agora!")))
-    (set-child win btn)
+  ;; --- 1. ESTILIZAÇÃO CSS ---
+  (let ((provider (make <gtk-css-provider>))
+        (display (gdk-display-get-default)))
+    (gtk-css-provider-load-from-string provider 
+      "window { background-color: #121212; }
+       .log-text { 
+          font-family: 'Monospace', monospace; 
+          color: #2ecc71; 
+          background: #000; 
+          padding: 15px; 
+       }
+       .scrolled-frame {
+          border: 1px solid #333;
+          border-radius: 8px;
+          margin: 15px;
+       }
+       .header-label {
+          color: #7f8c8d;
+          font-weight: bold;
+          margin: 15px 15px 5px 20px;
+       }")
+    (gtk-style-context-add-provider-for-display display provider 600))
+
+  ;; --- 2. ESTRUTURA DOS WIDGETS ---
+  (let* ((main-box (make <gtk-box> #:orientation 'vertical))
+         (label-title (make <gtk-label> #:label "MONITOR DE AMBIENTE GRÁFICO"))
+         (scrolled (make <gtk-scrolled-window> #:min-content-height 400 #:vexpand #t))
+         (text-view (make <gtk-text-view> #:editable #f #:cursor-visible #f))
+         (buffer (slot-ref text-view 'buffer)))
+    
+    (gtk-widget-add-css-class label-title "header-label")
+    (gtk-widget-add-css-class text-view "log-text")
+    (gtk-widget-add-css-class scrolled "scrolled-frame")
+    
+    (set-child win main-box)
+    (append main-box label-title)
+    (set-child scrolled text-view)
+    (append main-box scrolled)
+
+    ;; --- 3. FUNÇÕES AUXILIARES ---
+    (define (log-info msg)
+      (gtk-text-buffer-insert-at-cursor buffer (string-append "> " msg "\n") -1)
+      (let ((mark (gtk-text-buffer-get-insert buffer)))
+        (gtk-text-view-scroll-mark-onscreen text-view mark)))
+
+    (define (exec cmd)
+      (catch #t
+        (lambda ()
+          (let* ((port (open-input-pipe (string-append cmd " 2>/dev/null")))
+                 (line (read-line port)))
+            (close-pipe port)
+            (if (or (eof-object? line) (string=? line "")) "N/A" line)))
+        (lambda (key . args) "N/A")))
+
+    ;; --- 4. EXECUÇÃO DO DIAGNÓSTICO ---
+    (log-info "=== VERIFICAÇÃO DE DISPLAY SERVER ===")
+    
+    ;; Detectando Wayland vs X11
+    (let ((session (or (getenv "XDG_SESSION_TYPE") "Não detectado")))
+      (log-info (string-append "Sessão atual: " (string-upcase session)))
+      
+      ;; Detalhe extra: Backend do GDK (o que o GTK está usando de fato)
+      (let ((backend (cond 
+                       ((string-contains (string-downcase session) "wayland") "Wayland Backend")
+                       ((string-contains (string-downcase session) "x11") "X11/Xorg Backend")
+                       (else "Desconhecido"))))
+        (log-info (string-append "Backend GTK: " backend))
+        ))
+
+    (log-info "--------------------------------")
+    (log-info (string-append "Kernel: " (exec "uname -r")))
+    (log-info (string-append "Hostname: " (exec "hostname")))
+    
+    ;; Tenta identificar a GPU
+    (let ((gpu (exec "lspci | grep -i vga | cut -d ':' -f3")))
+      (if (string=? gpu "N/A")
+          (log-info "GPU: Hardware info via lspci indisponível")
+          (log-info (string-append "GPU: " (string-trim-both gpu)))))
+
+    (log-info "--------------------------------")
+    (log-info "Fim do relatório.")
+
     (present win)))
