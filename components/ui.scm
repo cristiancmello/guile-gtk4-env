@@ -4,8 +4,13 @@
   #:use-module (ice-9 rdelim)
   #:export (build-ui))
 
+;; Provider privado deste componente.
+;; Persiste entre reloads para que possamos remover o anterior
+;; antes de registrar o novo, evitando acúmulo na display.
+(define *css-provider* #f)
+
 (define (build-ui win)
-  (apply-styles! win)
+  (apply-styles!)
   (let* ((main-box    (make <gtk-box> #:orientation 'vertical))
          (label-title (make <gtk-label> #:label "MONITOR DE AMBIENTE GRÁFICO"))
          (scrolled    (make <gtk-scrolled-window>
@@ -26,25 +31,38 @@
     (populate-log! buffer text-view)
     (present win)))
 
-(define (apply-styles! win)
-  (let ((provider (make <gtk-css-provider>))
-        (display  (gdk-display-get-default)))
-    (gtk-css-provider-load-from-string provider
-      ".log-text {
-          font-family: 'Monospace', monospace;
-          color: #1901f2;
-          padding: 15px;
-       }
-       .scrolled-frame {
-          border: 1px solid #333;
-          border-radius: 8px;
-          margin: 15px;
-       }
-       .header-label {
-          font-weight: bold;
-          margin: 15px 15px 5px 20px;
-       }")
-    (gtk-style-context-add-provider-for-display display provider 600)))
+(define (apply-styles!)
+  (let ((display (gdk-display-get-default)))
+    ;; Remove o provider anterior antes de criar o novo,
+    ;; evitando que providers se acumulem a cada reload.
+    (when *css-provider*
+      (catch #t
+        (lambda ()
+          (gtk-style-context-remove-provider-for-display display *css-provider*))
+        (lambda (key . args)
+          (format (current-error-port)
+                  "AVISO: Falha ao remover CSS provider anterior: ~a ~s\n"
+                  key args))))
+
+    (let ((provider (make <gtk-css-provider>)))
+      (gtk-css-provider-load-from-string provider
+        ".log-text {
+            font-family: 'Monospace', monospace;
+            color: #1901f2;
+            padding: 15px;
+         }
+         .scrolled-frame {
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin: 15px;
+         }
+         .header-label {
+            font-weight: bold;
+            margin: 15px 15px 5px 20px;
+         }")
+      (gtk-style-context-add-provider-for-display display provider 600)
+      ;; Atualiza a referência do módulo para o próximo reload
+      (set! *css-provider* provider))))
 
 (define (make-logger buffer text-view)
   (lambda (msg)
