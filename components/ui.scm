@@ -3,7 +3,6 @@
   (ice-9 rdelim))
              
 (define (build-ui win)
-  ;; --- 1. ESTILIZAÇÃO CSS ---
   (let ((provider (make <gtk-css-provider>))
         (display (gdk-display-get-default)))
     (gtk-css-provider-load-from-string provider 
@@ -25,7 +24,7 @@
           margin: 15px 15px 5px 20px;
        }")
     (gtk-style-context-add-provider-for-display display provider 600))
-  ;; --- 2. ESTRUTURA DOS WIDGETS ---
+
   (let* ((main-box    (make <gtk-box> #:orientation 'vertical))
          (label-title (make <gtk-label> #:label "MONITOR DE AMBIENTE GRÁFICO"))
          (scrolled    (make <gtk-scrolled-window> #:min-content-height 400 #:vexpand #t))
@@ -41,7 +40,6 @@
     (set-child scrolled text-view)
     (append main-box scrolled)
 
-    ;; --- 3. FUNÇÕES AUXILIARES ---
     (define (log-info msg)
       (gtk-text-buffer-insert-at-cursor buffer (string-append "> " msg "\n") -1)
       (let ((mark (gtk-text-buffer-get-insert buffer)))
@@ -57,7 +55,6 @@
             (if (or (eof-object? line) (string=? line "")) "N/A" line)))
         (lambda (key . args) "N/A")))
 
-    ;; --- 4. EXECUÇÃO DO DIAGNÓSTICO ---
     (log-info "=== VERIFICAÇÃO DE DISPLAY SERVER ===")
 
     (let* ((session (or (getenv "XDG_SESSION_TYPE") "Não detectado"))
@@ -65,12 +62,16 @@
                       ((string-contains (string-downcase session) "wayland") "Wayland Backend")
                       ((string-contains (string-downcase session) "x11")     "X11/Xorg Backend")
                       (else "Desconhecido"))))
-      (log-info (string-append "Sessão atual: " (string-upcase session)))
-      (log-info (string-append "Backend GTK: "  backend)))
+      (for-each log-info (list
+        (string-append "Sessão atual: " (string-upcase session))
+        (string-append "Backend GTK: "  backend))
+      ))
 
-    (log-info "--------------------------------")
-    (log-info (string-append "Kernel: "   (exec "uname -r")))
-    (log-info (string-append "Hostname: " (exec "hostname")))
+    (for-each log-info (list 
+        "--------------------------------"
+        (format #f "Kernel: ~a"   (exec "uname -r"))
+        (format #f "Hostname: ~a" (exec "hostname"))
+        "--------------------------------"))
 
     (let ((gpu (exec "/usr/bin/lspci | grep -i vga | cut -d ':' -f3")))
       (log-info (string-append "GPU: "
@@ -78,6 +79,7 @@
                                    "Hardware info via lspci indisponível"
                                    (string-trim-both gpu)))))
 
-    (log-info "--------------------------------")
-    (log-info "Fim do relatório.")
+    (for-each log-info '(
+      "--------------------------------"
+      "Fim do diagnóstico"))
     (present win)))

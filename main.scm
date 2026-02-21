@@ -10,7 +10,6 @@
 
 (define *win* #f)
 
-;; Descobre e carrega tudo em ui/ — main não sabe o que está lá
 (load-ui-dir "components")
 
 (define (reload-ui-action)
@@ -19,7 +18,7 @@
                     (catch #t
                       (lambda ()
                         (set-child *win* #f)
-                        (load-ui-dir "ui")
+                        (load-ui-dir "components")
                         (load-all-uis *win*)
                         (present *win*))
                       (lambda (key . args)
