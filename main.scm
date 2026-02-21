@@ -10,7 +10,10 @@
 
 (define *win* #f)
 
-(load-ui-dir "components")
+(define (rebuild-ui!)
+  (load-ui-dir "components")
+  (load-all-uis *win*)
+  (present *win*))
 
 (define (reload-ui-action)
   (g-idle-add (lambda ()
@@ -18,9 +21,7 @@
                     (catch #t
                       (lambda ()
                         (set-child *win* #f)
-                        (load-ui-dir "components")
-                        (load-all-uis *win*)
-                        (present *win*))
+                        (rebuild-ui!))
                       (lambda (key . args)
                         (format #t "Erro no reload: ~a ~s\n" key args)))
                     #f)
@@ -28,7 +29,7 @@
 
 (define (activate app)
   (set! *win* (make <gtk-application-window> #:application app #:default-width 600))
-  (load-all-uis *win*)
+  (rebuild-ui!)
   (for-each (lambda (f) (start-file-watcher f reload-ui-action))
             (get-watched-files))
   (present *win*))
