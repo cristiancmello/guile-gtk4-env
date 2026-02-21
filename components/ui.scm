@@ -1,33 +1,16 @@
-(use-modules 
-  (ice-9 popen)
-  (ice-9 rdelim))
-             
-(define (build-ui win)
-  (let ((provider (make <gtk-css-provider>))
-        (display (gdk-display-get-default)))
-    (gtk-css-provider-load-from-string provider 
-      "window { background-color: #121212; }
-       .log-text { 
-          font-family: 'Monospace', monospace; 
-          color: #2ecc71; 
-          background: #000; 
-          padding: 15px; 
-       }
-       .scrolled-frame {
-          border: 1px solid #333;
-          border-radius: 8px;
-          margin: 15px;
-       }
-       .header-label {
-          color: #7f8c8d;
-          font-weight: bold;
-          margin: 15px 15px 5px 20px;
-       }")
-    (gtk-style-context-add-provider-for-display display provider 600))
+(define-module (components ui)
+  #:use-module (g-golf)
+  #:use-module (ice-9 popen)
+  #:use-module (ice-9 rdelim)
+  #:export (build-ui))
 
+(define (build-ui win)
+  (apply-styles! win)
   (let* ((main-box    (make <gtk-box> #:orientation 'vertical))
          (label-title (make <gtk-label> #:label "MONITOR DE AMBIENTE GRÁFICO"))
-         (scrolled    (make <gtk-scrolled-window> #:min-content-height 400 #:vexpand #t))
+         (scrolled    (make <gtk-scrolled-window>
+                            #:min-content-height 400
+                            #:vexpand #t))
          (text-view   (make <gtk-text-view> #:editable #f #:cursor-visible #f))
          (buffer      (slot-ref text-view 'buffer)))
 
@@ -40,46 +23,71 @@
     (set-child scrolled text-view)
     (append main-box scrolled)
 
-    (define (log-info msg)
-      (gtk-text-buffer-insert-at-cursor buffer (string-append "> " msg "\n") -1)
-      (let ((mark (gtk-text-buffer-get-insert buffer)))
-        (gtk-text-view-scroll-mark-onscreen text-view mark)))
+    (populate-log! buffer text-view)
+    (present win)))
 
-    (define (exec cmd)
-      (catch #t
-        (lambda ()
-          (let* ((port (open-input-pipe
-                         (string-append "/bin/sh -c \"" cmd " 2>/dev/null\"")))
-                 (line (read-line port)))
-            (close-pipe port)
-            (if (or (eof-object? line) (string=? line "")) "N/A" line)))
-        (lambda (key . args) "N/A")))
+(define (apply-styles! win)
+  (let ((provider (make <gtk-css-provider>))
+        (display  (gdk-display-get-default)))
+    (gtk-css-provider-load-from-string provider
+      ".log-text {
+          font-family: 'Monospace', monospace;
+          color: #1901f2;
+          padding: 15px;
+       }
+       .scrolled-frame {
+          border: 1px solid #333;
+          border-radius: 8px;
+          margin: 15px;
+       }
+       .header-label {
+          font-weight: bold;
+          margin: 15px 15px 5px 20px;
+       }")
+    (gtk-style-context-add-provider-for-display display provider 600)))
 
-    (log-info "=== VERIFICAÇÃO DE DISPLAY SERVER ===")
+(define (make-logger buffer text-view)
+  (lambda (msg)
+    (gtk-text-buffer-insert-at-cursor buffer (string-append "> " msg "\n") -1)
+    (gtk-text-view-scroll-mark-onscreen
+      text-view
+      (gtk-text-buffer-get-insert buffer))))
+
+(define (exec cmd)
+  (catch #t
+    (lambda ()
+      (let* ((port (open-input-pipe
+                     (string-append "/bin/sh -c \"" cmd " 2>/dev/null\"")))
+             (line (read-line port)))
+        (close-pipe port)
+        (if (or (eof-object? line) (string=? line "")) "N/A" line)))
+    (lambda (key . args) "N/A")))
+
+(define (populate-log! buffer text-view)
+  (let ((log! (make-logger buffer text-view)))
+
+    (log! "=== VERIFICAÇÃO DE DISPLAY SERVER ===")
 
     (let* ((session (or (getenv "XDG_SESSION_TYPE") "Não detectado"))
            (backend (cond
-                      ((string-contains (string-downcase session) "wayland") "Wayland Backend")
-                      ((string-contains (string-downcase session) "x11")     "X11/Xorg Backend")
+                      ((string-contains (string-downcase session) "wayland")
+                       "Wayland Backend")
+                      ((string-contains (string-downcase session) "x11")
+                       "X11/Xorg Backend")
                       (else "Desconhecido"))))
-      (for-each log-info (list
-        (string-append "Sessão atual: " (string-upcase session))
-        (string-append "Backend GTK: "  backend))
-      ))
+      (log! (string-append "Sessão atual: " (string-upcase session)))
+      (log! (string-append "Backend GTK: "  backend)))
 
-    (for-each log-info (list 
-        "--------------------------------"
-        (format #f "Kernel: ~a"   (exec "uname -r"))
-        (format #f "Hostname: ~a" (exec "hostname"))
-        "--------------------------------"))
+    (log! "--------------------------------")
+    (log! (format #f "Kernel: ~a"   (exec "uname -r")))
+    (log! (format #f "Hostname: ~a" (exec "hostname")))
+    (log! "--------------------------------")
 
     (let ((gpu (exec "/usr/bin/lspci | grep -i vga | cut -d ':' -f3")))
-      (log-info (string-append "GPU: "
-                               (if (string=? gpu "N/A")
-                                   "Hardware info via lspci indisponível"
-                                   (string-trim-both gpu)))))
+      (log! (string-append "GPU: "
+                           (if (string=? gpu "N/A")
+                               "Hardware info via lspci indisponível"
+                               (string-trim-both gpu)))))
 
-    (for-each log-info '(
-      "--------------------------------"
-      "Fim do diagnóstico"))
-    (present win)))
+    (log! "--------------------------------")
+    (log! "Fim do diagnóstico")))
