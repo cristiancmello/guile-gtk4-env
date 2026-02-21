@@ -5,9 +5,8 @@
              (registry))
 
 (g-irepository-require "Gtk" #:version "4.0")
-(gi-import "Gtk")
-(gi-import "Gdk")
-(gi-import "Gio")
+
+(for-each gi-import '("Gtk" "Gdk" "Gio"))
 
 (define *win* #f)
 

@@ -15,7 +15,13 @@
   (for-each
     (lambda (f)
       (when (string-suffix? ".scm" f)
-        (primitive-load (string-append dir "/" f))))
+        (let ((filepath (string-append dir "/" f)))
+          (primitive-load filepath)
+          ;; Captura build-ui definido no arquivo recém-carregado
+          (let ((builder (module-ref (current-module) 'build-ui #f)))
+            (when builder
+              (set! *watched-files* (cons filepath *watched-files*))
+              (set! *builders* (cons builder *builders*)))))))
     (scandir dir (lambda (f) (string-suffix? ".scm" f)))))
 
 (define (load-all-uis win)

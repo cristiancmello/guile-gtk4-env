@@ -81,5 +81,3 @@
     (log-info "--------------------------------")
     (log-info "Fim do relatório.")
     (present win)))
-    
-(register-ui! "components/ui.scm" build-ui)
