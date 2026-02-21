@@ -1,55 +1,81 @@
 (define-module (watcher)
   #:use-module (system foreign)
-  #:use-module (ice-9 binary-ports)
   #:use-module (rnrs bytevectors)
   #:use-module (ice-9 threads)
+  #:use-module (g-golf)
   #:export (start-file-watcher))
+
+;; --- Constantes ------------------------------------------------------
 
 (define IN_CLOSE_WRITE #x00000008)
 
-(define (start-file-watcher filename on-change)
-  (let* ((libc         (dynamic-link))
-         (inotify-init (pointer->procedure int
-                         (dynamic-func "inotify_init" libc) '()))
-         (inotify-add  (pointer->procedure int
-                         (dynamic-func "inotify_add_watch" libc)
-                         (list int '* uint32)))
-         (close-fd     (pointer->procedure int
-                         (dynamic-func "close" libc)
-                         (list int)))
-         (read-c       (pointer->procedure ssize_t
-                         (dynamic-func "read" libc)
-                         (list int '* size_t)))
-         (fd           (inotify-init))
-         (buffer       (make-bytevector 1024))
-         (pending?     #f)
-         (mu           (make-mutex)))
+;; Tamanho mínimo garantido para um evento inotify:
+;; sizeof(inotify_event) = 16 bytes + NAME_MAX (255) + 1 = 272 bytes
+(define %inotify-buf-size 272)
 
+;; Debounce: aguarda 300ms após o último evento antes de disparar on-change
+(define %debounce-ms 300)
+
+;; --- FFI: resolvidos uma vez no carregamento do módulo ---------------
+
+(define %libc          (dynamic-link))
+
+(define %inotify-init
+  (pointer->procedure int
+    (dynamic-func "inotify_init" %libc) '()))
+
+(define %inotify-add-watch
+  (pointer->procedure int
+    (dynamic-func "inotify_add_watch" %libc)
+    (list int '* uint32)))
+
+(define %close
+  (pointer->procedure int
+    (dynamic-func "close" %libc)
+    (list int)))
+
+(define %read
+  (pointer->procedure ssize_t
+    (dynamic-func "read" %libc)
+    (list int '* size_t)))
+
+;; --- Implementação ---------------------------------------------------
+
+(define (start-file-watcher filepath on-change)
+  (let ((fd (%inotify-init)))
     (if (< fd 0)
         (begin
           (format (current-error-port)
-                  "ERRO: Falha ao iniciar inotify para ~a\n" filename)
+                  "ERRO: Falha ao iniciar inotify para ~a\n" filepath)
           (lambda () #f))
-
         (begin
-          (inotify-add fd (string->pointer filename) IN_CLOSE_WRITE)
+          (%inotify-add-watch fd (string->pointer filepath) IN_CLOSE_WRITE)
 
-          (make-thread
+          (let ((buf       (make-bytevector %inotify-buf-size))
+                (timer-id  #f)
+                (mu        (make-mutex)))
+
+            (make-thread
+              (lambda ()
+                (let loop ()
+                  (let ((n (%read fd (bytevector->pointer buf) %inotify-buf-size)))
+                    (cond
+                      ((<= n 0)
+                       (format (current-error-port)
+                               "INFO: Watcher encerrado para ~a\n" filepath))
+                      (else
+                       (with-mutex mu
+                         ;; Cancela timer pendente e agenda novo — debounce
+                         (when timer-id
+                           (g-source-remove timer-id)
+                           (set! timer-id #f))
+                         (set! timer-id
+                               (g-timeout-add %debounce-ms
+                                 (lambda ()
+                                   (with-mutex mu (set! timer-id #f))
+                                   (on-change)
+                                   #f))))  ;; #f = não repetir
+                       (loop)))))))
+
             (lambda ()
-              (let loop ()
-                (let ((n (read-c fd (bytevector->pointer buffer) 1024)))
-                  (cond
-                    ((<= n 0)
-                     (format (current-error-port)
-                             "INFO: Watcher encerrado para ~a\n" filename))
-                    (else
-                     (with-mutex mu
-                       (when (not pending?)
-                         (set! pending? #t)
-                         (usleep 200000)
-                         (on-change)
-                         (usleep 800000)
-                         (set! pending? #f)))
-                     (loop)))))))
-          (lambda ()
-            (close-fd fd))))))
+              (%close fd)))))))
