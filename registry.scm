@@ -24,20 +24,43 @@
         (stat:mtime st)))
     (lambda (key . args) -1)))
 
+;; Invalida o cache interno do Guile para o módulo, se ele já existir.
+;; Necessário para que um `load` subsequente realmente reexecute o arquivo
+;; em vez de reutilizar a versão compilada em memória.
+;;
+;; Em Guile 3.0, `reload-module` recarrega e reavalia o módulo a partir
+;; do source. Aqui usamos apenas para *invalidar* — o `load` abaixo
+;; é quem faz a leitura do disco, garantindo que o filepath correto
+;; (e não o caminho inferido pelo sistema de módulos) seja usado.
+(define (invalidate-module-cache! mod-name)
+  (let ((existing (resolve-module mod-name #f #:ensure #f)))
+    (when existing
+      (catch #t
+        (lambda () (reload-module existing))
+        (lambda (key . args)
+          (format (current-error-port)
+                  "AVISO: reload-module falhou para ~a: ~a ~s\n"
+                  mod-name key args))))))
+
 ;; Carrega (ou recarrega) um arquivo .scm e retorna o builder-proc,
 ;; ou #f se o módulo não exportar build-ui.
+;;
+;; Fluxo:
+;;   1. Invalida o módulo no cache do Guile (se já existia).
+;;   2. `load` reavalia o arquivo do disco.
+;;   3. `resolve-module` agora devolve a versão recém-avaliada.
 (define (load-component! filepath)
-  (let* ((mod-name (filepath->module-name filepath))
-         (module   (begin
-                     (load filepath)
-                     (resolve-module mod-name #f #:ensure #f))))
-    (if module
-        (module-ref module 'build-ui #f)
-        (begin
-          (format (current-error-port)
-                  "AVISO: Módulo ~a não encontrado após load de ~a\n"
-                  mod-name filepath)
-          #f))))
+  (let ((mod-name (filepath->module-name filepath)))
+    (invalidate-module-cache! mod-name)
+    (load filepath)
+    (let ((module (resolve-module mod-name #f #:ensure #f)))
+      (if module
+          (module-ref module 'build-ui #f)
+          (begin
+            (format (current-error-port)
+                    "AVISO: Módulo ~a não encontrado após load de ~a\n"
+                    mod-name filepath)
+            #f)))))
 
 ;; Varre o diretório procurando arquivos .scm.
 ;; - Arquivos novos: carrega e adiciona ao cache.
@@ -54,13 +77,20 @@
     ;; Marca quais arquivos ainda existem no diretório
     (for-each (lambda (fp) (hash-set! file-set fp #t)) files)
 
-    ;; Remove do cache arquivos que sumiram do diretório
-    (hash-for-each
-      (lambda (fp _)
-        (unless (hash-ref file-set fp #f)
-          (hash-remove! *ui-cache* fp)
-          (set! *ui-order* (filter (lambda (x) (not (string=? x fp))) *ui-order*))))
-      *ui-cache*)
+    ;; Coleta primeiro os arquivos que sumiram do diretório,
+    ;; sem mutar o hash durante a iteração (comportamento indefinido).
+    (let ((to-remove
+           (hash-fold (lambda (fp _ acc)
+                        (if (hash-ref file-set fp #f)
+                            acc
+                            (cons fp acc)))
+                      '()
+                      *ui-cache*)))
+      (for-each (lambda (fp)
+                  (hash-remove! *ui-cache* fp)
+                  (set! *ui-order*
+                        (filter (lambda (x) (not (string=? x fp))) *ui-order*)))
+                to-remove))
 
     ;; Para cada arquivo presente, decide se precisa recarregar
     (for-each

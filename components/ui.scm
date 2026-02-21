@@ -46,20 +46,21 @@
 
     (let ((provider (make <gtk-css-provider>)))
       (gtk-css-provider-load-from-string provider
-        ".log-text {
+        "
+          .log-text {
             font-family: 'Monospace', monospace;
-            color: #1901f2;
+            color: #130c57;
             padding: 15px;
-         }
-         .scrolled-frame {
+          }
+          .scrolled-frame {
             border: 1px solid #333;
             border-radius: 8px;
             margin: 15px;
-         }
-         .header-label {
+          }
+          .header-label {
             font-weight: bold;
             margin: 15px 15px 5px 20px;
-         }")
+          }")
       (gtk-style-context-add-provider-for-display display provider 600)
       ;; Atualiza a referência do módulo para o próximo reload
       (set! *css-provider* provider))))
@@ -108,4 +109,4 @@
                                (string-trim-both gpu)))))
 
     (log! "--------------------------------")
-    (log! "Fim do diagnóstico")))
+    (log! "Fim do diagnóstico.")))
