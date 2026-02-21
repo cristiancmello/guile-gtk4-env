@@ -1,7 +1,7 @@
 FROM fedora:latest
 
-# 1. Instalação de dependências e Drivers Gráficos (Sem pacotes X11 desnecessários)
 RUN dnf update -y && dnf install -y \
+    pciutils \
     glibc-langpack-en \
     sudo curl wget git \
     gcc gcc-c++ make automake autoconf libtool pkgconfig texinfo \
@@ -15,15 +15,12 @@ RUN dnf update -y && dnf install -y \
     libxkbcommon-devel \
     && dnf clean all
 
-# 2. Configuração de Locale
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-# 3. FIX: Links simbólicos para o Guile 3.0
 RUN ln -s /usr/bin/guile3.0 /usr/bin/guile && \
     ln -s /usr/bin/guild3.0 /usr/bin/guild
 
-# 4. Build do G-Golf (Savannah)
 WORKDIR /tmp
 RUN git clone git://git.savannah.gnu.org/g-golf.git && \
     cd g-golf && \
@@ -33,12 +30,10 @@ RUN git clone git://git.savannah.gnu.org/g-golf.git && \
     make -j$(nproc) && \
     make install
 
-# 5. Variáveis de Caminho do Guile
 ENV GUILE_LOAD_PATH="/usr/share/guile/site/3.0"
 ENV GUILE_EXTENSIONS_PATH="/usr/lib64/guile/3.0/extensions"
 ENV LD_LIBRARY_PATH="/usr/lib64"
 
-# 6. MODO WAYLAND + VULKAN (Sem X11)
 ENV GDK_BACKEND=wayland
 ENV GSK_RENDERER=vulkan
 ENV GDK_DEBUG=vulkan
