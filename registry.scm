@@ -5,7 +5,7 @@
   #:export (load-ui-dir load-all-uis get-watched-files))
 
 ;; Lista de (filepath . builder-proc) — atualizada atomicamente
-(define *entries* '())
+(define *components* '())
 
 ;; Converte caminho de arquivo para nome de módulo simbólico.
 ;; Ex: "components/ui.scm" -> (components ui)
@@ -15,29 +15,31 @@
          (filtered (filter (lambda (s) (not (string=? s "."))) parts)))
     (map string->symbol filtered)))
 
-;; Tenta carregar filepath como módulo e retorna o proc build-ui,
-;; ou #f em caso de falha — sem lançar exceção.
+;; Tenta carregar/recarregar o módulo via sistema de módulos do Guile
+;; e retorna o proc build-ui, ou #f em caso de falha.
 (define (load-component filepath)
   (catch #t
     (lambda ()
       (let* ((mod-name (filepath->module-name filepath))
-             (module   (begin
-                         (load filepath)
-                         (resolve-module mod-name #f #:ensure #f))))
-        (if module
-            (module-ref module 'build-ui #f)
-            (begin
-              (format (current-error-port)
-                      "AVISO: Módulo ~a não encontrado após load de ~a\n"
-                      mod-name filepath)
-              #f))))
+             (mod      (resolve-module mod-name #f #:ensure #f)))
+        ;; Se o módulo já existe, força recarga; caso contrário carrega pela primeira vez
+        (if mod
+            (reload-module mod)
+            (load filepath))
+        ;; Após carregado, resolve a interface pública e extrai build-ui
+        (let ((iface (resolve-interface mod-name)))
+          (or (module-ref iface 'build-ui #f)
+              (begin
+                (format (current-error-port)
+                        "AVISO: ~a não exporta build-ui\n" mod-name)
+                #f)))))
     (lambda (key . args)
       (format (current-error-port)
               "ERRO ao carregar ~a: ~a ~s\n" filepath key args)
       #f)))
 
 ;; Varre dir por arquivos .scm, monta nova lista localmente
-;; e só substitui *entries* ao final — atualização atômica.
+;; e só substitui *components* ao final — atualização atômica.
 (define (load-ui-dir dir)
   (let* ((files   (or (scandir dir (lambda (f) (string-suffix? ".scm" f))) '()))
          (new-entries
@@ -52,13 +54,13 @@
     (if (null? new-entries)
         (format (current-error-port)
                 "AVISO: Nenhum componente carregado de ~a\n" dir)
-        (set! *entries* new-entries))))
+        (set! *components* new-entries))))
 
 ;; Chama todos os builders registrados passando a janela.
 (define (load-all-uis win)
   (for-each (lambda (entry) ((cdr entry) win))
-            *entries*))
+            *components*))
 
 ;; Retorna lista de caminhos monitorados.
 (define (get-watched-files)
-  (map car *entries*))
+  (map car *components*))
