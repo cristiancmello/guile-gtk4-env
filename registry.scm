@@ -1,56 +1,64 @@
 (define-module (registry)
   #:use-module (ice-9 ftw)
   #:use-module (ice-9 string-fun)
+  #:use-module (srfi srfi-1)
   #:export (load-ui-dir load-all-uis get-watched-files))
 
-;; Estado interno: lista de (filepath . builder-proc)
-(define *ui-entries* '())
+;; Lista de (filepath . builder-proc) — atualizada atomicamente
+(define *entries* '())
 
-;; Converte um caminho de arquivo para um nome de módulo simbólico.
+;; Converte caminho de arquivo para nome de módulo simbólico.
 ;; Ex: "components/ui.scm" -> (components ui)
 (define (filepath->module-name filepath)
-  (let* ((no-ext   (string-drop-right filepath 4))          ;; remove ".scm"
-         (parts    (string-split no-ext #\/))               ;; split por "/"
-         (filtered (filter (lambda (s) (not (string=? s ".")))
-                           parts)))
+  (let* ((no-ext   (string-drop-right filepath 4))
+         (parts    (string-split no-ext #\/))
+         (filtered (filter (lambda (s) (not (string=? s "."))) parts)))
     (map string->symbol filtered)))
 
-;; Carrega um arquivo .scm como módulo e retorna o proc build-ui exportado,
-;; ou #f se o módulo não exportar build-ui.
-(define (load-component! filepath)
-  (let* ((mod-name (filepath->module-name filepath))
-         ;; Re-carrega o arquivo forçando reavaliação
-         (module   (begin
-                     (load filepath)
-                     (resolve-module mod-name #f #:ensure #f))))
-    (if module
-        (module-ref module 'build-ui #f)
-        (begin
-          (format (current-error-port)
-                  "AVISO: Módulo ~a não encontrado após load de ~a\n"
-                  mod-name filepath)
-          #f))))
+;; Tenta carregar filepath como módulo e retorna o proc build-ui,
+;; ou #f em caso de falha — sem lançar exceção.
+(define (load-component filepath)
+  (catch #t
+    (lambda ()
+      (let* ((mod-name (filepath->module-name filepath))
+             (module   (begin
+                         (load filepath)
+                         (resolve-module mod-name #f #:ensure #f))))
+        (if module
+            (module-ref module 'build-ui #f)
+            (begin
+              (format (current-error-port)
+                      "AVISO: Módulo ~a não encontrado após load de ~a\n"
+                      mod-name filepath)
+              #f))))
+    (lambda (key . args)
+      (format (current-error-port)
+              "ERRO ao carregar ~a: ~a ~s\n" filepath key args)
+      #f)))
 
-;; Varre o diretório dir procurando arquivos .scm, carrega cada um como
-;; módulo e coleta os builders e caminhos assistidos.
+;; Varre dir por arquivos .scm, monta nova lista localmente
+;; e só substitui *entries* ao final — atualização atômica.
 (define (load-ui-dir dir)
-  (set! *ui-entries* '())
-  (let ((entries (scandir dir (lambda (f) (string-suffix? ".scm" f)))))
-    (when entries
-      (for-each
-        (lambda (filename)
-          (let* ((filepath (string-append dir "/" filename))
-                 (builder  (load-component! filepath)))
-            (when builder
-              (set! *ui-entries*
-                    (append *ui-entries* (list (cons filepath builder)))))))
-        entries))))
+  (let* ((files   (or (scandir dir (lambda (f) (string-suffix? ".scm" f))) '()))
+         (new-entries
+           (filter-map
+             (lambda (filename)
+               (let* ((filepath (string-append dir "/" filename))
+                      (builder  (load-component filepath)))
+                 (if builder
+                     (cons filepath builder)
+                     #f)))
+             files)))
+    (if (null? new-entries)
+        (format (current-error-port)
+                "AVISO: Nenhum componente carregado de ~a\n" dir)
+        (set! *entries* new-entries))))
 
 ;; Chama todos os builders registrados passando a janela.
 (define (load-all-uis win)
   (for-each (lambda (entry) ((cdr entry) win))
-            *ui-entries*))
+            *entries*))
 
-;; Retorna a lista de caminhos de arquivo monitorados.
+;; Retorna lista de caminhos monitorados.
 (define (get-watched-files)
-  (map car *ui-entries*))
+  (map car *entries*))
