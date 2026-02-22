@@ -1,3 +1,3 @@
 #!/bin/bash
 
-guile -L . -s main.scm
+guile -L . -s bin/main.scm
