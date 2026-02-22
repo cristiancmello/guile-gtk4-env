@@ -1,0 +1,112 @@
+=== Build iniciado em Sun Feb 22 01:03:08 PM -03 2026 ===
+=== Log: build-20260222-130308.log ===
+STEP 1/23: FROM fedora:43
+STEP 2/23: ARG GGOLF_REPO=https://git.savannah.gnu.org/git/g-golf.git
+--> Using cache e6f9d8c1cb5d3232ce69d63413e4eea64cd0e0f96caa6b74e77b7b3f39ba7e04
+--> e6f9d8c1cb5d
+STEP 3/23: ARG GGOLF_REF=v0.8.3
+--> Using cache 1b1bfe96483362571faf80ddf5a24f4f9f4942697fef46bf20f910add25a015f
+--> 1b1bfe964833
+STEP 4/23: ARG GUILE_VER=3.0.9-5.fc43
+--> Using cache e1d3db90033e34702d9686cf6216d39935111f2f70850cdf3077fbb0e9b1ebe7
+--> e1d3db90033e
+STEP 5/23: ARG GLIB2_VER=2.86.4-1.fc43
+--> Using cache 6dd43f38968d0779b6fdb25933f247c304d8861e9f026ffca9ff7432cc6171f3
+--> 6dd43f38968d
+STEP 6/23: ARG GOBJECT_VER=1.84.0-3.fc43
+--> Using cache efd72ff86db3209514c4e67ca4ef03cd18c2d9bfb7f0aa065571b68efd4fbcd0
+--> efd72ff86db3
+STEP 7/23: ARG GTK3_VER=3.24.51-2.fc43
+--> Using cache f16beb02a4431e1536c29500374ba92071fad480353453a124651b3f131c8fc8
+--> f16beb02a443
+STEP 8/23: ARG GTK4_VER=4.20.2-1.fc43
+--> Using cache 685b4424f4fef0623a5f9a524c04354d91a8a9db5c742dafbfbee311883db45e
+--> 685b4424f4fe
+STEP 9/23: ARG ADWAITA_VER=1.8.4-1.fc43
+--> Using cache d261a447a271646f80f7c1ef7fe659be6dd34f534147df25a3f19cc490e33ddc
+--> d261a447a271
+STEP 10/23: RUN dnf update -y &&     dnf install -y glibc-langpack-en glibc-locale-source &&     localedef -i en_US -f UTF-8 en_US.UTF-8 &&     dnf install -y --setopt=install_weak_deps=False --setopt=tsflags=nodocs         pciutils wget git         gcc gcc-c++ make automake autoconf libtool pkgconfig texinfo         guile30-${GUILE_VER} guile30-devel-${GUILE_VER}         glib2-devel-${GLIB2_VER} gettext-devel         gobject-introspection-${GOBJECT_VER}         gobject-introspection-devel-${GOBJECT_VER}         gtk3-devel-${GTK3_VER}         gtk4-devel-${GTK4_VER}         libadwaita-${ADWAITA_VER} libadwaita-devel-${ADWAITA_VER}         vulkan-loader vulkan-tools         libwayland-client libwayland-cursor libwayland-egl         libxkbcommon-devel     && dnf clean all     && rm -rf /var/cache/dnf
+--> Using cache 949749416e8215f7326394ed9b8270b6c2111135058ac3c9e66d5a04f989c349
+--> 949749416e82
+STEP 11/23: ENV LANG=en_US.UTF-8
+--> Using cache b484279789eb82ae0ab4f7085bc5bffd2f0c5e6e9a6aadf56fb86e59be1a138d
+--> b484279789eb
+STEP 12/23: ENV LC_ALL=en_US.UTF-8
+--> Using cache 5743a81e6f82cb96280c5ee70a8f889a0183f9354f6c10c121fcdad25889aba1
+--> 5743a81e6f82
+STEP 13/23: RUN ln -sf /usr/bin/guile3.0 /usr/bin/guile &&     ln -sf /usr/bin/guild3.0  /usr/bin/guild
+--> Using cache 47681114d7d5442b105cc44c673fa8c5e7586428c698811877266d1fd49ae829
+--> 47681114d7d5
+STEP 14/23: RUN set -e &&     git clone --depth 1 --branch "${GGOLF_REF}" "${GGOLF_REPO}" /tmp/g-golf &&     cd /tmp/g-golf &&     ./autogen.sh &&     ./configure         --prefix=/usr         --libdir=/usr/lib64         --with-guile-site=yes         GUILE=/usr/bin/guile3.0         GUILD=/usr/bin/guild3.0 &&     make -j"$(nproc)" &&     make install &&     cd / && rm -rf /tmp/g-golf &&     ldconfig
+--> Using cache 97d8abbb6f0863f7a4e33a4c3aee048fc655422e9a539535297ec4a7ad8c3773
+--> 97d8abbb6f08
+STEP 15/23: ENV GUILE_LOAD_PATH="/usr/share/guile/site/3.0"
+--> Using cache bfca8cfa38a125e5c6c6fc92ae76f18bd1a117f7319d90b0c07deacfe5be67c5
+--> bfca8cfa38a1
+STEP 16/23: ENV GUILE_LOAD_COMPILED_PATH="/usr/lib64/guile/3.0/ccache"
+--> Using cache d90b168b8a1993379ba2f92976f7a990cf3b25aa1fb6c8de58d0acbbbeb66843
+--> d90b168b8a19
+STEP 17/23: ENV GUILE_EXTENSIONS_PATH="/usr/lib64/guile/3.0/extensions"
+--> Using cache 17204b2ea124d1bd176cd7de5382e151348352d3c2d3b7376bdeb48ff85c8a6c
+--> 17204b2ea124
+STEP 18/23: RUN set -e &&         echo "=== Guile ===" &&     guile --version &&     guile -c "(display \"Guile OK\n\")" &&     guile -c "(use-modules (g-golf)) (display \"G-Golf OK\n\")" &&         echo "=== GLib2 ===" &&     pkg-config --modversion glib-2.0 &&     pkg-config --atleast-version=2.73.0 glib-2.0 &&     echo "GLib2 version OK (>= 2.73.0)" &&     echo "#include <glib.h>" | gcc -x c - -c -o /dev/null $(pkg-config --cflags glib-2.0) &&     echo "GLib2 headers OK" &&     guile -c "(use-modules (g-golf glib)) (display \"GLib2 via G-Golf OK\n\")" &&         echo "=== Gettext / i18n ===" &&     guile -c "       (use-modules (ice-9 i18n))       (display \"ice-9 i18n OK\n\")       (setlocale LC_ALL \"en_US.UTF-8\")       (display (string-append \"locale: \" (setlocale LC_ALL) \"\n\"))       (bindtextdomain \"test\" \"/tmp\")       (textdomain \"test\")       (display \"bindtextdomain/textdomain OK\n\")     " &&         echo "=== GObject Introspection ===" &&     guile -c "       (use-modules (g-golf))       (display \"g-golf OK\n\")       (g-irepository-require \"GObject\" #:version \"2.0\")       (display \"GObject-2.0 typelib loaded OK\n\")       (let* ((n   (g-irepository-get-n-infos \"GObject\"))              (ver (g-irepository-get-version \"GObject\")))         (display (string-append \"GObject version: \" ver \"\n\"))         (display (string-append \"GObject entries: \" (number->string n) \"\n\")))     " &&         echo "=== GTK4 ===" &&     pkg-config --modversion gtk4 &&     pkg-config --atleast-version=4.8.0 gtk4 &&     echo "GTK4 version OK (>= 4.8.0)" &&     guile -c "       (use-modules (oop goops))       (default-duplicate-binding-handler         '(merge-generics replace warn-override-core warn last))       (use-modules (g-golf))       (g-irepository-require \"Gtk\" #:version \"4.0\")       (display \"Gtk-4.0 typelib loaded OK\n\")       (for-each (lambda (name) (gi-import-by-name \"Gtk\" name))                 '(\"Application\" \"ApplicationWindow\" \"Box\" \"Label\" \"Button\"))       (display \"GTK4 classes introspected OK\n\")     " &&         echo "=== Adwaita ===" &&     pkg-config --modversion libadwaita-1 &&     pkg-config --atleast-version=1.8.0 libadwaita-1 &&     echo "Adwaita version OK (>= 1.8.0)" &&     guile -c "       (use-modules (oop goops))       (default-duplicate-binding-handler         '(merge-generics replace warn-override-core warn last))       (use-modules (g-golf))       (g-irepository-require \"Adw\" #:version \"1\")       (display \"Adw-1 typelib loaded OK\n\")       (for-each (lambda (name) (gi-import-by-name \"Adw\" name))                 '(\"Application\" \"ApplicationWindow\" \"HeaderBar\" \"ToolbarView\"))       (display \"Adwaita classes introspected OK\n\")     " &&         echo "=== Vulkan ===" &&     echo "Skipping vulkaninfo hardware check during build (drivers will be injected by distrobox at runtime)" &&     pkg-config --modversion vulkan &&     pkg-config --atleast-version=1.3.0 vulkan &&     echo "Vulkan headers OK (>= 1.3.0)" &&         echo "=== Todos os sanity checks passaram ==="
+=== Guile ===
+guile (GNU Guile) 3.0.9
+Copyright (C) 2023 Free Software Foundation, Inc.
+
+License LGPLv3+: GNU LGPL 3 or later <http://gnu.org/licenses/lgpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Guile OK
+G-Golf OK
+=== GLib2 ===
+2.86.4
+GLib2 version OK (>= 2.73.0)
+GLib2 headers OK
+GLib2 via G-Golf OK
+=== Gettext / i18n ===
+ice-9 i18n OK
+locale: en_US.UTF-8
+bindtextdomain/textdomain OK
+=== GObject Introspection ===
+g-golf OK
+GObject-2.0 typelib loaded OK
+GObject version: 2.0
+GObject entries: 312
+=== GTK4 ===
+4.20.2
+GTK4 version OK (>= 4.8.0)
+Gtk-4.0 typelib loaded OK
+GTK4 classes introspected OK
+=== Adwaita ===
+1.8.4
+Adwaita version OK (>= 1.8.0)
+Adw-1 typelib loaded OK
+Adwaita classes introspected OK
+=== Vulkan ===
+Skipping vulkaninfo hardware check during build (drivers will be injected by distrobox at runtime)
+1.4.341
+Vulkan headers OK (>= 1.3.0)
+=== Todos os sanity checks passaram ===
+--> ad6102a7f792
+STEP 19/23: ENV GDK_BACKEND=wayland
+--> 03cc76563cac
+STEP 20/23: ENV GSK_RENDERER=vulkan
+--> e6dbd9837309
+STEP 21/23: ENV QT_QPA_PLATFORM=wayland
+--> 8df1fcf97170
+STEP 22/23: ENV XDG_SESSION_TYPE=wayland
+--> db2bcd9bcf16
+STEP 23/23: CMD ["/bin/bash"]
+COMMIT guile-gtk-dev
+--> 40b8c54e8178
+Successfully tagged localhost/guile-gtk-dev:latest
+40b8c54e8178014147f48bac13ffa46d35725b73febaf1986de7210892fd9860
+Error: no container with name or ID "guile-gtk-dev" found: no such container
+Creating 'guile-gtk-dev' using image localhost/guile-gtk-dev:latest	[32m [ OK ]
+[0mDistrobox 'guile-gtk-dev' successfully created.
+To enter, run:
+
+distrobox enter guile-gtk-dev
+
+=== Build finalizado em Sun Feb 22 01:03:55 PM -03 2026 ===
