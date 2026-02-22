@@ -29,15 +29,20 @@ rm -rf "$APP_DIR"
 mkdir -p "$APP_DIR/usr/bin"
 mkdir -p "$APP_DIR/usr/lib"
 mkdir -p "$APP_DIR/usr/lib/girepository-1.0"
+# A estrutura abaixo é vital: o load path apontará para share/$APP_NAME, 
+# então o módulo (src app) DEVE estar em share/$APP_NAME/src/app.scm
 mkdir -p "$APP_DIR/usr/share/$APP_NAME/src"
 mkdir -p "$APP_DIR/usr/share/applications"
 
 echo "==> 3. Copiando código e PRÉ-COMPILANDO nossa aplicação..."
 cp "$BIN_PATH" "$APP_DIR/usr/bin/$APP_NAME"
 chmod +x "$APP_DIR/usr/bin/$APP_NAME"
+
+# Copia o código fonte para o local correto para o Guile encontrar (src app)
 cp src/app.scm "$APP_DIR/usr/share/$APP_NAME/src/"
-# Compilação AOT (Ahead-of-Time) para garantir que nossa lógica seja instantânea
-guild compile src/app.scm -o "$APP_DIR/usr/share/$APP_NAME/src/app.go"
+
+# Compilação AOT (Ahead-of-Time) incluindo o diretório atual no path para resolver o módulo
+guild compile -L "$PROJECT_ROOT" src/app.scm -o "$APP_DIR/usr/share/$APP_NAME/src/app.go"
 
 echo "==> 4. Coletando bibliotecas dinâmicas (.so)..."
 ldd "$BIN_PATH" | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -L -n '{}' "$APP_DIR/usr/lib/" || true
@@ -46,7 +51,7 @@ echo "==> 4.1. Caçando bibliotecas de runtime (GTK4, G-Golf, GI)..."
 LIBS_TO_HUNT=("libg-golf" "libgirepository-1.0" "libgtk-4" "libgobject-2.0" "libglib-2.0" "libgio-2.0" "libadwaita-1" "libepoxy")
 
 SEARCH_PATHS=""
-for p in /usr/lib /usr/local/lib /usr/lib64 /usr/lib/x86_64-linux-gnu; do
+for p in /usr/lib /usr/lib64 /usr/local/lib /usr/lib/x86_64-linux-gnu; do
     [ -d "$p" ] && SEARCH_PATHS="$SEARCH_PATHS $p"
 done
 
@@ -68,23 +73,27 @@ find $SEARCH_PATHS -name "girepository-1.0" -type d 2>/dev/null | while read dir
     cp -L -r "$dir"/*.typelib "$APP_DIR/usr/lib/girepository-1.0/" 2>/dev/null || true
 done
 
-echo "==> 4.3. Coletando Módulos Scheme e Bytecode (Preservando Estrutura)..."
+echo "==> 4.3. Coletando Módulos Scheme do Sistema..."
 mkdir -p "$APP_DIR/usr/share/guile/site"
 mkdir -p "$APP_DIR/usr/lib/guile/ccache"
+mkdir -p "$APP_DIR/usr/lib/guile/3.0/extensions"
 
-# Copia os arquivos .scm (módulos)
+# Copia os arquivos .scm (módulos do sistema como o g-golf)
 guile -c "(for-each (lambda (p) (display p) (newline)) %load-path)" | while read path; do
-    if [ -d "$path" ] && [ "$path" != "." ]; then
+    if [ -d "$path" ] && [ "$path" != "." ] && [[ "$path" == /usr* ]]; then
         cp -r -L -n "$path"/. "$APP_DIR/usr/share/guile/site/" 2>/dev/null || true
     fi
 done
 
-# Copia os arquivos .go (bytecode compilado)
+# Copia os arquivos .go (bytecode compilado do sistema)
 guile -c "(for-each (lambda (p) (display p) (newline)) %load-compiled-path)" | while read path; do
-    if [ -d "$path" ] && [ "$path" != "." ]; then
+    if [ -d "$path" ] && [ "$path" != "." ] && [[ "$path" == /usr* ]]; then
         cp -r -L -n "$path"/. "$APP_DIR/usr/lib/guile/ccache/" 2>/dev/null || true
     fi
 done
+
+# Copia extensões nativas (essencial para o G-Golf funcionar no AppImage)
+find /usr/lib64/guile/3.0/extensions -name "*.so*" -exec cp -L {} "$APP_DIR/usr/lib/guile/3.0/extensions/" \; 2>/dev/null || true
 
 echo "==> 5. Metadados e AppRun..."
 cat << EOF > "$APP_DIR/org.guile.prototyper.desktop"
@@ -103,11 +112,18 @@ touch "$APP_DIR/org.guile.prototyper.png"
 cat << 'EOF' > "$APP_DIR/AppRun"
 #!/bin/sh
 HERE="$(dirname "$(readlink -f "${0}")")"
+
 export GUILE_AUTO_COMPILE=0
 export LD_LIBRARY_PATH="$HERE/usr/lib:$LD_LIBRARY_PATH"
 export GI_TYPELIB_PATH="$HERE/usr/lib/girepository-1.0"
-export GUILE_LOAD_PATH="$HERE/usr/share/$APP_NAME:$HERE/usr/share/guile/site:$GUILE_LOAD_PATH"
-export GUILE_LOAD_COMPILED_PATH="$HERE/usr/share/$APP_NAME:$HERE/usr/lib/guile/ccache:$GUILE_LOAD_COMPILED_PATH"
+
+# O path aponta para o diretório que CONTÉM a pasta 'src'
+export GUILE_LOAD_PATH="$HERE/usr/share/GuileGTK4Prototyper:$HERE/usr/share/guile/site:$GUILE_LOAD_PATH"
+export GUILE_LOAD_COMPILED_PATH="$HERE/usr/share/GuileGTK4Prototyper:$HERE/usr/lib/guile/ccache:$GUILE_LOAD_COMPILED_PATH"
+
+# Necessário para carregar as libs do G-Golf embutidas
+export GUILE_EXTENSIONS_PATH="$HERE/usr/lib/guile/3.0/extensions"
+
 exec "$HERE/usr/bin/GuileGTK4Prototyper" "$@"
 EOF
 
