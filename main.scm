@@ -1,32 +1,44 @@
+;; No topo do seu main.scm, logo após os use-modules
+(setenv "GTK_A11Y" "none") ; Desativa acessibilidade (ganha tempo)
+(setenv "G_MESSAGES_DEBUG" "none")
+
+;; main.scm
 (define-module (main)
-  #:use-module (oop goops)
   #:use-module (g-golf)
-  #:duplicates (merge-generics replace warn-override-core warn last))
+  #:export (main))
 
-(g-irepository-require "Gtk" #:version "4.0")
-(gi-import "Gtk")
+;; Voltamos ao básico funcional
+(gi-import "Gtk" #:version "4.0")
 
-(define (on-activate app)
-  (let* ((window-class (module-ref (current-module) '<gtk-application-window>))
-         (window (make window-class #:application app))
-         (present (module-ref (current-module) 'present)))
-    (present window)
-    (display "Janela carregada.\n")
+(define (on-button-clicked button)
+  (display "Botão clicado! Funciona sem subset.\n"))
+
+(define (activate app)
+  (let* ((window (make <gtk-application-window> 
+                       #:application app
+                       #:title "Guile GTK4 Standalone"
+                       #:default-width 400
+                       #:default-height 300))
+         (box (make <gtk-box> 
+                    #:orientation 'vertical
+                    #:spacing 10
+                    #:margin-top 20
+                    #:margin-bottom 20
+                    #:margin-start 20
+                    #:margin-end 20))
+         (label (make <gtk-label> 
+                      #:label "Lentidão inicial = G-Golf mapeando o GTK4"))
+         (button (make <gtk-button> 
+                       #:label "Clique Aqui")))
     
-    ;; SOLID: Se estivermos em teste, fechamos imediatamente após carregar
-    (when (getenv "GUILE_TEST_MODE")
-      (display "Modo de teste detectado, encerrando...\n")
-      ((module-ref (current-module) 'g-application-quit) app))))
+    (connect button 'clicked on-button-clicked)
+    (set-child window box)
+    (append box label)
+    (append box button)
+    (present window)))
 
-(define (main-proc)
-  (let* ((app-class (module-ref (current-module) '<gtk-application>))
-         (app (make app-class 
-                #:application-id "org.guile.standalone"
-                #:flags '()))
-         (run-proc (module-ref (current-module) 'g-application-run)))
-    
-    (connect app 'activate on-activate)
-    (run-proc app '())))
-
-;; Executa a lógica
-(main-proc)
+(define (main args)
+  (let ((app (make <gtk-application> 
+                   #:application-id "io.github.cristiancmello.app")))
+    (connect app 'activate activate)
+    (run app args)))
