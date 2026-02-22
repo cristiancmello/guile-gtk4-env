@@ -9,9 +9,14 @@
 (define (on-activate app)
   (let* ((window-class (module-ref (current-module) '<gtk-application-window>))
          (window (make window-class #:application app))
-         (present-method (module-ref (current-module) 'present)))
-    ;; Em vez de fechar, agora vamos mostrar a janela
-    (present-method window)))
+         (present (module-ref (current-module) 'present)))
+    (present window)
+    (display "Janela carregada.\n")
+    
+    ;; SOLID: Se estivermos em teste, fechamos imediatamente após carregar
+    (when (getenv "GUILE_TEST_MODE")
+      (display "Modo de teste detectado, encerrando...\n")
+      ((module-ref (current-module) 'g-application-quit) app))))
 
 (define (main-proc)
   (let* ((app-class (module-ref (current-module) '<gtk-application>))
