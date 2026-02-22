@@ -152,11 +152,4 @@ ENV GSK_RENDERER=vulkan
 ENV QT_QPA_PLATFORM=wayland
 ENV XDG_SESSION_TYPE=wayland
 
-# ── Usuário não-root ─────────────────────────────────────────────────────────
-# O distrobox já injeta permissões de sudo; não é necessário NOPASSWD:ALL aqui.
-RUN useradd -m -s /bin/bash dev
-
-USER dev
-WORKDIR /home/dev
-
 CMD ["/bin/bash"]
