@@ -14,7 +14,7 @@ RUN dnf update -y && \
     dnf install -y glibc-langpack-en glibc-locale-source && \
     localedef -i en_US -f UTF-8 en_US.UTF-8 && \
     dnf install -y --setopt=install_weak_deps=False --setopt=tsflags=nodocs \
-        pciutils wget git \
+        pciutils wget git file \
         gcc gcc-c++ make automake autoconf libtool pkgconfig texinfo \
         guile30-${GUILE_VER} guile30-devel-${GUILE_VER} \
         glib2-devel-${GLIB2_VER} gettext-devel \
