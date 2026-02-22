@@ -1,21 +1,56 @@
-(define-module (src app)
-  #:use-module (g-golf)
-  #:export (create-app))
+(eval-when (expand load eval)
+  (use-modules (oop goops))
 
-;; Ignoramos warnings de compilação pois G-Golf injeta tipos em tempo de execução
-(gi-import "Gtk" #:version "4.0")
-(gi-import "Gio" #:version "2.0")
+  (default-duplicate-binding-handler
+    '(merge-generics replace warn-override-core warn last))
+
+  (use-modules (g-golf))
+
+  (g-irepository-require "Gtk" #:version "4.0")
+  (for-each (lambda (name)
+              (gi-import-by-name "Gtk" name))
+      '("Application"
+        "ApplicationWindow"
+        "Box"
+        "Label"
+        "Button")))
+
 
 (define (activate app)
-  (let ((window (make <gtk-application-window> 
-                      #:application app
-                      #:title "Guile GTK4 Prototyper")))
-    (gtk-window-present window)))
+  (let ((window (make <gtk-application-window>
+                  #:title "Hello"
+                  #:default-width 320
+                  #:default-height 240
+                  #:application app))
+        (box    (make <gtk-box>
+                  #:margin-top 6
+                  #:margin-start 6
+                  #:margin-bottom 6
+                  #:margin-end 6
+                  #:orientation 'vertical))
+        (label  (make <gtk-label>
+                  #:label "Hello, World!"
+                  #:hexpand #t
+                  #:vexpand #t))
+        (button (make <gtk-button>
+                  #:label "Close")))
 
-(define (create-app)
-  "Cria e retorna a instância da aplicação GTK, pronta para ser ativada ou testada."
-  (let ((app (make <gtk-application> 
-                   #:application-id "org.guile.prototyper"
-                   #:flags '())))
+    (connect button
+	     'clicked
+	     (lambda (b)
+               (close window)))
+
+    (set-child window box)
+    (append box label)
+    (append box button)
+    (present window)))
+
+
+(define (main args)
+  (let ((app (make <gtk-application>
+               #:application-id "org.gtk.example")))
     (connect app 'activate activate)
-    app))
+    (let ((status (run app '())))
+      (exit status))))
+
+(main (command-line))
