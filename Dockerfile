@@ -1,32 +1,50 @@
 FROM fedora:43
 
+# ── G-Golf source ────────────────────────────────────────────────────────────
 ARG GGOLF_REPO=https://git.savannah.gnu.org/git/g-golf.git
 ARG GGOLF_REF=v0.8.3
 
+# ── Versões pinadas (facilitam upgrade de Fedora) ────────────────────────────
+ARG GUILE_VER=3.0.9-5.fc43
+ARG GLIB2_VER=2.86.4-1.fc43
+ARG GOBJECT_VER=1.84.0-3.fc43
+ARG GTK3_VER=3.24.51-2.fc43
+ARG GTK4_VER=4.20.2-1.fc43
+ARG ADWAITA_VER=1.8.4-1.fc43
+
+# ── Dependências do sistema ──────────────────────────────────────────────────
+# LANG/LC_ALL são definidos APÓS o locale ser gerado (ver ENV abaixo do RUN)
 RUN dnf update -y && \
     dnf install -y glibc-langpack-en glibc-locale-source && \
     localedef -i en_US -f UTF-8 en_US.UTF-8 && \
     dnf install -y --setopt=install_weak_deps=False --setopt=tsflags=nodocs \
         pciutils wget git \
         gcc gcc-c++ make automake autoconf libtool pkgconfig texinfo \
-        guile30-3.0.9-5.fc43 guile30-devel-3.0.9-5.fc43 \
-        glib2-devel-2.86.4-1.fc43 gettext-devel \
-        gobject-introspection-1.84.0-3.fc43 gobject-introspection-devel-1.84.0-3.fc43 \
-        gtk3-devel-3.24.51-2.fc43 \
-        gtk4-devel-4.20.2-1.fc43 \
-        libadwaita-1.8.4-1.fc43 libadwaita-devel-1.8.4-1.fc43 \
+        guile30-${GUILE_VER} guile30-devel-${GUILE_VER} \
+        glib2-devel-${GLIB2_VER} gettext-devel \
+        gobject-introspection-${GOBJECT_VER} \
+        gobject-introspection-devel-${GOBJECT_VER} \
+        gtk3-devel-${GTK3_VER} \
+        gtk4-devel-${GTK4_VER} \
+        libadwaita-${ADWAITA_VER} libadwaita-devel-${ADWAITA_VER} \
         vulkan-loader mesa-vulkan-drivers vulkan-tools \
-        mesa-libGLES libwayland-client libwayland-cursor libwayland-egl libxkbcommon-devel \
+        mesa-libGLES \
+        libwayland-client libwayland-cursor libwayland-egl \
+        libxkbcommon-devel \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
+# ── Locale — definido após o localedef ter rodado ────────────────────────────
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
+# ── Symlinks do Guile ────────────────────────────────────────────────────────
 RUN ln -sf /usr/bin/guile3.0 /usr/bin/guile && \
     ln -sf /usr/bin/guild3.0  /usr/bin/guild
 
-RUN git clone --branch "${GGOLF_REF}" "${GGOLF_REPO}" /tmp/g-golf && \
+# ── Build e instalação do G-Golf ─────────────────────────────────────────────
+RUN set -e && \
+    git clone --depth 1 --branch "${GGOLF_REF}" "${GGOLF_REPO}" /tmp/g-golf && \
     cd /tmp/g-golf && \
     ./autogen.sh && \
     ./configure \
@@ -40,41 +58,40 @@ RUN git clone --branch "${GGOLF_REF}" "${GGOLF_REPO}" /tmp/g-golf && \
     cd / && rm -rf /tmp/g-golf && \
     ldconfig
 
+# ── Variáveis de ambiente do Guile ───────────────────────────────────────────
+# Complementamos os caminhos padrão em vez de substituí-los
 ENV GUILE_LOAD_PATH="/usr/share/guile/site/3.0"
+ENV GUILE_LOAD_COMPILED_PATH="/usr/lib64/guile/3.0/ccache"
 ENV GUILE_EXTENSIONS_PATH="/usr/lib64/guile/3.0/extensions"
 
-# Sanity check: verify Guile binary, basic execution, and G-Golf import
-RUN echo "=== Guile sanity check ===" && \
+# ── Sanity checks (camada única para não inflar o layer cache) ───────────────
+RUN set -e && \
+    \
+    echo "=== Guile ===" && \
     guile --version && \
     guile -c "(display \"Guile OK\n\")" && \
     guile -c "(use-modules (g-golf)) (display \"G-Golf OK\n\")" && \
-    echo "=== Sanity check passed ==="
-
-# Sanity check: verify GLib2 headers, pkg-config metadata, and runtime version
-RUN echo "=== GLib2 sanity check ===" && \
+    \
+    echo "=== GLib2 ===" && \
     pkg-config --modversion glib-2.0 && \
     pkg-config --atleast-version=2.73.0 glib-2.0 && \
     echo "GLib2 version OK (>= 2.73.0)" && \
     echo "#include <glib.h>" | gcc -x c - -c -o /dev/null $(pkg-config --cflags glib-2.0) && \
     echo "GLib2 headers OK" && \
     guile -c "(use-modules (g-golf glib)) (display \"GLib2 via G-Golf OK\n\")" && \
-    echo "=== Sanity check passed ==="
-
-# Sanity check: verify gettext via Guile's i18n module
-RUN echo "=== Gettext sanity check ===" && \
+    \
+    echo "=== Gettext / i18n ===" && \
     guile -c " \
       (use-modules (ice-9 i18n)) \
       (display \"ice-9 i18n OK\n\") \
       (setlocale LC_ALL \"en_US.UTF-8\") \
-      (display (string-append \"locale set to: \" (setlocale LC_ALL) \"\n\")) \
+      (display (string-append \"locale: \" (setlocale LC_ALL) \"\n\")) \
       (bindtextdomain \"test\" \"/tmp\") \
       (textdomain \"test\") \
       (display \"bindtextdomain/textdomain OK\n\") \
     " && \
-    echo "=== Sanity check passed ==="
-
-# Sanity check: verify GObject Introspection via G-Golf's irepository bindings
-RUN echo "=== GObject Introspection sanity check ===" && \
+    \
+    echo "=== GObject Introspection ===" && \
     guile -c " \
       (use-modules (g-golf)) \
       (display \"g-golf OK\n\") \
@@ -85,12 +102,8 @@ RUN echo "=== GObject Introspection sanity check ===" && \
         (display (string-append \"GObject version: \" ver \"\n\")) \
         (display (string-append \"GObject entries: \" (number->string n) \"\n\"))) \
     " && \
-    echo "=== Sanity check passed ==="
-
-# Sanity check: verify GTK4 typelib loads and core classes introspect correctly
-# Note: widgets cannot be instantiated without a display; this check is limited
-# to typelib loading and class introspection only.
-RUN echo "=== GTK4 sanity check ===" && \
+    \
+    echo "=== GTK4 ===" && \
     pkg-config --modversion gtk4 && \
     pkg-config --atleast-version=4.8.0 gtk4 && \
     echo "GTK4 version OK (>= 4.8.0)" && \
@@ -103,16 +116,10 @@ RUN echo "=== GTK4 sanity check ===" && \
       (display \"Gtk-4.0 typelib loaded OK\n\") \
       (for-each (lambda (name) (gi-import-by-name \"Gtk\" name)) \
                 '(\"Application\" \"ApplicationWindow\" \"Box\" \"Label\" \"Button\")) \
-      (display \"GtkApplication introspected OK\n\") \
-      (display \"GtkApplicationWindow introspected OK\n\") \
-      (display \"GtkBox introspected OK\n\") \
-      (display \"GtkLabel introspected OK\n\") \
-      (display \"GtkButton introspected OK\n\") \
+      (display \"GTK4 classes introspected OK\n\") \
     " && \
-    echo "=== Sanity check passed ==="
-
-# Sanity check: verify Adwaita typelib loads and core classes introspect correctly
-RUN echo "=== Adwaita sanity check ===" && \
+    \
+    echo "=== Adwaita ===" && \
     pkg-config --modversion libadwaita-1 && \
     pkg-config --atleast-version=1.8.0 libadwaita-1 && \
     echo "Adwaita version OK (>= 1.8.0)" && \
@@ -125,32 +132,29 @@ RUN echo "=== Adwaita sanity check ===" && \
       (display \"Adw-1 typelib loaded OK\n\") \
       (for-each (lambda (name) (gi-import-by-name \"Adw\" name)) \
                 '(\"Application\" \"ApplicationWindow\" \"HeaderBar\" \"ToolbarView\")) \
-      (display \"AdwApplication introspected OK\n\") \
-      (display \"AdwApplicationWindow introspected OK\n\") \
-      (display \"AdwHeaderBar introspected OK\n\") \
-      (display \"AdwToolbarView introspected OK\n\") \
+      (display \"Adwaita classes introspected OK\n\") \
     " && \
-    echo "=== Sanity check passed ==="
-
-# Sanity check: verify Vulkan loader, ICD, and headers are present
-# Note: GPU enumeration requires a real device; this check validates the
-# loader and software ICD (lavapipe) which is available in mesa-vulkan-drivers.
-RUN echo "=== Vulkan sanity check ===" && \
+    \
+    echo "=== Vulkan ===" && \
     vulkaninfo --summary 2>&1 | grep -E "Vulkan Instance|apiVersion|driverVersion|deviceName|deviceType" && \
     echo "Vulkan loader OK" && \
     pkg-config --modversion vulkan && \
     pkg-config --atleast-version=1.3.0 vulkan && \
     echo "Vulkan headers OK (>= 1.3.0)" && \
-    echo "=== Sanity check passed ==="
+    \
+    echo "=== Todos os sanity checks passaram ==="
 
+# ── Variáveis de ambiente Wayland / Vulkan ───────────────────────────────────
+# GDK_DEBUG=vulkan é ruidoso demais para a imagem final;
+# defina-o no entrypoint ou no ambiente do distrobox quando necessário.
 ENV GDK_BACKEND=wayland
 ENV GSK_RENDERER=vulkan
-ENV GDK_DEBUG=vulkan
 ENV QT_QPA_PLATFORM=wayland
 ENV XDG_SESSION_TYPE=wayland
 
-RUN useradd -m -s /bin/bash dev && \
-    echo "dev ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/dev
+# ── Usuário não-root ─────────────────────────────────────────────────────────
+# O distrobox já injeta permissões de sudo; não é necessário NOPASSWD:ALL aqui.
+RUN useradd -m -s /bin/bash dev
 
 USER dev
 WORKDIR /home/dev
