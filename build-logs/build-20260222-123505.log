@@ -1,0 +1,1813 @@
+=== Build iniciado em Sun Feb 22 12:35:05 PM -03 2026 ===
+=== Log: build-20260222-123505.log ===
+STEP 1/26: FROM fedora:43
+Resolved "fedora" as an alias (/etc/containers/registries.conf.d/000-shortnames.conf)
+Trying to pull registry.fedoraproject.org/fedora:43...
+Getting image source signatures
+Copying blob sha256:7972b163e7f9c91ce06aada376eab61696cdc34bc4f42b29aac41ef319572cce
+Copying config sha256:076ea9a436b97227535973e6449f77f8f1fd5637eb0fed7ee8d91b1fcfb00569
+Writing manifest to image destination
+STEP 2/26: ARG GGOLF_REPO=https://git.savannah.gnu.org/git/g-golf.git
+--> 6235f846203c
+STEP 3/26: ARG GGOLF_REF=v0.8.3
+--> 050b6547cc84
+STEP 4/26: ARG GUILE_VER=3.0.9-5.fc43
+--> 18dc376c645d
+STEP 5/26: ARG GLIB2_VER=2.86.4-1.fc43
+--> 9eb4a23eef66
+STEP 6/26: ARG GOBJECT_VER=1.84.0-3.fc43
+--> e355fcedf0a2
+STEP 7/26: ARG GTK3_VER=3.24.51-2.fc43
+--> 91a3e2009d14
+STEP 8/26: ARG GTK4_VER=4.20.2-1.fc43
+--> e484c325dd60
+STEP 9/26: ARG ADWAITA_VER=1.8.4-1.fc43
+--> 3f623268b56d
+STEP 10/26: RUN dnf update -y &&     dnf install -y glibc-langpack-en glibc-locale-source &&     localedef -i en_US -f UTF-8 en_US.UTF-8 &&     dnf install -y --setopt=install_weak_deps=False --setopt=tsflags=nodocs         pciutils wget git         gcc gcc-c++ make automake autoconf libtool pkgconfig texinfo         guile30-${GUILE_VER} guile30-devel-${GUILE_VER}         glib2-devel-${GLIB2_VER} gettext-devel         gobject-introspection-${GOBJECT_VER}         gobject-introspection-devel-${GOBJECT_VER}         gtk3-devel-${GTK3_VER}         gtk4-devel-${GTK4_VER}         libadwaita-${ADWAITA_VER} libadwaita-devel-${ADWAITA_VER}         vulkan-loader mesa-vulkan-drivers vulkan-tools         mesa-libGLES         libwayland-client libwayland-cursor libwayland-egl         libxkbcommon-devel     && dnf clean all     && rm -rf /var/cache/dnf
+Updating and loading repositories:
+ Fedora 43 openh264 (From Cisco) - x86_ 100% |   2.4 KiB/s |   5.8 KiB |  00m02s
+ Fedora 43 - x86_64 - Updates           100% |   3.9 MiB/s |  11.4 MiB |  00m03s
+ Fedora 43 - x86_64                     100% |   6.2 MiB/s |  35.4 MiB |  00m06s
+Repositories loaded.
+Nothing to do.
+Updating and loading repositories:
+Repositories loaded.
+Package              Arch   Version      Repository      Size
+Installing:
+ glibc-langpack-en   x86_64 2.42-10.fc43 updates      5.7 MiB
+ glibc-locale-source x86_64 2.42-10.fc43 updates     15.0 MiB
+
+Transaction Summary:
+ Installing:         2 packages
+
+Total size of inbound packages is 5 MiB. Need to download 5 MiB.
+After this operation, 21 MiB extra will be used (install 21 MiB, remove 0 B).
+[1/2] glibc-langpack-en-0:2.42-10.fc43. 100% |   1.3 MiB/s | 583.9 KiB |  00m00s
+[2/2] glibc-locale-source-0:2.42-10.fc4 100% |   6.5 MiB/s |   4.2 MiB |  00m01s
+--------------------------------------------------------------------------------
+[2/2] Total                             100% |   3.3 MiB/s |   4.7 MiB |  00m01s
+Running transaction
+[1/4] Verify package files              100% | 142.0   B/s |   2.0   B |  00m00s
+[2/4] Prepare transaction               100% | 133.0   B/s |   2.0   B |  00m00s
+[3/4] Installing glibc-locale-source-0: 100% | 239.8 MiB/s |  15.1 MiB |  00m00s
+[4/4] Installing glibc-langpack-en-0:2. 100% | 115.7 MiB/s |   5.8 MiB |  00m00s
+Complete!
+Updating and loading repositories:
+Repositories loaded.
+Package                           Arch   Version                 Repository                 Size
+Installing:
+ autoconf                         noarch 2.72-7.fc43             fedora                  2.8 MiB
+ automake                         noarch 1.18.1-2.fc43           fedora                  1.8 MiB
+ gcc                              x86_64 15.2.1-7.fc43           updates               112.0 MiB
+ gcc-c++                          x86_64 15.2.1-7.fc43           updates                41.4 MiB
+ gettext-devel                    x86_64 0.25.1-2.fc43           fedora                  1.3 MiB
+ git                              x86_64 2.53.0-1.fc43           updates                56.4 KiB
+ glib2-devel                      x86_64 2.86.4-1.fc43           updates                15.7 MiB
+ gobject-introspection            x86_64 1.84.0-3.fc43           fedora                392.8 KiB
+ gobject-introspection-devel      x86_64 1.84.0-3.fc43           fedora                  3.1 MiB
+ gtk3-devel                       x86_64 3.24.51-2.fc43          fedora                 34.3 MiB
+ gtk4-devel                       x86_64 4.20.2-1.fc43           fedora                 22.7 MiB
+ guile30                          x86_64 3.0.9-5.fc43            fedora                 52.7 MiB
+ guile30-devel                    x86_64 3.0.9-5.fc43            fedora                453.2 KiB
+ libadwaita                       x86_64 1.8.4-1.fc43            updates                 3.2 MiB
+ libadwaita-devel                 x86_64 1.8.4-1.fc43            updates                 2.4 MiB
+ libglvnd-gles                    x86_64 1:1.7.0-8.fc43          fedora                 97.9 KiB
+ libtool                          x86_64 2.5.4-8.fc43            updates                 2.7 MiB
+ libxkbcommon-devel               x86_64 1.11.0-1.fc43           fedora                383.4 KiB
+ make                             x86_64 1:4.4.1-11.fc43         fedora                  1.8 MiB
+ mesa-vulkan-drivers              x86_64 25.3.5-1.fc43           updates               152.7 MiB
+ pciutils                         x86_64 3.14.0-2.fc43           fedora                284.1 KiB
+ pkgconf-pkg-config               x86_64 2.3.0-3.fc43            fedora                989.0   B
+ texinfo                          x86_64 7.2-7.fc43              updates                 7.3 MiB
+ vulkan-loader                    x86_64 1.4.341.0-1.fc43        updates               569.6 KiB
+ vulkan-tools                     x86_64 1.4.341.0-1.fc43        updates                 1.6 MiB
+ wget2-wget                       x86_64 2.2.1-1.fc43            updates                42.0   B
+Installing dependencies:
+ abattis-cantarell-vf-fonts       noarch 0.301-15.fc43           fedora                192.7 KiB
+ adwaita-cursor-theme             noarch 49.0-1.fc43             fedora                 11.4 MiB
+ adwaita-icon-theme               noarch 49.0-1.fc43             fedora                  1.2 MiB
+ adwaita-icon-theme-legacy        noarch 46.2-4.fc43             fedora                  2.1 MiB
+ alsa-lib                         x86_64 1.2.15.3-1.fc43         updates                 1.5 MiB
+ appstream                        x86_64 1.1.0-1.fc43            fedora                  4.3 MiB
+ appstream-devel                  x86_64 1.1.0-1.fc43            fedora                 12.4 MiB
+ at-spi2-atk                      x86_64 2.58.3-1.fc43           updates               283.7 KiB
+ at-spi2-atk-devel                x86_64 2.58.3-1.fc43           updates                 1.6 KiB
+ at-spi2-core                     x86_64 2.58.3-1.fc43           updates                 1.5 MiB
+ at-spi2-core-devel               x86_64 2.58.3-1.fc43           updates                 4.3 MiB
+ atk                              x86_64 2.58.3-1.fc43           updates               248.6 KiB
+ atk-devel                        x86_64 2.58.3-1.fc43           updates                 5.9 MiB
+ avahi-glib                       x86_64 0.9~rc2-6.fc43          fedora                 19.6 KiB
+ avahi-libs                       x86_64 0.9~rc2-6.fc43          fedora                171.6 KiB
+ binutils                         x86_64 2.45.1-4.fc43           updates                27.3 MiB
+ brotli                           x86_64 1.2.0-1.fc43            updates                33.6 KiB
+ brotli-devel                     x86_64 1.2.0-1.fc43            updates                65.9 KiB
+ bubblewrap                       x86_64 0.11.0-2.fc43           fedora                135.0 KiB
+ bzip2-devel                      x86_64 1.0.8-21.fc43           fedora                309.8 KiB
+ cairo                            x86_64 1.18.4-2.fc43           fedora                  1.8 MiB
+ cairo-devel                      x86_64 1.18.4-2.fc43           fedora                  2.3 MiB
+ cairo-gobject                    x86_64 1.18.4-2.fc43           fedora                 31.1 KiB
+ cairo-gobject-devel              x86_64 1.18.4-2.fc43           fedora                  7.0 KiB
+ cdparanoia-libs                  x86_64 10.2-48.fc43            fedora                113.5 KiB
+ cmake-filesystem                 x86_64 3.31.10-3.fc43          updates                 0.0   B
+ colord-libs                      x86_64 1.4.8-2.fc43            fedora                830.7 KiB
+ cpp                              x86_64 15.2.1-7.fc43           updates                38.0 MiB
+ cups-filesystem                  noarch 1:2.4.16-4.fc43         updates                 0.0   B
+ cups-libs                        x86_64 1:2.4.16-4.fc43         updates               618.7 KiB
+ dbus                             x86_64 1:1.16.0-4.fc43         fedora                  0.0   B
+ dbus-devel                       x86_64 1:1.16.0-4.fc43         fedora                131.7 KiB
+ dbus-libs                        x86_64 1:1.16.0-4.fc43         fedora                345.5 KiB
+ default-fonts-core-sans          noarch 4.2-5.fc43              fedora                 11.9 KiB
+ diffutils                        x86_64 3.12-3.fc43             fedora                  1.6 MiB
+ dns-root-data                    noarch 2026260100-2.fc43       updates                10.9 KiB
+ elfutils-debuginfod-client       x86_64 0.194-1.fc43            updates                84.0 KiB
+ emacs-filesystem                 noarch 1:30.0-5.fc43           fedora                  0.0   B
+ expat                            x86_64 2.7.3-1.fc43            updates               301.1 KiB
+ fontconfig                       x86_64 2.17.0-3.fc43           fedora                765.9 KiB
+ fontconfig-devel                 x86_64 2.17.0-3.fc43           fedora                123.6 KiB
+ fonts-filesystem                 noarch 1:2.0.5-23.fc43         fedora                  0.0   B
+ freetype                         x86_64 2.13.3-3.fc43           fedora                850.2 KiB
+ freetype-devel                   x86_64 2.13.3-3.fc43           fedora                  8.5 MiB
+ fribidi                          x86_64 1.0.16-3.fc43           fedora                190.3 KiB
+ fribidi-devel                    x86_64 1.0.16-3.fc43           fedora                 78.0 KiB
+ gc                               x86_64 8.2.6-5.fc43            fedora                250.3 KiB
+ gc-devel                         x86_64 8.2.6-5.fc43            fedora                395.7 KiB
+ gdk-pixbuf2                      x86_64 2.44.4-1.fc43           updates                 2.5 MiB
+ gdk-pixbuf2-devel                x86_64 2.44.4-1.fc43           updates                 2.3 MiB
+ gettext                          x86_64 0.25.1-2.fc43           fedora                 12.9 MiB
+ gettext-common-devel             noarch 0.25.1-2.fc43           fedora                592.5 KiB
+ gettext-envsubst                 x86_64 0.25.1-2.fc43           fedora                 74.8 KiB
+ gettext-libs                     x86_64 0.25.1-2.fc43           fedora                  2.2 MiB
+ gettext-runtime                  x86_64 0.25.1-2.fc43           fedora                444.2 KiB
+ git-core                         x86_64 2.53.0-1.fc43           updates                24.1 MiB
+ git-core-doc                     noarch 2.53.0-1.fc43           updates                18.6 MiB
+ glibc-devel                      x86_64 2.42-10.fc43            updates                 2.3 MiB
+ glycin-devel                     x86_64 2.0.8-1.fc43            updates               126.1 KiB
+ glycin-libs                      x86_64 2.0.8-1.fc43            updates                 4.2 MiB
+ glycin-loaders                   x86_64 2.0.8-1.fc43            updates                12.7 MiB
+ gmp-c++                          x86_64 1:6.3.0-4.fc43          fedora                 27.6 KiB
+ gmp-devel                        x86_64 1:6.3.0-4.fc43          fedora                352.3 KiB
+ gnutls-dane                      x86_64 3.8.12-1.fc43           updates                60.9 KiB
+ google-noto-fonts-common         noarch 20251101-2.fc43         updates                17.7 KiB
+ google-noto-sans-vf-fonts        noarch 20251101-2.fc43         updates                 1.4 MiB
+ gpgme                            x86_64 1.24.3-6.fc43           fedora                587.9 KiB
+ graphene                         x86_64 1.10.8-2.fc43           fedora                158.4 KiB
+ graphene-devel                   x86_64 1.10.8-2.fc43           fedora                  2.3 MiB
+ graphite2                        x86_64 1.3.14-19.fc43          fedora                191.8 KiB
+ graphite2-devel                  x86_64 1.3.14-19.fc43          fedora                 49.3 KiB
+ groff-base                       x86_64 1.23.0-11.fc43          updates                 3.8 MiB
+ gssdp                            x86_64 1.6.4-5.fc43            updates               146.4 KiB
+ gstreamer1                       x86_64 1.26.10-1.fc43          updates                 5.4 MiB
+ gstreamer1-plugins-bad-free-libs x86_64 1.26.10-1.fc43          updates                 3.1 MiB
+ gstreamer1-plugins-base          x86_64 1.26.10-1.fc43          updates                 7.4 MiB
+ gtk-update-icon-cache            x86_64 3.24.51-2.fc43          fedora                 62.2 KiB
+ gtk3                             x86_64 3.24.51-2.fc43          fedora                 22.4 MiB
+ gtk4                             x86_64 4.20.2-1.fc43           fedora                 26.7 MiB
+ gupnp                            x86_64 1.6.9-2.fc43            fedora                308.0 KiB
+ gupnp-igd                        x86_64 1.6.0-7.fc43            fedora                 66.7 KiB
+ harfbuzz                         x86_64 11.5.1-2.fc43           updates                 2.8 MiB
+ harfbuzz-cairo                   x86_64 11.5.1-2.fc43           updates                48.1 KiB
+ harfbuzz-devel                   x86_64 11.5.1-2.fc43           updates                 5.3 MiB
+ harfbuzz-icu                     x86_64 11.5.1-2.fc43           updates                15.4 KiB
+ hicolor-icon-theme               noarch 0.18-2.fc43             fedora                 72.4 KiB
+ highway                          x86_64 1.3.0-1.fc43            updates                 5.5 MiB
+ hiredis                          x86_64 1.2.0-7.fc43            fedora                105.9 KiB
+ hwdata                           noarch 0.404-1.fc43            updates                 9.8 MiB
+ iso-codes                        noarch 4.18.0-2.fc43           fedora                 21.5 MiB
+ jansson                          x86_64 2.14-3.fc43             fedora                 89.1 KiB
+ jbigkit-libs                     x86_64 2.1-32.fc43             fedora                113.5 KiB
+ json-glib                        x86_64 1.10.8-4.fc43           updates               592.3 KiB
+ kernel-headers                   x86_64 6.18.3-200.fc43         updates                 6.8 MiB
+ kmod-libs                        x86_64 34.2-2.fc43             fedora                135.1 KiB
+ lcms2                            x86_64 2.16-6.fc43             fedora                433.7 KiB
+ lcms2-devel                      x86_64 2.16-6.fc43             fedora                135.7 KiB
+ less                             x86_64 679-2.fc43              fedora                406.1 KiB
+ libX11                           x86_64 1.8.12-1.fc43           fedora                  1.3 MiB
+ libX11-common                    noarch 1.8.12-1.fc43           fedora                  1.2 MiB
+ libX11-devel                     x86_64 1.8.12-1.fc43           fedora                  1.0 MiB
+ libX11-xcb                       x86_64 1.8.12-1.fc43           fedora                 10.9 KiB
+ libXau                           x86_64 1.0.12-3.fc43           fedora                 72.9 KiB
+ libXau-devel                     x86_64 1.0.12-3.fc43           fedora                  7.5 KiB
+ libXcomposite                    x86_64 0.4.6-6.fc43            fedora                 40.5 KiB
+ libXcomposite-devel              x86_64 0.4.6-6.fc43            fedora                  8.0 KiB
+ libXcursor                       x86_64 1.2.3-3.fc43            fedora                 53.4 KiB
+ libXcursor-devel                 x86_64 1.2.3-3.fc43            fedora                 22.7 KiB
+ libXdamage                       x86_64 1.1.6-6.fc43            fedora                 39.6 KiB
+ libXdamage-devel                 x86_64 1.1.6-6.fc43            fedora                  2.5 KiB
+ libXext                          x86_64 1.3.6-4.fc43            fedora                 90.0 KiB
+ libXext-devel                    x86_64 1.3.6-4.fc43            fedora                 98.9 KiB
+ libXfixes                        x86_64 6.0.1-6.fc43            fedora                 26.2 KiB
+ libXfixes-devel                  x86_64 6.0.1-6.fc43            fedora                  9.2 KiB
+ libXft                           x86_64 2.3.8-9.fc43            fedora                164.4 KiB
+ libXft-devel                     x86_64 2.3.8-9.fc43            fedora                 31.7 KiB
+ libXi                            x86_64 1.8.2-3.fc43            fedora                 80.6 KiB
+ libXi-devel                      x86_64 1.8.2-3.fc43            fedora                132.5 KiB
+ libXinerama                      x86_64 1.1.5-9.fc43            fedora                 15.0 KiB
+ libXinerama-devel                x86_64 1.1.5-9.fc43            fedora                  7.0 KiB
+ libXrandr                        x86_64 1.5.4-6.fc43            fedora                 51.8 KiB
+ libXrandr-devel                  x86_64 1.5.4-6.fc43            fedora                 21.8 KiB
+ libXrender                       x86_64 0.9.12-3.fc43           fedora                 46.0 KiB
+ libXrender-devel                 x86_64 0.9.12-3.fc43           fedora                 50.1 KiB
+ libXtst                          x86_64 1.2.5-3.fc43            fedora                 33.5 KiB
+ libXtst-devel                    x86_64 1.2.5-3.fc43            fedora                 11.6 KiB
+ libXv                            x86_64 1.0.13-3.fc43           fedora                 26.0 KiB
+ libXxf86vm                       x86_64 1.1.6-3.fc43            fedora                 25.3 KiB
+ libaom                           x86_64 3.13.1-1.fc43           fedora                  5.0 MiB
+ libblkid-devel                   x86_64 2.41.3-7.fc43           updates                44.9 KiB
+ libcap-devel                     x86_64 2.76-3.fc43             fedora                 37.5 KiB
+ libcbor                          x86_64 0.12.0-6.fc43           fedora                 77.8 KiB
+ libcloudproviders                x86_64 0.3.6-2.fc43            fedora                124.3 KiB
+ libcloudproviders-devel          x86_64 0.3.6-2.fc43            fedora                375.4 KiB
+ libdatrie                        x86_64 0.2.13-12.fc43          fedora                 53.8 KiB
+ libdatrie-devel                  x86_64 0.2.13-12.fc43          fedora                558.1 KiB
+ libdav1d                         x86_64 1.5.2-1.fc43            updates                 1.7 MiB
+ libdisplay-info                  x86_64 0.2.0-4.fc43            fedora                215.9 KiB
+ libdrm                           x86_64 2.4.131-1.fc43          updates               404.7 KiB
+ libedit                          x86_64 3.1-57.20251016cvs.fc43 updates               240.2 KiB
+ libepoxy                         x86_64 1.5.10-11.fc43          fedora                  1.1 MiB
+ libepoxy-devel                   x86_64 1.5.10-11.fc43          fedora                  1.6 MiB
+ libfdisk                         x86_64 2.41.3-7.fc43           updates               380.4 KiB
+ libffi-devel                     x86_64 3.5.2-1.fc43            updates                33.9 KiB
+ libfido2                         x86_64 1.16.0-3.fc43           fedora                238.5 KiB
+ libfyaml                         x86_64 0.8-8.fc43              fedora                541.3 KiB
+ libglvnd                         x86_64 1:1.7.0-8.fc43          fedora                526.1 KiB
+ libglvnd-core-devel              x86_64 1:1.7.0-8.fc43          fedora                 40.3 KiB
+ libglvnd-devel                   x86_64 1:1.7.0-8.fc43          fedora                  2.1 MiB
+ libglvnd-egl                     x86_64 1:1.7.0-8.fc43          fedora                 64.7 KiB
+ libglvnd-glx                     x86_64 1:1.7.0-8.fc43          fedora                601.2 KiB
+ libglvnd-opengl                  x86_64 1:1.7.0-8.fc43          fedora                144.8 KiB
+ libgudev                         x86_64 238-8.fc43              fedora                 83.8 KiB
+ libgusb                          x86_64 0.4.9-4.fc43            fedora                162.0 KiB
+ libheif                          x86_64 1.20.2-6.fc43           fedora                  1.6 MiB
+ libicu                           x86_64 77.1-1.fc43             fedora                 36.4 MiB
+ libicu-devel                     x86_64 77.1-1.fc43             fedora                  5.0 MiB
+ libjpeg-turbo                    x86_64 3.1.2-1.fc43            fedora                804.9 KiB
+ libjxl                           x86_64 1:0.11.1-7.fc43         updates                 4.1 MiB
+ liblastlog2                      x86_64 2.41.3-7.fc43           updates                33.9 KiB
+ liblerc                          x86_64 4.0.0-9.fc43            fedora                624.1 KiB
+ libmount-devel                   x86_64 2.41.3-7.fc43           updates                65.5 KiB
+ libmpc                           x86_64 1.3.1-8.fc43            fedora                160.6 KiB
+ libnice                          x86_64 0.1.22-8.fc43           fedora                497.7 KiB
+ libogg                           x86_64 2:1.3.6-2.fc43          updates                45.6 KiB
+ libopenjph                       x86_64 0.22.0-2.fc43           fedora                466.2 KiB
+ libpciaccess                     x86_64 0.16-16.fc43            fedora                 44.5 KiB
+ libpkgconf                       x86_64 2.3.0-3.fc43            fedora                 78.1 KiB
+ libpng                           x86_64 2:1.6.55-1.fc43         updates               241.7 KiB
+ libpng-devel                     x86_64 2:1.6.55-1.fc43         updates               887.7 KiB
+ librsvg2                         x86_64 2.61.0-5.fc43           updates                 5.1 MiB
+ libseccomp                       x86_64 2.6.0-2.fc43            fedora                224.9 KiB
+ libseccomp-devel                 x86_64 2.6.0-2.fc43            fedora                114.3 KiB
+ libselinux-devel                 x86_64 3.9-5.fc43              fedora                127.3 KiB
+ libsepol-devel                   x86_64 3.9-2.fc43              fedora                121.4 KiB
+ libsoup3                         x86_64 3.6.6-1.fc43            updates                 1.7 MiB
+ libstdc++-devel                  x86_64 15.2.1-7.fc43           updates                37.3 MiB
+ libstemmer                       x86_64 3.0.1-8.fc43            fedora                661.5 KiB
+ libtextstyle                     x86_64 0.25.1-2.fc43           fedora                199.5 KiB
+ libthai                          x86_64 0.1.29-11.fc43          fedora                783.4 KiB
+ libthai-devel                    x86_64 0.1.29-11.fc43          fedora                644.3 KiB
+ libtheora                        x86_64 1:1.1.1-40.fc43         fedora                477.3 KiB
+ libtiff                          x86_64 4.7.1-1.fc43            updates               624.4 KiB
+ libtinysparql                    x86_64 3.10.1-5.fc43           updates               995.0 KiB
+ libunwind                        x86_64 1.8.1-3.fc43            fedora                194.1 KiB
+ libva                            x86_64 2.22.0-6.fc43           fedora                329.4 KiB
+ libvala                          x86_64 0.56.18-3.fc43          fedora                  1.9 MiB
+ libvisual                        x86_64 1:0.4.2-3.fc43          fedora                452.7 KiB
+ libvmaf                          x86_64 3.0.0-4.fc43            fedora                827.0 KiB
+ libvorbis                        x86_64 1:1.3.7-13.fc43         fedora                833.4 KiB
+ libwayland-client                x86_64 1.24.0-1.fc43           fedora                 62.0 KiB
+ libwayland-cursor                x86_64 1.24.0-1.fc43           fedora                 37.3 KiB
+ libwayland-egl                   x86_64 1.24.0-1.fc43           fedora                 12.4 KiB
+ libwayland-server                x86_64 1.24.0-1.fc43           fedora                 78.5 KiB
+ libwebp                          x86_64 1.6.0-2.fc43            fedora                956.6 KiB
+ libxcb                           x86_64 1.17.0-6.fc43           fedora                  1.1 MiB
+ libxcb-devel                     x86_64 1.17.0-6.fc43           fedora                  2.7 MiB
+ libxcrypt-devel                  x86_64 4.5.2-1.fc43            updates                31.1 KiB
+ libxkbcommon                     x86_64 1.11.0-1.fc43           fedora                408.2 KiB
+ libxml2-devel                    x86_64 2.12.10-5.fc43          fedora                  3.4 MiB
+ libxmlb                          x86_64 0.3.24-1.fc43           fedora                280.4 KiB
+ libxshmfence                     x86_64 1.3.2-7.fc43            fedora                 12.4 KiB
+ llvm-filesystem                  x86_64 21.1.8-4.fc43           updates                 0.0   B
+ llvm-libs                        x86_64 21.1.8-4.fc43           updates               138.6 MiB
+ lm_sensors-libs                  x86_64 3.6.0-23.fc43           fedora                 85.8 KiB
+ lzo                              x86_64 2.10-15.fc43            fedora                178.9 KiB
+ lzo-devel                        x86_64 2.10-15.fc43            fedora                212.2 KiB
+ lzo-minilzo                      x86_64 2.10-15.fc43            fedora                 36.7 KiB
+ m4                               x86_64 1.4.21-1.fc43           updates               877.2 KiB
+ mesa-dri-drivers                 x86_64 25.3.5-1.fc43           updates                48.8 MiB
+ mesa-filesystem                  x86_64 25.3.5-1.fc43           updates                 3.6 KiB
+ mesa-libEGL                      x86_64 25.3.5-1.fc43           updates               310.4 KiB
+ mesa-libGL                       x86_64 25.3.5-1.fc43           updates               286.0 KiB
+ mesa-libgbm                      x86_64 25.3.5-1.fc43           updates                19.7 KiB
+ mpdecimal                        x86_64 4.0.1-2.fc43            fedora                217.2 KiB
+ ncurses                          x86_64 6.5-7.20250614.fc43     fedora                609.8 KiB
+ ngtcp2                           x86_64 1.19.0-1.fc43           updates               314.2 KiB
+ ngtcp2-crypto-ossl               x86_64 1.19.0-1.fc43           updates                51.7 KiB
+ openh264                         x86_64 2.6.0-2.fc43            fedora-cisco-openh264   1.1 MiB
+ openjpeg                         x86_64 2.5.4-1.fc43            fedora                456.3 KiB
+ openssh                          x86_64 10.0p1-6.fc43           updates                 1.4 MiB
+ openssh-clients                  x86_64 10.0p1-6.fc43           updates                 2.6 MiB
+ opus                             x86_64 1.5.2-3.fc43            fedora                427.6 KiB
+ orc                              x86_64 0.4.41-2.fc43           fedora                726.3 KiB
+ pango                            x86_64 1.57.0-1.fc43           fedora                  1.0 MiB
+ pango-devel                      x86_64 1.57.0-1.fc43           fedora                  1.5 MiB
+ pciutils-libs                    x86_64 3.14.0-2.fc43           fedora                 99.4 KiB
+ pcre2-devel                      x86_64 10.47-1.fc43            updates                 2.1 MiB
+ pcre2-utf16                      x86_64 10.47-1.fc43            updates               639.2 KiB
+ pcre2-utf32                      x86_64 10.47-1.fc43            updates               611.1 KiB
+ perl-AutoLoader                  noarch 5.74-521.fc43           updates                20.6 KiB
+ perl-B                           x86_64 1.89-521.fc43           updates               501.3 KiB
+ perl-Carp                        noarch 1.54-520.fc43           fedora                 46.6 KiB
+ perl-Class-Struct                noarch 0.68-521.fc43           updates                25.4 KiB
+ perl-Data-Dumper                 x86_64 2.191-521.fc43          fedora                115.6 KiB
+ perl-Digest                      noarch 1.20-520.fc43           fedora                 35.3 KiB
+ perl-Digest-MD5                  x86_64 2.59-520.fc43           fedora                 59.7 KiB
+ perl-DynaLoader                  x86_64 1.57-521.fc43           updates                32.1 KiB
+ perl-Encode                      x86_64 4:3.21-520.fc43         fedora                  4.7 MiB
+ perl-Errno                       x86_64 1.38-521.fc43           updates                 8.4 KiB
+ perl-Error                       noarch 1:0.17030-2.fc43        fedora                 76.7 KiB
+ perl-Exporter                    noarch 5.79-520.fc43           fedora                 54.3 KiB
+ perl-Fcntl                       x86_64 1.20-521.fc43           updates                48.8 KiB
+ perl-File-Basename               noarch 2.86-521.fc43           updates                14.0 KiB
+ perl-File-Compare                noarch 1.100.800-521.fc43      updates                 5.6 KiB
+ perl-File-Copy                   noarch 2.41-521.fc43           updates                19.7 KiB
+ perl-File-Find                   noarch 1.44-521.fc43           updates                42.0 KiB
+ perl-File-Path                   noarch 2.18-520.fc43           fedora                 63.5 KiB
+ perl-File-Temp                   noarch 1:0.231.100-520.fc43    fedora                162.3 KiB
+ perl-File-stat                   noarch 1.14-521.fc43           updates                12.5 KiB
+ perl-FileHandle                  noarch 2.05-521.fc43           updates                 9.4 KiB
+ perl-Getopt-Long                 noarch 1:2.58-520.fc43         fedora                144.5 KiB
+ perl-Getopt-Std                  noarch 1.14-521.fc43           updates                11.2 KiB
+ perl-Git                         noarch 2.53.0-1.fc43           updates                64.4 KiB
+ perl-HTTP-Tiny                   noarch 0.090-521.fc43          fedora                154.4 KiB
+ perl-IO                          x86_64 1.55-521.fc43           updates               147.4 KiB
+ perl-IO-Socket-IP                noarch 0.43-521.fc43           fedora                100.3 KiB
+ perl-IO-Socket-SSL               noarch 2.095-2.fc43            fedora                714.5 KiB
+ perl-IPC-Open3                   noarch 1.24-521.fc43           updates                27.7 KiB
+ perl-MIME-Base32                 noarch 1.303-24.fc43           fedora                 30.7 KiB
+ perl-MIME-Base64                 x86_64 3.16-520.fc43           fedora                 42.0 KiB
+ perl-Net-SSLeay                  x86_64 1.94-11.fc43            fedora                  1.3 MiB
+ perl-POSIX                       x86_64 2.23-521.fc43           updates               229.5 KiB
+ perl-PathTools                   x86_64 3.94-520.fc43           fedora                180.0 KiB
+ perl-Pod-Escapes                 noarch 1:1.07-520.fc43         fedora                 24.9 KiB
+ perl-Pod-Perldoc                 noarch 3.28.01-521.fc43        fedora                163.7 KiB
+ perl-Pod-Simple                  noarch 1:3.47-3.fc43           fedora                565.3 KiB
+ perl-Pod-Usage                   noarch 4:2.05-520.fc43         fedora                 86.3 KiB
+ perl-Scalar-List-Utils           x86_64 5:1.70-1.fc43           fedora                144.9 KiB
+ perl-SelectSaver                 noarch 1.02-521.fc43           updates                 2.2 KiB
+ perl-Socket                      x86_64 4:2.040-2.fc43          fedora                120.3 KiB
+ perl-Storable                    x86_64 1:3.37-521.fc43         fedora                231.2 KiB
+ perl-Symbol                      noarch 1.09-521.fc43           updates                 6.8 KiB
+ perl-Term-ANSIColor              noarch 5.01-521.fc43           fedora                 97.5 KiB
+ perl-Term-Cap                    noarch 1.18-520.fc43           fedora                 29.3 KiB
+ perl-TermReadKey                 x86_64 2.38-26.fc43            fedora                 64.0 KiB
+ perl-Text-ParseWords             noarch 3.31-520.fc43           fedora                 13.6 KiB
+ perl-Text-Tabs+Wrap              noarch 2024.001-520.fc43       fedora                 22.6 KiB
+ perl-Text-Unidecode              noarch 1.30-27.fc43            fedora                448.7 KiB
+ perl-Thread-Queue                noarch 3.14-520.fc43           fedora                 28.9 KiB
+ perl-Time-Local                  noarch 2:1.350-520.fc43        fedora                 69.0 KiB
+ perl-URI                         noarch 5.34-2.fc43             updates               268.0 KiB
+ perl-Unicode-EastAsianWidth      noarch 12.0-17.fc43            fedora                 32.9 KiB
+ perl-Unicode-Normalize           x86_64 1.32-520.fc43           fedora                486.2 KiB
+ perl-base                        noarch 2.27-521.fc43           updates                12.6 KiB
+ perl-constant                    noarch 1.33-521.fc43           fedora                 26.2 KiB
+ perl-if                          noarch 0.61.000-521.fc43       updates                 5.8 KiB
+ perl-interpreter                 x86_64 4:5.42.0-521.fc43       updates               118.6 KiB
+ perl-lib                         x86_64 0.65-521.fc43           updates                 8.5 KiB
+ perl-libintl-perl                x86_64 1.35-3.fc43             fedora                  4.1 MiB
+ perl-libnet                      noarch 3.15-521.fc43           fedora                289.4 KiB
+ perl-libs                        x86_64 4:5.42.0-521.fc43       updates                11.5 MiB
+ perl-locale                      noarch 1.13-521.fc43           updates                 6.1 KiB
+ perl-mro                         x86_64 1.29-521.fc43           updates                41.6 KiB
+ perl-overload                    noarch 1.40-521.fc43           updates                71.6 KiB
+ perl-overloading                 noarch 0.02-521.fc43           updates                 4.9 KiB
+ perl-parent                      noarch 1:0.244-520.fc43        fedora                 10.3 KiB
+ perl-podlators                   noarch 1:6.0.2-520.fc43        fedora                317.5 KiB
+ perl-threads                     x86_64 1:2.43-520.fc43         fedora                115.1 KiB
+ perl-threads-shared              x86_64 1.70-520.fc43           fedora                 83.6 KiB
+ perl-vars                        noarch 1.05-521.fc43           updates                 3.9 KiB
+ pixman                           x86_64 0.46.2-2.fc43           fedora                710.3 KiB
+ pixman-devel                     x86_64 0.46.2-2.fc43           fedora                 56.1 KiB
+ pkgconf                          x86_64 2.3.0-3.fc43            fedora                 88.5 KiB
+ pkgconf-m4                       noarch 2.3.0-3.fc43            fedora                 14.4 KiB
+ protobuf-c                       x86_64 1.5.2-1.fc43            updates                49.8 KiB
+ python-pip-wheel                 noarch 25.1.1-18.fc43          fedora                  1.2 MiB
+ python3                          x86_64 3.14.2-1.fc43           updates                28.9 KiB
+ python3-libs                     x86_64 3.14.2-1.fc43           updates                43.1 MiB
+ python3-mako                     noarch 1.2.3-13.fc43           fedora                712.0 KiB
+ python3-markdown                 noarch 3.10-1.fc43             updates               757.0 KiB
+ python3-markupsafe               x86_64 3.0.2-6.fc43            fedora                 61.5 KiB
+ python3-packaging                noarch 25.0-7.fc43             fedora                607.4 KiB
+ python3-setuptools               noarch 78.1.1-15.fc43          fedora                  9.0 MiB
+ rav1e-libs                       x86_64 0.8.1-2.fc43            updates                 3.1 MiB
+ shared-mime-info                 x86_64 2.4-2.fc43              fedora                  5.2 MiB
+ spirv-tools-libs                 x86_64 2026.1-2.fc43           updates                 5.9 MiB
+ svt-av1-libs                     x86_64 3.1.2-1.fc43            fedora                  5.6 MiB
+ sysprof-capture-devel            x86_64 49.0-1.fc43             fedora                803.7 KiB
+ systemd-devel                    x86_64 258.4-1.fc43            updates               615.2 KiB
+ unbound-libs                     x86_64 1.24.2-1.fc43           updates                 1.5 MiB
+ util-linux                       x86_64 2.41.3-7.fc43           updates                 3.5 MiB
+ vala                             x86_64 0.56.18-3.fc43          fedora                 10.3 MiB
+ vulkan-headers                   noarch 1.4.341.0-1.fc43        updates                36.1 MiB
+ vulkan-loader-devel              x86_64 1.4.341.0-1.fc43        updates                 8.0 KiB
+ wayland-devel                    x86_64 1.24.0-1.fc43           fedora                691.9 KiB
+ wget2                            x86_64 2.2.1-1.fc43            updates                 1.1 MiB
+ wget2-libs                       x86_64 2.2.1-1.fc43            updates               377.6 KiB
+ xkeyboard-config                 noarch 2.46-1.fc43             updates                10.2 MiB
+ xml-common                       noarch 0.6.3-67.fc43           fedora                 78.4 KiB
+ xorg-x11-proto-devel             noarch 2024.1-5.fc43           fedora                  1.7 MiB
+ xprop                            x86_64 1.2.8-4.fc43            fedora                 54.7 KiB
+ xz-devel                         x86_64 1:5.8.1-4.fc43          updates               258.8 KiB
+ zlib-ng-compat-devel             x86_64 2.3.3-1.fc43            updates               107.0 KiB
+
+Transaction Summary:
+ Installing:       360 packages
+
+Total size of inbound packages is 308 MiB. Need to download 308 MiB.
+After this operation, 1 GiB extra will be used (install 1 GiB, remove 0 B).
+[  1/360] make-1:4.4.1-11.fc43.x86_64   100% |   1.8 MiB/s | 585.2 KiB |  00m00s
+[  2/360] perl-Carp-0:1.54-520.fc43.noa 100% |   1.0 MiB/s |  28.7 KiB |  00m00s
+[  3/360] autoconf-0:2.72-7.fc43.noarch 100% |   2.3 MiB/s | 830.6 KiB |  00m00s
+[  4/360] perl-Exporter-0:5.79-520.fc43 100% | 907.4 KiB/s |  30.9 KiB |  00m00s
+[  5/360] perl-File-Path-0:2.18-520.fc4 100% |   1.1 MiB/s |  35.1 KiB |  00m00s
+[  6/360] automake-0:1.18.1-2.fc43.noar 100% |   1.8 MiB/s | 723.5 KiB |  00m00s
+[  7/360] perl-Getopt-Long-1:2.58-520.f 100% |   1.9 MiB/s |  63.6 KiB |  00m00s
+[  8/360] perl-PathTools-0:3.94-520.fc4 100% |   2.1 MiB/s |  87.2 KiB |  00m00s
+[  9/360] perl-Thread-Queue-0:3.14-520. 100% | 645.0 KiB/s |  21.3 KiB |  00m00s
+[ 10/360] perl-constant-0:1.33-521.fc43 100% | 948.8 KiB/s |  22.8 KiB |  00m00s
+[ 11/360] perl-threads-1:2.43-520.fc43. 100% |   2.0 MiB/s |  57.9 KiB |  00m00s
+[ 12/360] emacs-filesystem-1:30.0-5.fc4 100% | 312.0 KiB/s |   7.5 KiB |  00m00s
+[ 13/360] perl-Data-Dumper-0:2.191-521. 100% |   1.6 MiB/s |  56.3 KiB |  00m00s
+[ 14/360] perl-File-Temp-1:0.231.100-52 100% |   1.8 MiB/s |  59.0 KiB |  00m00s
+[ 15/360] perl-Text-ParseWords-0:3.31-5 100% | 495.4 KiB/s |  16.3 KiB |  00m00s
+[ 16/360] perl-Pod-Usage-4:2.05-520.fc4 100% |   1.0 MiB/s |  40.5 KiB |  00m00s
+[ 17/360] perl-Scalar-List-Utils-5:1.70 100% |   2.9 MiB/s |  75.0 KiB |  00m00s
+[ 18/360] perl-threads-shared-0:1.70-52 100% | 663.1 KiB/s |  44.4 KiB |  00m00s
+[ 19/360] perl-parent-1:0.244-520.fc43. 100% | 284.7 KiB/s |  14.8 KiB |  00m00s
+[ 20/360] perl-Pod-Perldoc-0:3.28.01-52 100% |   1.9 MiB/s |  84.3 KiB |  00m00s
+[ 21/360] perl-podlators-1:6.0.2-520.fc 100% |   4.2 MiB/s | 128.3 KiB |  00m00s
+[ 22/360] perl-Pod-Simple-1:3.47-3.fc43 100% |   6.7 MiB/s | 219.9 KiB |  00m00s
+[ 23/360] perl-HTTP-Tiny-0:0.090-521.fc 100% |   1.1 MiB/s |  56.3 KiB |  00m00s
+[ 24/360] perl-Term-Cap-0:1.18-520.fc43 100% | 913.9 KiB/s |  21.9 KiB |  00m00s
+[ 25/360] perl-Term-ANSIColor-0:5.01-52 100% | 951.5 KiB/s |  47.6 KiB |  00m00s
+[ 26/360] perl-IO-Socket-SSL-0:2.095-2. 100% |   6.5 MiB/s | 231.5 KiB |  00m00s
+[ 27/360] perl-MIME-Base64-0:3.16-520.f 100% | 707.4 KiB/s |  29.7 KiB |  00m00s
+[ 28/360] perl-Socket-4:2.040-2.fc43.x8 100% |   1.5 MiB/s |  54.9 KiB |  00m00s
+[ 29/360] perl-Time-Local-2:1.350-520.f 100% |   1.0 MiB/s |  34.4 KiB |  00m00s
+[ 30/360] perl-Net-SSLeay-0:1.94-11.fc4 100% |   6.0 MiB/s | 374.8 KiB |  00m00s
+[ 31/360] perl-Pod-Escapes-1:1.07-520.f 100% | 638.0 KiB/s |  19.8 KiB |  00m00s
+[ 32/360] perl-Text-Tabs+Wrap-0:2024.00 100% | 460.3 KiB/s |  21.6 KiB |  00m00s
+[ 33/360] perl-IO-Socket-IP-0:0.43-521. 100% |   1.1 MiB/s |  42.1 KiB |  00m00s
+[ 34/360] pciutils-0:3.14.0-2.fc43.x86_ 100% |   2.8 MiB/s | 124.7 KiB |  00m00s
+[ 35/360] ncurses-0:6.5-7.20250614.fc43 100% |   4.9 MiB/s | 426.2 KiB |  00m00s
+[ 36/360] kmod-libs-0:34.2-2.fc43.x86_6 100% |   1.8 MiB/s |  68.1 KiB |  00m00s
+[ 37/360] wget2-wget-0:2.2.1-1.fc43.x86 100% | 348.2 KiB/s |   9.4 KiB |  00m00s
+[ 38/360] pciutils-libs-0:3.14.0-2.fc43 100% |   1.8 MiB/s |  52.2 KiB |  00m00s
+[ 39/360] wget2-0:2.2.1-1.fc43.x86_64   100% |   5.7 MiB/s | 295.8 KiB |  00m00s
+[ 40/360] wget2-libs-0:2.2.1-1.fc43.x86 100% |   2.6 MiB/s | 153.0 KiB |  00m00s
+[ 41/360] git-0:2.53.0-1.fc43.x86_64    100% |   1.2 MiB/s |  40.7 KiB |  00m00s
+[ 42/360] gpgme-0:1.24.3-6.fc43.x86_64  100% |   3.6 MiB/s | 218.5 KiB |  00m00s
+[ 43/360] perl-Git-0:2.53.0-1.fc43.noar 100% |   1.0 MiB/s |  37.8 KiB |  00m00s
+[ 44/360] perl-TermReadKey-0:2.38-26.fc 100% | 952.6 KiB/s |  35.2 KiB |  00m00s
+[ 45/360] less-0:679-2.fc43.x86_64      100% |   4.5 MiB/s | 195.3 KiB |  00m00s
+[ 46/360] perl-Error-1:0.17030-2.fc43.n 100% |   1.0 MiB/s |  40.2 KiB |  00m00s
+[ 47/360] git-core-doc-0:2.53.0-1.fc43. 100% |   6.6 MiB/s |   3.1 MiB |  00m00s
+[ 48/360] git-core-0:2.53.0-1.fc43.x86_ 100% |  10.2 MiB/s |   5.2 MiB |  00m01s
+[ 49/360] libmpc-0:1.3.1-8.fc43.x86_64  100% |   2.4 MiB/s |  70.4 KiB |  00m00s
+[ 50/360] gcc-c++-0:15.2.1-7.fc43.x86_6 100% |  15.4 MiB/s |  15.3 MiB |  00m01s
+[ 51/360] libtool-0:2.5.4-8.fc43.x86_64 100% |   9.8 MiB/s | 621.4 KiB |  00m00s
+[ 52/360] pkgconf-pkg-config-0:2.3.0-3. 100% | 266.9 KiB/s |   9.6 KiB |  00m00s
+[ 53/360] pkgconf-0:2.3.0-3.fc43.x86_64 100% |   1.2 MiB/s |  44.6 KiB |  00m00s
+[ 54/360] pkgconf-m4-0:2.3.0-3.fc43.noa 100% | 339.3 KiB/s |  13.9 KiB |  00m00s
+[ 55/360] libpkgconf-0:2.3.0-3.fc43.x86 100% | 947.4 KiB/s |  37.9 KiB |  00m00s
+[ 56/360] texinfo-0:7.2-7.fc43.x86_64   100% |  13.8 MiB/s |   1.6 MiB |  00m00s
+[ 57/360] perl-Storable-1:3.37-521.fc43 100% |   3.0 MiB/s |  98.5 KiB |  00m00s
+[ 58/360] perl-Text-Unidecode-0:1.30-27 100% |   4.6 MiB/s | 182.2 KiB |  00m00s
+[ 59/360] perl-Unicode-EastAsianWidth-0 100% | 641.2 KiB/s |  18.6 KiB |  00m00s
+[ 60/360] perl-Unicode-Normalize-0:1.32 100% |   2.1 MiB/s |  74.0 KiB |  00m00s
+[ 61/360] perl-libintl-perl-0:1.35-3.fc 100% |  14.4 MiB/s | 813.7 KiB |  00m00s
+[ 62/360] guile30-0:3.0.9-5.fc43.x86_64 100% |  22.5 MiB/s |   8.3 MiB |  00m00s
+[ 63/360] gc-0:8.2.6-5.fc43.x86_64      100% |   2.6 MiB/s | 111.0 KiB |  00m00s
+[ 64/360] guile30-devel-0:3.0.9-5.fc43. 100% |   4.7 MiB/s | 124.4 KiB |  00m00s
+[ 65/360] glib2-devel-0:2.86.4-1.fc43.x 100% |  18.6 MiB/s |   1.5 MiB |  00m00s
+[ 66/360] python3-packaging-0:25.0-7.fc 100% |   5.6 MiB/s | 161.5 KiB |  00m00s
+[ 67/360] gettext-devel-0:0.25.1-2.fc43 100% |   9.2 MiB/s | 282.1 KiB |  00m00s
+[ 68/360] diffutils-0:3.12-3.fc43.x86_6 100% |  11.6 MiB/s | 392.3 KiB |  00m00s
+[ 69/360] cpp-0:15.2.1-7.fc43.x86_64    100% |   5.8 MiB/s |  12.9 MiB |  00m02s
+[ 70/360] gettext-0:0.25.1-2.fc43.x86_6 100% |  19.8 MiB/s |   1.6 MiB |  00m00s
+[ 71/360] gettext-libs-0:0.25.1-2.fc43. 100% |  11.0 MiB/s | 791.3 KiB |  00m00s
+[ 72/360] gettext-common-devel-0:0.25.1 100% |   3.9 MiB/s | 601.7 KiB |  00m00s
+[ 73/360] gettext-runtime-0:0.25.1-2.fc 100% |   3.4 MiB/s | 116.3 KiB |  00m00s
+[ 74/360] libtextstyle-0:0.25.1-2.fc43. 100% |   2.8 MiB/s |  91.8 KiB |  00m00s
+[ 75/360] gettext-envsubst-0:0.25.1-2.f 100% |   1.2 MiB/s |  37.7 KiB |  00m00s
+[ 76/360] gobject-introspection-0:1.84. 100% |   4.4 MiB/s | 120.3 KiB |  00m00s
+[ 77/360] gobject-introspection-devel-0 100% |  11.0 MiB/s | 474.5 KiB |  00m00s
+[ 78/360] python3-mako-0:1.2.3-13.fc43. 100% |   3.0 MiB/s | 220.3 KiB |  00m00s
+[ 79/360] python3-markupsafe-0:3.0.2-6. 100% | 646.2 KiB/s |  31.7 KiB |  00m00s
+[ 80/360] cairo-0:1.18.4-2.fc43.x86_64  100% |  12.1 MiB/s | 729.3 KiB |  00m00s
+[ 81/360] gtk3-0:3.24.51-2.fc43.x86_64  100% |  21.8 MiB/s |   5.9 MiB |  00m00s
+[ 82/360] libepoxy-0:1.5.10-11.fc43.x86 100% |   7.2 MiB/s | 229.5 KiB |  00m00s
+[ 83/360] pango-0:1.57.0-1.fc43.x86_64  100% |   9.3 MiB/s | 353.4 KiB |  00m00s
+[ 84/360] fontconfig-0:2.17.0-3.fc43.x8 100% |   6.6 MiB/s | 272.2 KiB |  00m00s
+[ 85/360] freetype-0:2.13.3-3.fc43.x86_ 100% |   8.0 MiB/s | 412.1 KiB |  00m00s
+[ 86/360] libX11-0:1.8.12-1.fc43.x86_64 100% |  15.2 MiB/s | 655.6 KiB |  00m00s
+[ 87/360] libXext-0:1.3.6-4.fc43.x86_64 100% |   1.1 MiB/s |  39.1 KiB |  00m00s
+[ 88/360] libXrender-0:0.9.12-3.fc43.x8 100% | 839.8 KiB/s |  26.9 KiB |  00m00s
+[ 89/360] gcc-0:15.2.1-7.fc43.x86_64    100% |  11.4 MiB/s |  39.7 MiB |  00m03s
+[ 90/360] libxcb-0:1.17.0-6.fc43.x86_64 100% |   4.6 MiB/s | 237.7 KiB |  00m00s
+[ 91/360] pixman-0:0.46.2-2.fc43.x86_64 100% |   7.9 MiB/s | 292.5 KiB |  00m00s
+[ 92/360] lzo-0:2.10-15.fc43.x86_64     100% |   1.8 MiB/s |  69.4 KiB |  00m00s
+[ 93/360] adwaita-icon-theme-0:49.0-1.f 100% |   8.8 MiB/s | 403.9 KiB |  00m00s
+[ 94/360] cairo-gobject-0:1.18.4-2.fc43 100% | 384.8 KiB/s |  16.9 KiB |  00m00s
+[ 95/360] colord-libs-0:1.4.8-2.fc43.x8 100% |   6.6 MiB/s | 230.5 KiB |  00m00s
+[ 96/360] fribidi-0:1.0.16-3.fc43.x86_6 100% |   1.5 MiB/s |  53.3 KiB |  00m00s
+[ 97/360] gtk-update-icon-cache-0:3.24. 100% |   1.3 MiB/s |  33.8 KiB |  00m00s
+[ 98/360] hicolor-icon-theme-0:0.18-2.f 100% |   2.5 MiB/s |  65.9 KiB |  00m00s
+[ 99/360] libXcomposite-0:0.4.6-6.fc43. 100% | 895.0 KiB/s |  24.2 KiB |  00m00s
+[100/360] libXcursor-0:1.2.3-3.fc43.x86 100% |   1.1 MiB/s |  31.2 KiB |  00m00s
+[101/360] libXdamage-0:1.1.6-6.fc43.x86 100% | 726.8 KiB/s |  23.3 KiB |  00m00s
+[102/360] libXfixes-0:6.0.1-6.fc43.x86_ 100% | 615.2 KiB/s |  19.1 KiB |  00m00s
+[103/360] libXi-0:1.8.2-3.fc43.x86_64   100% |   1.3 MiB/s |  40.3 KiB |  00m00s
+[104/360] libXinerama-0:1.1.5-9.fc43.x8 100% | 471.7 KiB/s |  14.2 KiB |  00m00s
+[105/360] libXrandr-0:1.5.4-6.fc43.x86_ 100% | 811.6 KiB/s |  27.6 KiB |  00m00s
+[106/360] libcloudproviders-0:0.3.6-2.f 100% |   1.4 MiB/s |  46.9 KiB |  00m00s
+[107/360] gtk3-devel-0:3.24.51-2.fc43.x 100% |   4.5 MiB/s |   4.3 MiB |  00m01s
+[108/360] libwayland-client-0:1.24.0-1. 100% |   1.1 MiB/s |  33.6 KiB |  00m00s
+[109/360] libwayland-cursor-0:1.24.0-1. 100% | 609.4 KiB/s |  18.9 KiB |  00m00s
+[110/360] libwayland-egl-0:1.24.0-1.fc4 100% | 375.0 KiB/s |  12.4 KiB |  00m00s
+[111/360] libxkbcommon-0:1.11.0-1.fc43. 100% |   4.6 MiB/s | 174.3 KiB |  00m00s
+[112/360] libXft-0:2.3.8-9.fc43.x86_64  100% |   1.9 MiB/s |  72.2 KiB |  00m00s
+[113/360] default-fonts-core-sans-0:4.2 100% | 854.2 KiB/s |  29.9 KiB |  00m00s
+[114/360] fonts-filesystem-1:2.0.5-23.f 100% | 247.9 KiB/s |   8.7 KiB |  00m00s
+[115/360] libthai-0:0.1.29-11.fc43.x86_ 100% |   3.3 MiB/s | 210.3 KiB |  00m00s
+[116/360] xml-common-0:0.6.3-67.fc43.no 100% |   1.3 MiB/s |  31.0 KiB |  00m00s
+[117/360] libX11-common-0:1.8.12-1.fc43 100% |   5.9 MiB/s | 175.9 KiB |  00m00s
+[118/360] libXau-0:1.0.12-3.fc43.x86_64 100% |   1.1 MiB/s |  33.4 KiB |  00m00s
+[119/360] adwaita-cursor-theme-0:49.0-1 100% |  11.2 MiB/s | 380.1 KiB |  00m00s
+[120/360] libgusb-0:0.4.9-4.fc43.x86_64 100% |   2.0 MiB/s |  64.5 KiB |  00m00s
+[121/360] lcms2-0:2.16-6.fc43.x86_64    100% |   3.2 MiB/s | 182.8 KiB |  00m00s
+[122/360] libdatrie-0:0.2.13-12.fc43.x8 100% |   1.0 MiB/s |  32.0 KiB |  00m00s
+[123/360] abattis-cantarell-vf-fonts-0: 100% |   4.7 MiB/s | 120.1 KiB |  00m00s
+[124/360] graphene-0:1.10.8-2.fc43.x86_ 100% | 888.3 KiB/s |  61.3 KiB |  00m00s
+[125/360] gtk4-devel-0:4.20.2-1.fc43.x8 100% |  22.2 MiB/s |   4.4 MiB |  00m00s
+[126/360] libjpeg-turbo-0:3.1.2-1.fc43. 100% |   6.2 MiB/s | 236.8 KiB |  00m00s
+[127/360] libadwaita-0:1.8.4-1.fc43.x86 100% |  12.7 MiB/s | 717.2 KiB |  00m00s
+[128/360] adwaita-icon-theme-legacy-0:4 100% |   6.4 MiB/s |   2.5 MiB |  00m00s
+[129/360] appstream-0:1.1.0-1.fc43.x86_ 100% |  17.1 MiB/s | 874.0 KiB |  00m00s
+[130/360] libfyaml-0:0.8-8.fc43.x86_64  100% |   4.3 MiB/s | 230.0 KiB |  00m00s
+[131/360] libstemmer-0:3.0.1-8.fc43.x86 100% |   4.5 MiB/s | 155.3 KiB |  00m00s
+[132/360] libxmlb-0:0.3.24-1.fc43.x86_6 100% |   3.6 MiB/s | 117.3 KiB |  00m00s
+[133/360] shared-mime-info-0:2.4-2.fc43 100% |   9.3 MiB/s | 399.7 KiB |  00m00s
+[134/360] libadwaita-devel-0:1.8.4-1.fc 100% |   4.6 MiB/s | 205.7 KiB |  00m00s
+[135/360] vulkan-loader-0:1.4.341.0-1.f 100% |   3.8 MiB/s | 161.6 KiB |  00m00s
+[136/360] mesa-filesystem-0:25.3.5-1.fc 100% | 278.4 KiB/s |  10.3 KiB |  00m00s
+[137/360] libX11-xcb-0:1.8.12-1.fc43.x8 100% | 360.5 KiB/s |  11.5 KiB |  00m00s
+[138/360] libdisplay-info-0:0.2.0-4.fc4 100% |   2.4 MiB/s |  85.4 KiB |  00m00s
+[139/360] libxshmfence-0:1.3.2-7.fc43.x 100% | 369.0 KiB/s |  13.3 KiB |  00m00s
+[140/360] vulkan-tools-0:1.4.341.0-1.fc 100% |   8.6 MiB/s | 423.7 KiB |  00m00s
+[141/360] libglvnd-gles-1:1.7.0-8.fc43. 100% | 891.9 KiB/s |  28.5 KiB |  00m00s
+[142/360] mesa-libEGL-0:25.3.5-1.fc43.x 100% |   3.5 MiB/s | 120.4 KiB |  00m00s
+[143/360] libglvnd-1:1.7.0-8.fc43.x86_6 100% |   4.0 MiB/s | 114.0 KiB |  00m00s
+[144/360] mesa-dri-drivers-0:25.3.5-1.f 100% |  24.2 MiB/s |  12.8 MiB |  00m01s
+[145/360] mesa-libgbm-0:25.3.5-1.fc43.x 100% | 477.9 KiB/s |  16.2 KiB |  00m00s
+[146/360] libglvnd-egl-1:1.7.0-8.fc43.x 100% |   1.3 MiB/s |  36.0 KiB |  00m00s
+[147/360] lm_sensors-libs-0:3.6.0-23.fc 100% |   1.0 MiB/s |  40.6 KiB |  00m00s
+[148/360] libxkbcommon-devel-0:1.11.0-1 100% |   1.9 MiB/s |  73.0 KiB |  00m00s
+[149/360] python3-0:3.14.2-1.fc43.x86_6 100% | 843.6 KiB/s |  27.8 KiB |  00m00s
+[150/360] python3-setuptools-0:78.1.1-1 100% |  16.4 MiB/s |   2.1 MiB |  00m00s
+[151/360] gtk4-0:4.20.2-1.fc43.x86_64   100% |   4.3 MiB/s |   6.4 MiB |  00m02s
+[152/360] mpdecimal-0:4.0.1-2.fc43.x86_ 100% |   1.5 MiB/s |  97.1 KiB |  00m00s
+[153/360] python3-libs-0:3.14.2-1.fc43. 100% |  26.1 MiB/s |   9.8 MiB |  00m00s
+[154/360] python-pip-wheel-0:25.1.1-18. 100% |   3.6 MiB/s |   1.2 MiB |  00m00s
+[155/360] perl-interpreter-4:5.42.0-521 100% |   1.1 MiB/s |  71.7 KiB |  00m00s
+[156/360] perl-libs-4:5.42.0-521.fc43.x 100% |  22.6 MiB/s |   2.6 MiB |  00m00s
+[157/360] perl-Errno-0:1.38-521.fc43.x8 100% | 446.3 KiB/s |  14.3 KiB |  00m00s
+[158/360] perl-overload-0:1.40-521.fc43 100% |   1.5 MiB/s |  44.9 KiB |  00m00s
+[159/360] perl-File-Basename-0:2.86-521 100% | 610.9 KiB/s |  16.5 KiB |  00m00s
+[160/360] perl-POSIX-0:2.23-521.fc43.x8 100% |   2.8 MiB/s |  96.3 KiB |  00m00s
+[161/360] perl-DynaLoader-0:1.57-521.fc 100% | 874.1 KiB/s |  25.3 KiB |  00m00s
+[162/360] perl-IO-0:1.55-521.fc43.x86_6 100% |   2.1 MiB/s |  81.5 KiB |  00m00s
+[163/360] perl-base-0:2.27-521.fc43.noa 100% | 457.3 KiB/s |  15.5 KiB |  00m00s
+[164/360] perl-locale-0:1.13-521.fc43.n 100% | 367.0 KiB/s |  12.8 KiB |  00m00s
+[165/360] perl-Encode-4:3.21-520.fc43.x 100% |   5.7 MiB/s |   1.1 MiB |  00m00s
+[166/360] perl-vars-0:1.05-521.fc43.noa 100% | 385.1 KiB/s |  12.3 KiB |  00m00s
+[167/360] perl-Fcntl-0:1.20-521.fc43.x8 100% | 909.8 KiB/s |  29.1 KiB |  00m00s
+[168/360] perl-Symbol-0:1.09-521.fc43.n 100% | 423.2 KiB/s |  13.5 KiB |  00m00s
+[169/360] perl-if-0:0.61.000-521.fc43.n 100% | 404.3 KiB/s |  13.3 KiB |  00m00s
+[170/360] groff-base-0:1.23.0-11.fc43.x 100% |  17.5 MiB/s |   1.1 MiB |  00m00s
+[171/360] perl-IPC-Open3-0:1.24-521.fc4 100% | 628.3 KiB/s |  23.2 KiB |  00m00s
+[172/360] perl-AutoLoader-0:5.74-521.fc 100% | 791.4 KiB/s |  20.6 KiB |  00m00s
+[173/360] perl-URI-0:5.34-2.fc43.noarch 100% |   4.6 MiB/s | 149.3 KiB |  00m00s
+[174/360] perl-MIME-Base32-0:1.303-24.f 100% | 753.8 KiB/s |  20.4 KiB |  00m00s
+[175/360] perl-libnet-0:3.15-521.fc43.n 100% |   4.5 MiB/s | 128.3 KiB |  00m00s
+[176/360] perl-Digest-MD5-0:2.59-520.fc 100% |   1.3 MiB/s |  35.8 KiB |  00m00s
+[177/360] perl-Digest-0:1.20-520.fc43.n 100% | 688.5 KiB/s |  24.8 KiB |  00m00s
+[178/360] perl-Getopt-Std-0:1.14-521.fc 100% | 484.6 KiB/s |  15.0 KiB |  00m00s
+[179/360] perl-B-0:1.89-521.fc43.x86_64 100% |   2.8 MiB/s | 177.0 KiB |  00m00s
+[180/360] hwdata-0:0.404-1.fc43.noarch  100% |  20.0 MiB/s |   1.7 MiB |  00m00s
+[181/360] harfbuzz-0:11.5.1-2.fc43.x86_ 100% |   5.8 MiB/s |   1.1 MiB |  00m00s
+[182/360] graphite2-0:1.3.14-19.fc43.x8 100% | 605.1 KiB/s |  95.6 KiB |  00m00s
+[183/360] libxml2-devel-0:2.12.10-5.fc4 100% |   5.2 MiB/s | 524.0 KiB |  00m00s
+[184/360] json-glib-0:1.10.8-4.fc43.x86 100% |   5.1 MiB/s | 172.7 KiB |  00m00s
+[185/360] gc-devel-0:8.2.6-5.fc43.x86_6 100% |   3.5 MiB/s | 116.0 KiB |  00m00s
+[186/360] gmp-devel-1:6.3.0-4.fc43.x86_ 100% |   5.2 MiB/s | 174.3 KiB |  00m00s
+[187/360] gmp-c++-1:6.3.0-4.fc43.x86_64 100% | 634.6 KiB/s |  18.4 KiB |  00m00s
+[188/360] cups-libs-1:2.4.16-4.fc43.x86 100% |   3.4 MiB/s | 261.6 KiB |  00m00s
+[189/360] cups-filesystem-1:2.4.16-4.fc 100% | 482.2 KiB/s |  13.0 KiB |  00m00s
+[190/360] avahi-libs-0:0.9~rc2-6.fc43.x 100% |   2.2 MiB/s |  69.0 KiB |  00m00s
+[191/360] dbus-libs-1:1.16.0-4.fc43.x86 100% |   4.5 MiB/s | 148.3 KiB |  00m00s
+[192/360] xkeyboard-config-0:2.46-1.fc4 100% |   2.0 MiB/s | 993.6 KiB |  00m00s
+[193/360] gdk-pixbuf2-0:2.44.4-1.fc43.x 100% |   5.1 MiB/s | 484.9 KiB |  00m00s
+[194/360] gdk-pixbuf2-devel-0:2.44.4-1. 100% |   4.6 MiB/s | 369.3 KiB |  00m00s
+[195/360] mesa-vulkan-drivers-0:25.3.5- 100% |   8.5 MiB/s |  24.8 MiB |  00m03s
+[196/360] libunwind-0:1.8.1-3.fc43.x86_ 100% |   1.9 MiB/s |  76.5 KiB |  00m00s
+[197/360] libnice-0:0.1.22-8.fc43.x86_6 100% |   4.8 MiB/s | 200.2 KiB |  00m00s
+[198/360] libva-0:2.22.0-6.fc43.x86_64  100% |   3.4 MiB/s | 115.9 KiB |  00m00s
+[199/360] gstreamer1-plugins-bad-free-l 100% |   9.2 MiB/s |   1.0 MiB |  00m00s
+[200/360] gupnp-igd-0:1.6.0-7.fc43.x86_ 100% | 931.6 KiB/s |  33.5 KiB |  00m00s
+[201/360] libglvnd-glx-1:1.7.0-8.fc43.x 100% |   2.9 MiB/s | 132.1 KiB |  00m00s
+[202/360] gupnp-0:1.6.9-2.fc43.x86_64   100% |   2.4 MiB/s | 106.7 KiB |  00m00s
+[203/360] gstreamer1-0:1.26.10-1.fc43.x 100% |   5.7 MiB/s |   1.7 MiB |  00m00s
+[204/360] mesa-libGL-0:25.3.5-1.fc43.x8 100% |   3.7 MiB/s | 118.8 KiB |  00m00s
+[205/360] dbus-1:1.16.0-4.fc43.x86_64   100% | 257.8 KiB/s |   7.5 KiB |  00m00s
+[206/360] libXxf86vm-0:1.1.6-3.fc43.x86 100% | 611.9 KiB/s |  17.7 KiB |  00m00s
+[207/360] cdparanoia-libs-0:10.2-48.fc4 100% |   1.7 MiB/s |  53.9 KiB |  00m00s
+[208/360] libXv-0:1.0.13-3.fc43.x86_64  100% | 515.9 KiB/s |  18.6 KiB |  00m00s
+[209/360] libgudev-0:238-8.fc43.x86_64  100% | 989.1 KiB/s |  34.6 KiB |  00m00s
+[210/360] libtheora-1:1.1.1-40.fc43.x86 100% |   4.1 MiB/s | 170.3 KiB |  00m00s
+[211/360] libvisual-1:0.4.2-3.fc43.x86_ 100% |   4.0 MiB/s | 153.2 KiB |  00m00s
+[212/360] gstreamer1-plugins-base-0:1.2 100% |  10.0 MiB/s |   2.3 MiB |  00m00s
+[213/360] libvorbis-1:1.3.7-13.fc43.x86 100% |   4.0 MiB/s | 188.4 KiB |  00m00s
+[214/360] opus-0:1.5.2-3.fc43.x86_64    100% |   6.6 MiB/s | 237.1 KiB |  00m00s
+[215/360] orc-0:0.4.41-2.fc43.x86_64    100% |   6.0 MiB/s | 221.5 KiB |  00m00s
+[216/360] libpng-2:1.6.55-1.fc43.x86_64 100% |   3.3 MiB/s | 123.9 KiB |  00m00s
+[217/360] libtiff-0:4.7.1-1.fc43.x86_64 100% |   4.9 MiB/s | 222.4 KiB |  00m00s
+[218/360] jbigkit-libs-0:2.1-32.fc43.x8 100% |   1.8 MiB/s |  53.2 KiB |  00m00s
+[219/360] liblerc-0:4.0.0-9.fc43.x86_64 100% |   5.5 MiB/s | 215.1 KiB |  00m00s
+[220/360] librsvg2-0:2.61.0-5.fc43.x86_ 100% |  10.4 MiB/s |   1.9 MiB |  00m00s
+[221/360] libwebp-0:1.6.0-2.fc43.x86_64 100% |   7.9 MiB/s | 324.2 KiB |  00m00s
+[222/360] libtinysparql-0:3.10.1-5.fc43 100% |   8.1 MiB/s | 347.1 KiB |  00m00s
+[223/360] avahi-glib-0:0.9~rc2-6.fc43.x 100% | 421.6 KiB/s |  15.2 KiB |  00m00s
+[224/360] vulkan-loader-devel-0:1.4.341 100% | 385.3 KiB/s |  12.3 KiB |  00m00s
+[225/360] cairo-devel-0:1.18.4-2.fc43.x 100% |   4.3 MiB/s | 191.8 KiB |  00m00s
+[226/360] iso-codes-0:4.18.0-2.fc43.noa 100% |   6.8 MiB/s |   3.7 MiB |  00m01s
+[227/360] cairo-gobject-devel-0:1.18.4- 100% | 320.4 KiB/s |  10.9 KiB |  00m00s
+[228/360] graphene-devel-0:1.10.8-2.fc4 100% |   5.3 MiB/s | 168.5 KiB |  00m00s
+[229/360] xorg-x11-proto-devel-0:2024.1 100% |   3.9 MiB/s | 300.0 KiB |  00m00s
+[230/360] pango-devel-0:1.57.0-1.fc43.x 100% |   4.5 MiB/s | 162.0 KiB |  00m00s
+[231/360] libX11-devel-0:1.8.12-1.fc43. 100% |   7.4 MiB/s |   1.0 MiB |  00m00s
+[232/360] fontconfig-devel-0:2.17.0-3.f 100% |   5.2 MiB/s | 169.5 KiB |  00m00s
+[233/360] wayland-devel-0:1.24.0-1.fc43 100% |   4.3 MiB/s | 154.2 KiB |  00m00s
+[234/360] libwayland-server-0:1.24.0-1. 100% |   1.2 MiB/s |  41.5 KiB |  00m00s
+[235/360] freetype-devel-0:2.13.3-3.fc4 100% |   9.3 MiB/s |   1.0 MiB |  00m00s
+[236/360] at-spi2-atk-devel-0:2.58.3-1. 100% | 342.3 KiB/s |  11.0 KiB |  00m00s
+[237/360] at-spi2-atk-0:2.58.3-1.fc43.x 100% |   3.2 MiB/s |  87.4 KiB |  00m00s
+[238/360] atk-0:2.58.3-1.fc43.x86_64    100% |   2.3 MiB/s |  80.3 KiB |  00m00s
+[239/360] at-spi2-core-0:2.58.3-1.fc43. 100% |   4.4 MiB/s | 390.0 KiB |  00m00s
+[240/360] libXtst-0:1.2.5-3.fc43.x86_64 100% | 427.6 KiB/s |  20.5 KiB |  00m00s
+[241/360] xprop-0:1.2.8-4.fc43.x86_64   100% | 870.4 KiB/s |  34.8 KiB |  00m00s
+[242/360] fribidi-devel-0:1.0.16-3.fc43 100% | 860.5 KiB/s |  29.3 KiB |  00m00s
+[243/360] atk-devel-0:2.58.3-1.fc43.x86 100% |   5.5 MiB/s | 443.6 KiB |  00m00s
+[244/360] libXcomposite-devel-0:0.4.6-6 100% | 528.1 KiB/s |  15.8 KiB |  00m00s
+[245/360] libXcursor-devel-0:1.2.3-3.fc 100% |   1.1 MiB/s |  39.6 KiB |  00m00s
+[246/360] libXdamage-devel-0:1.1.6-6.fc 100% | 306.4 KiB/s |   9.5 KiB |  00m00s
+[247/360] libicu-0:77.1-1.fc43.x86_64   100% |  17.2 MiB/s |  10.7 MiB |  00m01s
+[248/360] libXext-devel-0:1.3.6-4.fc43. 100% |   2.5 MiB/s |  85.2 KiB |  00m00s
+[249/360] libXfixes-devel-0:6.0.1-6.fc4 100% | 392.4 KiB/s |  12.6 KiB |  00m00s
+[250/360] libXinerama-devel-0:1.1.5-9.f 100% | 543.0 KiB/s |  13.0 KiB |  00m00s
+[251/360] libXrandr-devel-0:1.5.4-6.fc4 100% | 836.1 KiB/s |  19.2 KiB |  00m00s
+[252/360] libXi-devel-0:1.8.2-3.fc43.x8 100% |   4.2 MiB/s | 115.8 KiB |  00m00s
+[253/360] libcloudproviders-devel-0:0.3 100% |   1.8 MiB/s |  49.2 KiB |  00m00s
+[254/360] libepoxy-devel-0:1.5.10-11.fc 100% |   4.5 MiB/s | 132.9 KiB |  00m00s
+[255/360] brotli-devel-0:1.2.0-1.fc43.x 100% |   1.2 MiB/s |  34.4 KiB |  00m00s
+[256/360] brotli-0:1.2.0-1.fc43.x86_64  100% | 850.2 KiB/s |  23.8 KiB |  00m00s
+[257/360] python3-markdown-0:3.10-1.fc4 100% |   3.8 MiB/s | 223.9 KiB |  00m00s
+[258/360] harfbuzz-cairo-0:11.5.1-2.fc4 100% |   1.0 MiB/s |  30.0 KiB |  00m00s
+[259/360] harfbuzz-icu-0:11.5.1-2.fc43. 100% | 580.0 KiB/s |  15.7 KiB |  00m00s
+[260/360] harfbuzz-devel-0:11.5.1-2.fc4 100% |   7.2 MiB/s | 455.8 KiB |  00m00s
+[261/360] zlib-ng-compat-devel-0:2.3.3- 100% |   1.1 MiB/s |  37.8 KiB |  00m00s
+[262/360] libpng-devel-2:1.6.55-1.fc43. 100% |   8.0 MiB/s | 293.8 KiB |  00m00s
+[263/360] bzip2-devel-0:1.0.8-21.fc43.x 100% |   6.3 MiB/s | 213.4 KiB |  00m00s
+[264/360] google-noto-sans-vf-fonts-0:2 100% |  13.3 MiB/s | 614.5 KiB |  00m00s
+[265/360] google-noto-fonts-common-0:20 100% | 402.6 KiB/s |  17.3 KiB |  00m00s
+[266/360] libXrender-devel-0:0.9.12-3.f 100% | 678.1 KiB/s |  19.0 KiB |  00m00s
+[267/360] pixman-devel-0:0.46.2-2.fc43. 100% | 748.8 KiB/s |  18.0 KiB |  00m00s
+[268/360] lzo-devel-0:2.10-15.fc43.x86_ 100% |   1.6 MiB/s |  39.0 KiB |  00m00s
+[269/360] perl-Class-Struct-0:0.68-521. 100% | 930.9 KiB/s |  21.4 KiB |  00m00s
+[270/360] lzo-minilzo-0:2.10-15.fc43.x8 100% | 666.3 KiB/s |  24.0 KiB |  00m00s
+[271/360] perl-File-Compare-0:1.100.800 100% | 349.6 KiB/s |  12.6 KiB |  00m00s
+[272/360] m4-0:1.4.21-1.fc43.x86_64     100% |   4.9 MiB/s | 343.9 KiB |  00m00s
+[273/360] perl-File-Copy-0:2.41-521.fc4 100% | 649.0 KiB/s |  19.5 KiB |  00m00s
+[274/360] libxcb-devel-0:1.17.0-6.fc43. 100% |  10.6 MiB/s |   1.4 MiB |  00m00s
+[275/360] perl-File-Find-0:1.44-521.fc4 100% | 986.7 KiB/s |  24.7 KiB |  00m00s
+[276/360] perl-File-stat-0:1.14-521.fc4 100% | 655.5 KiB/s |  16.4 KiB |  00m00s
+[277/360] cmake-filesystem-0:3.31.10-3. 100% | 554.8 KiB/s |  13.9 KiB |  00m00s
+[278/360] gnutls-dane-0:3.8.12-1.fc43.x 100% |   1.5 MiB/s |  38.7 KiB |  00m00s
+[279/360] expat-0:2.7.3-1.fc43.x86_64   100% |   2.4 MiB/s | 119.9 KiB |  00m00s
+[280/360] perl-mro-0:1.29-521.fc43.x86_ 100% | 621.6 KiB/s |  29.2 KiB |  00m00s
+[281/360] vulkan-headers-0:1.4.341.0-1. 100% |  18.0 MiB/s |   1.7 MiB |  00m00s
+[282/360] perl-overloading-0:0.02-521.f 100% | 349.6 KiB/s |  12.2 KiB |  00m00s
+[283/360] perl-SelectSaver-0:1.02-521.f 100% | 368.6 KiB/s |  11.1 KiB |  00m00s
+[284/360] libpciaccess-0:0.16-16.fc43.x 100% | 969.8 KiB/s |  26.2 KiB |  00m00s
+[285/360] libdrm-0:2.4.131-1.fc43.x86_6 100% |   5.5 MiB/s | 162.9 KiB |  00m00s
+[286/360] llvm-filesystem-0:21.1.8-4.fc 100% | 553.6 KiB/s |  14.9 KiB |  00m00s
+[287/360] libedit-0:3.1-57.20251016cvs. 100% |   2.7 MiB/s | 105.2 KiB |  00m00s
+[288/360] libsoup3-0:3.6.6-1.fc43.x86_6 100% |   9.8 MiB/s | 451.3 KiB |  00m00s
+[289/360] libdav1d-0:1.5.2-1.fc43.x86_6 100% |   9.4 MiB/s | 637.4 KiB |  00m00s
+[290/360] spirv-tools-libs-0:2026.1-2.f 100% |   7.7 MiB/s |   1.7 MiB |  00m00s
+[291/360] appstream-devel-0:1.1.0-1.fc4 100% |  19.0 MiB/s |   2.0 MiB |  00m00s
+[292/360] libvala-0:0.56.18-3.fc43.x86_ 100% |  11.4 MiB/s | 608.3 KiB |  00m00s
+[293/360] graphite2-devel-0:1.3.14-19.f 100% | 606.9 KiB/s |  20.6 KiB |  00m00s
+[294/360] vala-0:0.56.18-3.fc43.x86_64  100% |   9.0 MiB/s |   1.4 MiB |  00m00s
+[295/360] libicu-devel-0:77.1-1.fc43.x8 100% |  13.1 MiB/s | 794.4 KiB |  00m00s
+[296/360] libogg-2:1.3.6-2.fc43.x86_64  100% | 930.1 KiB/s |  33.5 KiB |  00m00s
+[297/360] alsa-lib-0:1.2.15.3-1.fc43.x8 100% |   5.8 MiB/s | 541.4 KiB |  00m00s
+[298/360] unbound-libs-0:1.24.2-1.fc43. 100% |  11.7 MiB/s | 574.5 KiB |  00m00s
+[299/360] dns-root-data-0:2026260100-2. 100% | 319.7 KiB/s |  14.4 KiB |  00m00s
+[300/360] ngtcp2-crypto-ossl-0:1.19.0-1 100% |   1.0 MiB/s |  26.7 KiB |  00m00s
+[301/360] hiredis-0:1.2.0-7.fc43.x86_64 100% |   1.9 MiB/s |  50.3 KiB |  00m00s
+[302/360] libffi-devel-0:3.5.2-1.fc43.x 100% |   1.1 MiB/s |  29.7 KiB |  00m00s
+[303/360] ngtcp2-0:1.19.0-1.fc43.x86_64 100% |   4.6 MiB/s | 147.3 KiB |  00m00s
+[304/360] libmount-devel-0:2.41.3-7.fc4 100% | 848.3 KiB/s |  24.6 KiB |  00m00s
+[305/360] pcre2-utf16-0:10.47-1.fc43.x8 100% |   6.9 MiB/s | 246.1 KiB |  00m00s
+[306/360] pcre2-devel-0:10.47-1.fc43.x8 100% |   8.5 MiB/s | 550.9 KiB |  00m00s
+[307/360] pcre2-utf32-0:10.47-1.fc43.x8 100% |   7.3 MiB/s | 232.9 KiB |  00m00s
+[308/360] libselinux-devel-0:3.9-5.fc43 100% |   4.5 MiB/s | 152.1 KiB |  00m00s
+[309/360] libsepol-devel-0:3.9-2.fc43.x 100% |   1.2 MiB/s |  48.4 KiB |  00m00s
+[310/360] sysprof-capture-devel-0:49.0- 100% |   4.3 MiB/s | 171.1 KiB |  00m00s
+[311/360] openssh-clients-0:10.0p1-6.fc 100% |  14.9 MiB/s | 746.3 KiB |  00m00s
+[312/360] openssh-0:10.0p1-6.fc43.x86_6 100% |   6.4 MiB/s | 338.5 KiB |  00m00s
+[313/360] libfido2-0:1.16.0-3.fc43.x86_ 100% |   2.1 MiB/s |  98.5 KiB |  00m00s
+[314/360] libcbor-0:0.12.0-6.fc43.x86_6 100% | 905.7 KiB/s |  33.5 KiB |  00m00s
+[315/360] perl-lib-0:0.65-521.fc43.x86_ 100% | 510.2 KiB/s |  14.3 KiB |  00m00s
+[316/360] glycin-devel-0:2.0.8-1.fc43.x 100% | 874.8 KiB/s |  24.5 KiB |  00m00s
+[317/360] glycin-loaders-0:2.0.8-1.fc43 100% |  18.2 MiB/s |   2.8 MiB |  00m00s
+[318/360] libseccomp-0:2.6.0-2.fc43.x86 100% |   2.3 MiB/s |  75.7 KiB |  00m00s
+[319/360] bubblewrap-0:0.11.0-2.fc43.x8 100% |   1.7 MiB/s |  65.5 KiB |  00m00s
+[320/360] glycin-libs-0:2.0.8-1.fc43.x8 100% |   6.7 MiB/s |   1.5 MiB |  00m00s
+[321/360] libheif-0:1.20.2-6.fc43.x86_6 100% |  12.3 MiB/s | 578.1 KiB |  00m00s
+[322/360] libopenjph-0:0.22.0-2.fc43.x8 100% |   3.8 MiB/s | 154.4 KiB |  00m00s
+[323/360] openjpeg-0:2.5.4-1.fc43.x86_6 100% |   4.6 MiB/s | 192.2 KiB |  00m00s
+[324/360] svt-av1-libs-0:3.1.2-1.fc43.x 100% |  17.1 MiB/s |   2.0 MiB |  00m00s
+[325/360] libaom-0:3.13.1-1.fc43.x86_64 100% |   7.6 MiB/s |   1.9 MiB |  00m00s
+[326/360] libvmaf-0:3.0.0-4.fc43.x86_64 100% |   6.4 MiB/s | 196.6 KiB |  00m00s
+[327/360] libstdc++-devel-0:15.2.1-7.fc 100% |  24.1 MiB/s |   5.3 MiB |  00m00s
+[328/360] jansson-0:2.14-3.fc43.x86_64  100% |   1.5 MiB/s |  45.3 KiB |  00m00s
+[329/360] glibc-devel-0:2.42-10.fc43.x8 100% |  10.9 MiB/s | 569.0 KiB |  00m00s
+[330/360] elfutils-debuginfod-client-0: 100% |   1.8 MiB/s |  46.9 KiB |  00m00s
+[331/360] at-spi2-core-devel-0:2.58.3-1 100% |   8.8 MiB/s | 341.8 KiB |  00m00s
+[332/360] dbus-devel-1:1.16.0-4.fc43.x8 100% | 903.0 KiB/s |  38.8 KiB |  00m00s
+[333/360] perl-FileHandle-0:2.05-521.fc 100% | 412.0 KiB/s |  14.8 KiB |  00m00s
+[334/360] libXft-devel-0:2.3.8-9.fc43.x 100% |   1.2 MiB/s |  49.4 KiB |  00m00s
+[335/360] libthai-devel-0:0.1.29-11.fc4 100% |   2.7 MiB/s | 128.3 KiB |  00m00s
+[336/360] xz-devel-1:5.8.1-4.fc43.x86_6 100% |   1.6 MiB/s |  66.7 KiB |  00m00s
+[337/360] libXau-devel-0:1.0.12-3.fc43. 100% | 365.3 KiB/s |  13.9 KiB |  00m00s
+[338/360] libdatrie-devel-0:0.2.13-12.f 100% |   3.3 MiB/s | 137.3 KiB |  00m00s
+[339/360] rav1e-libs-0:0.8.1-2.fc43.x86 100% |  17.0 MiB/s |   1.1 MiB |  00m00s
+[340/360] binutils-0:2.45.1-4.fc43.x86_ 100% |   8.4 MiB/s |   5.9 MiB |  00m01s
+[341/360] libglvnd-devel-1:1.7.0-8.fc43 100% |   5.5 MiB/s | 162.2 KiB |  00m00s
+[342/360] libglvnd-core-devel-1:1.7.0-8 100% | 690.2 KiB/s |  17.3 KiB |  00m00s
+[343/360] libglvnd-opengl-1:1.7.0-8.fc4 100% |   1.3 MiB/s |  37.0 KiB |  00m00s
+[344/360] gssdp-0:1.6.4-5.fc43.x86_64   100% |   2.3 MiB/s |  58.3 KiB |  00m00s
+[345/360] systemd-devel-0:258.4-1.fc43. 100% |   9.8 MiB/s | 672.8 KiB |  00m00s
+[346/360] protobuf-c-0:1.5.2-1.fc43.x86 100% |   1.2 MiB/s |  32.7 KiB |  00m00s
+[347/360] libcap-devel-0:2.76-3.fc43.x8 100% |   2.4 MiB/s |  61.5 KiB |  00m00s
+[348/360] util-linux-0:2.41.3-7.fc43.x8 100% |  10.2 MiB/s |   1.2 MiB |  00m00s
+[349/360] libblkid-devel-0:2.41.3-7.fc4 100% | 899.7 KiB/s |  23.4 KiB |  00m00s
+[350/360] libjxl-1:0.11.1-7.fc43.x86_64 100% |  11.2 MiB/s |   1.2 MiB |  00m00s
+[351/360] lcms2-devel-0:2.16-6.fc43.x86 100% |   1.3 MiB/s |  31.8 KiB |  00m00s
+[352/360] libseccomp-devel-0:2.6.0-2.fc 100% |   2.4 MiB/s |  62.3 KiB |  00m00s
+[353/360] kernel-headers-0:6.18.3-200.f 100% |  11.7 MiB/s |   1.7 MiB |  00m00s
+[354/360] libxcrypt-devel-0:4.5.2-1.fc4 100% |   1.1 MiB/s |  30.0 KiB |  00m00s
+[355/360] libXtst-devel-0:1.2.5-3.fc43. 100% | 543.6 KiB/s |  15.8 KiB |  00m00s
+[356/360] libfdisk-0:2.41.3-7.fc43.x86_ 100% |   4.5 MiB/s | 161.9 KiB |  00m00s
+[357/360] liblastlog2-0:2.41.3-7.fc43.x 100% | 833.6 KiB/s |  23.3 KiB |  00m00s
+[358/360] highway-0:1.3.0-1.fc43.x86_64 100% |   7.1 MiB/s | 694.5 KiB |  00m00s
+[359/360] openh264-0:2.6.0-2.fc43.x86_6 100% | 424.1 KiB/s | 422.8 KiB |  00m01s
+[360/360] llvm-libs-0:21.1.8-4.fc43.x86 100% |   8.2 MiB/s |  34.9 MiB |  00m04s
+--------------------------------------------------------------------------------
+[360/360] Total                         100% |  18.6 MiB/s | 307.8 MiB |  00m17s
+Running transaction
+[  1/362] Verify package files          100% | 311.0   B/s | 360.0   B |  00m01s
+[  2/362] Prepare transaction           100% |   2.1 KiB/s | 360.0   B |  00m00s
+[  3/362] Installing libwayland-client- 100% |  30.9 MiB/s |  63.2 KiB |  00m00s
+[  4/362] Installing expat-0:2.7.3-1.fc 100% |  22.8 MiB/s | 303.2 KiB |  00m00s
+[  5/362] Installing libX11-xcb-0:1.8.1 100% |  11.5 MiB/s |  11.8 KiB |  00m00s
+[  6/362] Installing libpng-2:1.6.55-1. 100% | 118.6 MiB/s | 243.0 KiB |  00m00s
+[  7/362] Installing fribidi-0:1.0.16-3 100% |  15.7 MiB/s | 192.8 KiB |  00m00s
+[  8/362] Installing cmake-filesystem-0 100% |   3.7 MiB/s |   7.6 KiB |  00m00s
+[  9/362] Installing libglvnd-1:1.7.0-8 100% | 515.1 MiB/s | 527.5 KiB |  00m00s
+[ 10/362] Installing vulkan-loader-0:1. 100% | 279.4 MiB/s | 572.3 KiB |  00m00s
+[ 11/362] Installing libjpeg-turbo-0:3. 100% | 262.6 MiB/s | 806.6 KiB |  00m00s
+[ 12/362] Installing graphene-0:1.10.8- 100% | 156.4 MiB/s | 160.1 KiB |  00m00s
+[ 13/362] Installing libwayland-egl-0:1 100% |  13.2 MiB/s |  13.6 KiB |  00m00s
+[ 14/362] Installing libepoxy-0:1.5.10- 100% | 359.4 MiB/s |   1.1 MiB |  00m00s
+[ 15/362] Installing libwayland-cursor- 100% |  37.6 MiB/s |  38.5 KiB |  00m00s
+[ 16/362] Installing dbus-libs-1:1.16.0 100% | 169.3 MiB/s | 346.6 KiB |  00m00s
+[ 17/362] Installing shared-mime-info-0 100% |  99.6 MiB/s |   2.6 MiB |  00m00s
+[ 18/362] Installing avahi-libs-0:0.9~r 100% |  85.0 MiB/s | 174.0 KiB |  00m00s
+[ 19/362] Installing libogg-2:1.3.6-2.f 100% |  46.0 MiB/s |  47.1 KiB |  00m00s
+[ 20/362] Installing libsoup3-0:3.6.6-1 100% | 356.2 MiB/s |   1.8 MiB |  00m00s
+[ 21/362] Installing libicu-0:77.1-1.fc 100% | 383.0 MiB/s |  36.4 MiB |  00m00s
+[ 22/362] Installing mesa-filesystem-0: 100% |   0.0   B/s |   4.3 KiB |  00m00s
+[ 23/362] Installing lcms2-0:2.16-6.fc4 100% |  53.1 MiB/s | 435.3 KiB |  00m00s
+[ 24/362] Installing xml-common-0:0.6.3 100% |  79.2 MiB/s |  81.1 KiB |  00m00s
+[ 25/362] Installing fonts-filesystem-1 100% |   0.0   B/s | 788.0   B |  00m00s
+[ 26/362] Installing libmpc-0:1.3.1-8.f 100% | 158.3 MiB/s | 162.1 KiB |  00m00s
+[ 27/362] Installing gssdp-0:1.6.4-5.fc 100% | 144.9 MiB/s | 148.4 KiB |  00m00s
+[ 28/362] Installing libseccomp-0:2.6.0 100% | 221.4 MiB/s | 226.8 KiB |  00m00s
+[ 29/362] Installing ngtcp2-0:1.19.0-1. 100% | 308.4 MiB/s | 315.8 KiB |  00m00s
+[ 30/362] Installing libdav1d-0:1.5.2-1 100% | 338.6 MiB/s |   1.7 MiB |  00m00s
+[ 31/362] Installing libedit-0:3.1-57.2 100% | 236.2 MiB/s | 241.9 KiB |  00m00s
+[ 32/362] Installing spirv-tools-libs-0 100% | 372.0 MiB/s |   6.0 MiB |  00m00s
+[ 33/362] Installing libwebp-0:1.6.0-2. 100% | 234.5 MiB/s | 960.7 KiB |  00m00s
+[ 34/362] Installing dbus-1:1.16.0-4.fc 100% |   0.0   B/s | 124.0   B |  00m00s
+[ 35/362] Installing json-glib-0:1.10.8 100% | 196.7 MiB/s | 604.4 KiB |  00m00s
+[ 36/362] Installing graphite2-0:1.3.14 100% |  13.5 MiB/s | 193.9 KiB |  00m00s
+[ 37/362] Installing freetype-0:2.13.3- 100% | 208.0 MiB/s | 851.9 KiB |  00m00s
+[ 38/362] Installing harfbuzz-0:11.5.1- 100% | 353.5 MiB/s |   2.8 MiB |  00m00s
+[ 39/362] Installing hwdata-0:0.404-1.f 100% | 490.7 MiB/s |   9.8 MiB |  00m00s
+[ 40/362] Installing libxshmfence-0:1.3 100% |  13.2 MiB/s |  13.6 KiB |  00m00s
+[ 41/362] Installing libstemmer-0:3.0.1 100% | 323.7 MiB/s | 662.9 KiB |  00m00s
+[ 42/362] Installing libdatrie-0:0.2.13 100% |  53.7 MiB/s |  54.9 KiB |  00m00s
+[ 43/362] Installing libthai-0:0.1.29-1 100% | 255.6 MiB/s | 785.2 KiB |  00m00s
+[ 44/362] Installing libXau-0:1.0.12-3. 100% |  72.7 MiB/s |  74.5 KiB |  00m00s
+[ 45/362] Installing libxcb-0:1.17.0-6. 100% | 135.0 MiB/s |   1.1 MiB |  00m00s
+[ 46/362] Installing libcloudproviders- 100% |  61.6 MiB/s | 126.2 KiB |  00m00s
+[ 47/362] Installing hicolor-icon-theme 100% |   9.2 MiB/s | 179.7 KiB |  00m00s
+[ 48/362] Installing pixman-0:0.46.2-2. 100% | 347.4 MiB/s | 711.4 KiB |  00m00s
+[ 49/362] Installing lzo-0:2.10-15.fc43 100% | 176.3 MiB/s | 180.5 KiB |  00m00s
+[ 50/362] Installing libtextstyle-0:0.2 100% | 195.6 MiB/s | 200.3 KiB |  00m00s
+[ 51/362] Installing gettext-libs-0:0.2 100% | 313.5 MiB/s |   2.2 MiB |  00m00s
+[ 52/362] Installing gc-0:8.2.6-5.fc43. 100% | 123.5 MiB/s | 252.8 KiB |  00m00s
+[ 53/362] Installing gpgme-0:1.24.3-6.f 100% |  38.4 MiB/s | 590.4 KiB |  00m00s
+[ 54/362] Installing guile30-0:3.0.9-5. 100% | 342.9 MiB/s |  52.8 MiB |  00m00s
+[ 55/362] Installing libpciaccess-0:0.1 100% |  44.8 MiB/s |  45.9 KiB |  00m00s
+[ 56/362] Installing libdrm-0:2.4.131-1 100% | 133.0 MiB/s | 408.5 KiB |  00m00s
+[ 57/362] Installing harfbuzz-icu-0:11. 100% |   0.0   B/s |  16.3 KiB |  00m00s
+[ 58/362] Installing libgusb-0:0.4.9-4. 100% | 159.8 MiB/s | 163.7 KiB |  00m00s
+[ 59/362] Installing colord-libs-0:1.4. 100% | 271.4 MiB/s | 833.8 KiB |  00m00s
+[ 60/362] Installing gupnp-0:1.6.9-2.fc 100% | 151.3 MiB/s | 309.8 KiB |  00m00s
+[ 61/362] Installing gupnp-igd-0:1.6.0- 100% |  66.9 MiB/s |  68.6 KiB |  00m00s
+[ 62/362] Installing libnice-0:0.1.22-8 100% |  40.7 MiB/s | 500.6 KiB |  00m00s
+[ 63/362] Installing ngtcp2-crypto-ossl 100% |  51.3 MiB/s |  52.6 KiB |  00m00s
+[ 64/362] Installing cpp-0:15.2.1-7.fc4 100% | 395.5 MiB/s |  38.0 MiB |  00m00s
+[ 65/362] Installing abattis-cantarell- 100% |  63.3 MiB/s | 194.4 KiB |  00m00s
+[ 66/362] Installing iso-codes-0:4.18.0 100% | 655.6 MiB/s |  21.6 MiB |  00m00s
+[ 67/362] Installing libtheora-1:1.1.1- 100% | 234.2 MiB/s | 479.7 KiB |  00m00s
+[ 68/362] Installing libvorbis-1:1.3.7- 100% | 272.1 MiB/s | 835.9 KiB |  00m00s
+[ 69/362] Installing avahi-glib-0:0.9~r 100% |   0.0   B/s |  20.4 KiB |  00m00s
+[ 70/362] Installing libtinysparql-0:3. 100% | 243.6 MiB/s | 997.9 KiB |  00m00s
+[ 71/362] Installing libxmlb-0:0.3.24-1 100% |  23.0 MiB/s | 282.6 KiB |  00m00s
+[ 72/362] Installing libglvnd-opengl-1: 100% | 142.2 MiB/s | 145.6 KiB |  00m00s
+[ 73/362] Installing highway-0:1.3.0-1. 100% | 553.5 MiB/s |   5.5 MiB |  00m00s
+[ 74/362] Installing libjxl-1:0.11.1-7. 100% | 411.1 MiB/s |   4.1 MiB |  00m00s
+[ 75/362] Installing liblastlog2-0:2.41 100% |   4.4 MiB/s |  36.0 KiB |  00m00s
+[ 76/362] Installing libfdisk-0:2.41.3- 100% | 124.2 MiB/s | 381.6 KiB |  00m00s
+[ 77/362] Installing util-linux-0:2.41. 100% |  77.8 MiB/s |   3.6 MiB |  00m00s
+[ 78/362] Installing openssh-0:10.0p1-6 100% |  87.0 MiB/s |   1.4 MiB |  00m00s
+[ 79/362] Installing kernel-headers-0:6 100% | 102.1 MiB/s |   6.9 MiB |  00m00s
+[ 80/362] Installing protobuf-c-0:1.5.2 100% |  50.2 MiB/s |  51.4 KiB |  00m00s
+[ 81/362] Installing openh264-0:2.6.0-2 100% | 182.7 MiB/s |   1.1 MiB |  00m00s
+[ 82/362] Installing rav1e-libs-0:0.8.1 100% | 237.2 MiB/s |   3.1 MiB |  00m00s
+[ 83/362] Installing elfutils-debuginfo 100% |   6.5 MiB/s |  86.3 KiB |  00m00s
+[ 84/362] Installing jansson-0:2.14-3.f 100% |  88.3 MiB/s |  90.5 KiB |  00m00s
+[ 85/362] Installing binutils-0:2.45.1- 100% | 427.8 MiB/s |  27.4 MiB |  00m00s
+[ 86/362] Installing libstdc++-devel-0: 100% | 353.7 MiB/s |  37.5 MiB |  00m00s
+[ 87/362] Installing libvmaf-0:3.0.0-4. 100% | 404.5 MiB/s | 828.4 KiB |  00m00s
+[ 88/362] Installing libaom-0:3.13.1-1. 100% | 457.4 MiB/s |   5.0 MiB |  00m00s
+[ 89/362] Installing svt-av1-libs-0:3.1 100% | 428.4 MiB/s |   5.6 MiB |  00m00s
+[ 90/362] Installing openjpeg-0:2.5.4-1 100% | 223.8 MiB/s | 458.2 KiB |  00m00s
+[ 91/362] Installing libopenjph-0:0.22. 100% | 228.2 MiB/s | 467.3 KiB |  00m00s
+[ 92/362] Installing libheif-0:1.20.2-6 100% | 388.4 MiB/s |   1.6 MiB |  00m00s
+[ 93/362] Installing bubblewrap-0:0.11. 100% |  11.2 MiB/s | 137.2 KiB |  00m00s
+[ 94/362] Installing libcbor-0:0.12.0-6 100% |  77.3 MiB/s |  79.2 KiB |  00m00s
+[ 95/362] Installing libfido2-0:1.16.0- 100% | 234.4 MiB/s | 240.0 KiB |  00m00s
+[ 96/362] Installing openssh-clients-0: 100% | 108.8 MiB/s |   2.6 MiB |  00m00s
+[ 97/362] Installing pcre2-utf32-0:10.4 100% | 298.8 MiB/s | 611.9 KiB |  00m00s
+[ 98/362] Installing pcre2-utf16-0:10.4 100% | 312.5 MiB/s | 640.0 KiB |  00m00s
+[ 99/362] Installing hiredis-0:1.2.0-7. 100% | 105.1 MiB/s | 107.6 KiB |  00m00s
+[100/362] Installing dns-root-data-0:20 100% |  12.2 MiB/s |  12.5 KiB |  00m00s
+[101/362] Installing alsa-lib-0:1.2.15. 100% |  77.2 MiB/s |   1.5 MiB |  00m00s
+[102/362] Installing libvala-0:0.56.18- 100% | 386.2 MiB/s |   1.9 MiB |  00m00s
+[103/362] Installing llvm-filesystem-0: 100% |   0.0   B/s |   1.1 KiB |  00m00s
+[104/362] Installing llvm-libs-0:21.1.8 100% | 410.1 MiB/s | 138.6 MiB |  00m00s
+[105/362] Installing m4-0:1.4.21-1.fc43 100% |  61.6 MiB/s | 883.7 KiB |  00m00s
+[106/362] Installing lzo-minilzo-0:2.10 100% |  37.1 MiB/s |  37.9 KiB |  00m00s
+[107/362] Installing google-noto-fonts- 100% |   0.0   B/s |  18.5 KiB |  00m00s
+[108/362] Installing google-noto-sans-v 100% | 278.3 MiB/s |   1.4 MiB |  00m00s
+[109/362] Installing default-fonts-core 100% |   8.9 MiB/s |  18.2 KiB |  00m00s
+[110/362] Installing fontconfig-0:2.17. 100% | 755.8 KiB/s | 785.3 KiB |  00m01s
+[111/362] Installing brotli-0:1.2.0-1.f 100% |   2.8 MiB/s |  34.4 KiB |  00m00s
+[112/362] Installing libwayland-server- 100% |  77.8 MiB/s |  79.7 KiB |  00m00s
+[113/362] Installing liblerc-0:4.0.0-9. 100% | 305.5 MiB/s | 625.6 KiB |  00m00s
+[114/362] Installing jbigkit-libs-0:2.1 100% | 112.7 MiB/s | 115.4 KiB |  00m00s
+[115/362] Installing libtiff-0:4.7.1-1. 100% | 204.0 MiB/s | 626.6 KiB |  00m00s
+[116/362] Installing orc-0:0.4.41-2.fc4 100% |  54.8 MiB/s | 728.9 KiB |  00m00s
+[117/362] Installing opus-0:1.5.2-3.fc4 100% | 209.3 MiB/s | 428.7 KiB |  00m00s
+[118/362] Installing libvisual-1:0.4.2- 100% | 222.2 MiB/s | 455.1 KiB |  00m00s
+[119/362] Installing libgudev-0:238-8.f 100% |  83.3 MiB/s |  85.3 KiB |  00m00s
+[120/362] Installing cdparanoia-libs-0: 100% | 112.3 MiB/s | 115.0 KiB |  00m00s
+[121/362] Installing libunwind-0:1.8.1- 100% |  96.4 MiB/s | 197.4 KiB |  00m00s
+[122/362] Installing cups-filesystem-1: 100% |   1.7 MiB/s |   1.8 KiB |  00m00s
+[123/362] Installing cups-libs-1:2.4.16 100% | 201.9 MiB/s | 620.2 KiB |  00m00s
+[124/362] Installing gmp-c++-1:6.3.0-4. 100% |  27.8 MiB/s |  28.5 KiB |  00m00s
+[125/362] Installing xkeyboard-config-0 100% | 396.4 MiB/s |  10.3 MiB |  00m00s
+[126/362] Installing libxkbcommon-0:1.1 100% |  36.4 MiB/s | 409.9 KiB |  00m00s
+[127/362] Installing groff-base-0:1.23. 100% | 101.2 MiB/s |   3.8 MiB |  00m00s
+[128/362] Installing python-pip-wheel-0 100% | 622.6 MiB/s |   1.2 MiB |  00m00s
+[129/362] Installing mpdecimal-0:4.0.1- 100% |  42.7 MiB/s | 218.8 KiB |  00m00s
+[130/362] Installing python3-libs-0:3.1 100% | 196.7 MiB/s |  43.5 MiB |  00m00s
+[131/362] Installing python3-0:3.14.2-1 100% |   2.0 MiB/s |  30.6 KiB |  00m00s
+[132/362] Installing gstreamer1-0:1.26. 100% | 174.1 MiB/s |   5.4 MiB |  00m00s
+[133/362] Installing python3-packaging- 100% | 121.1 MiB/s | 619.9 KiB |  00m00s
+[134/362] Installing python3-markupsafe 100% |  32.1 MiB/s |  65.8 KiB |  00m00s
+[135/362] Installing python3-mako-0:1.2 100% |  34.5 MiB/s | 740.9 KiB |  00m00s
+[136/362] Installing python3-setuptools 100% | 111.1 MiB/s |   9.2 MiB |  00m00s
+[137/362] Installing python3-markdown-0 100% |  34.6 MiB/s | 778.6 KiB |  00m00s
+[138/362] Installing vulkan-headers-0:1 100% | 481.8 MiB/s |  36.1 MiB |  00m00s
+>>> Running sysusers scriptlet: unbound-libs-0:1.24.2-1.fc43.x86_64             
+>>> Finished sysusers scriptlet: unbound-libs-0:1.24.2-1.fc43.x86_64            
+>>> Scriptlet output:                                                           
+>>> Failed to connect to audit log, ignoring: Invalid argument                  
+>>> Creating group 'unbound' with GID 999.                                      
+>>> Creating user 'unbound' (Unbound DNS resolver) with UID 999 and GID 999.    
+>>>                                                                             
+[139/362] Installing unbound-libs-0:1.2 100% | 134.1 MiB/s |   1.5 MiB |  00m00s
+[140/362] Installing gnutls-dane-0:3.8. 100% |  60.3 MiB/s |  61.7 KiB |  00m00s
+[141/362] Installing wget2-libs-0:2.2.1 100% | 185.0 MiB/s | 378.9 KiB |  00m00s
+[142/362] Installing wget2-0:2.2.1-1.fc 100% |  76.5 MiB/s |   1.1 MiB |  00m00s
+[143/362] Installing lm_sensors-libs-0: 100% |  42.4 MiB/s |  86.9 KiB |  00m00s
+[144/362] Installing mesa-dri-drivers-0 100% | 435.8 MiB/s |  48.8 MiB |  00m00s
+[145/362] Installing mesa-libgbm-0:25.3 100% |  20.0 MiB/s |  20.5 KiB |  00m00s
+[146/362] Installing libdisplay-info-0: 100% | 212.2 MiB/s | 217.3 KiB |  00m00s
+[147/362] Installing libfyaml-0:0.8-8.f 100% |  41.0 MiB/s | 545.4 KiB |  00m00s
+[148/362] Installing appstream-0:1.1.0- 100% | 206.2 MiB/s |   4.3 MiB |  00m00s
+[149/362] Installing adwaita-icon-theme 100% |  26.4 MiB/s |   2.4 MiB |  00m00s
+[150/362] Installing adwaita-cursor-the 100% | 544.2 MiB/s |  11.4 MiB |  00m00s
+[151/362] Installing adwaita-icon-theme 100% |  32.9 MiB/s |   1.3 MiB |  00m00s
+[152/362] Installing libX11-common-0:1. 100% |  74.3 MiB/s |   1.2 MiB |  00m00s
+[153/362] Installing libX11-0:1.8.12-1. 100% | 320.4 MiB/s |   1.3 MiB |  00m00s
+[154/362] Installing libXext-0:1.3.6-4. 100% |  89.1 MiB/s |  91.2 KiB |  00m00s
+[155/362] Installing libXi-0:1.8.2-3.fc 100% |  79.8 MiB/s |  81.7 KiB |  00m00s
+[156/362] Installing libXfixes-0:6.0.1- 100% |  26.9 MiB/s |  27.6 KiB |  00m00s
+[157/362] Installing libXrender-0:0.9.1 100% |  46.2 MiB/s |  47.3 KiB |  00m00s
+[158/362] Installing cairo-0:1.18.4-2.f 100% | 354.4 MiB/s |   1.8 MiB |  00m00s
+[159/362] Installing cairo-gobject-0:1. 100% |   0.0   B/s |  32.0 KiB |  00m00s
+[160/362] Installing libXcursor-0:1.2.3 100% |  53.8 MiB/s |  55.1 KiB |  00m00s
+[161/362] Installing libXrandr-0:1.5.4- 100% |  51.8 MiB/s |  53.0 KiB |  00m00s
+[162/362] Installing libXdamage-0:1.1.6 100% |  40.2 MiB/s |  41.2 KiB |  00m00s
+[163/362] Installing libXinerama-0:1.1. 100% |   0.0   B/s |  16.1 KiB |  00m00s
+[164/362] Installing libXft-0:2.3.8-9.f 100% | 162.0 MiB/s | 165.9 KiB |  00m00s
+[165/362] Installing pango-0:1.57.0-1.f 100% |  62.0 MiB/s |   1.0 MiB |  00m00s
+[166/362] Installing glycin-loaders-0:2 100% | 454.9 MiB/s |  12.7 MiB |  00m00s
+[167/362] Installing glycin-libs-0:2.0. 100% | 385.4 MiB/s |   4.2 MiB |  00m00s
+[168/362] Installing gdk-pixbuf2-0:2.44 100% | 140.3 MiB/s |   2.5 MiB |  00m00s
+[169/362] Installing librsvg2-0:2.61.0- 100% | 362.0 MiB/s |   5.1 MiB |  00m00s
+[170/362] Installing gtk-update-icon-ca 100% |   5.2 MiB/s |  63.3 KiB |  00m00s
+[171/362] Installing libXtst-0:1.2.5-3. 100% |  33.8 MiB/s |  34.6 KiB |  00m00s
+[172/362] Installing libXcomposite-0:0. 100% |  41.0 MiB/s |  42.0 KiB |  00m00s
+[173/362] Installing mesa-libEGL-0:25.3 100% | 152.0 MiB/s | 311.3 KiB |  00m00s
+[174/362] Installing libglvnd-egl-1:1.7 100% |  64.8 MiB/s |  66.3 KiB |  00m00s
+[175/362] Installing libglvnd-gles-1:1. 100% |  97.0 MiB/s |  99.3 KiB |  00m00s
+[176/362] Installing harfbuzz-cairo-0:1 100% |  47.8 MiB/s |  49.0 KiB |  00m00s
+[177/362] Installing libXxf86vm-0:1.1.6 100% |   0.0   B/s |  26.5 KiB |  00m00s
+[178/362] Installing mesa-libGL-0:25.3. 100% | 140.1 MiB/s | 287.0 KiB |  00m00s
+[179/362] Installing libglvnd-glx-1:1.7 100% | 294.2 MiB/s | 602.6 KiB |  00m00s
+[180/362] Installing libva-0:2.22.0-6.f 100% | 108.5 MiB/s | 333.4 KiB |  00m00s
+[181/362] Installing libXv-0:1.0.13-3.f 100% |  26.6 MiB/s |  27.2 KiB |  00m00s
+[182/362] Installing gstreamer1-plugins 100% | 273.4 MiB/s |   7.4 MiB |  00m00s
+[183/362] Installing gstreamer1-plugins 100% | 224.5 MiB/s |   3.1 MiB |  00m00s
+[184/362] Installing gtk4-0:4.20.2-1.fc 100% | 375.9 MiB/s |  26.7 MiB |  00m00s
+[185/362] Installing libadwaita-0:1.8.4 100% | 179.0 MiB/s |   3.2 MiB |  00m00s
+[186/362] Installing xprop-0:1.2.8-4.fc 100% |   5.0 MiB/s |  56.0 KiB |  00m00s
+[187/362] Installing at-spi2-core-0:2.5 100% | 259.8 MiB/s |   1.6 MiB |  00m00s
+[188/362] Installing atk-0:2.58.3-1.fc4 100% | 122.1 MiB/s | 250.0 KiB |  00m00s
+[189/362] Installing at-spi2-atk-0:2.58 100% | 139.5 MiB/s | 285.7 KiB |  00m00s
+[190/362] Installing gtk3-0:3.24.51-2.f 100% | 311.2 MiB/s |  22.4 MiB |  00m00s
+[191/362] Installing gobject-introspect 100% | 129.2 MiB/s | 397.1 KiB |  00m00s
+[192/362] Installing gettext-envsubst-0 100% |   6.8 MiB/s |  76.1 KiB |  00m00s
+[193/362] Installing gettext-runtime-0: 100% |  34.1 MiB/s | 453.6 KiB |  00m00s
+[194/362] Installing gettext-0:0.25.1-2 100% | 369.6 MiB/s |  12.9 MiB |  00m00s
+[195/362] Installing gettext-common-dev 100% | 578.9 MiB/s | 592.8 KiB |  00m00s
+[196/362] Installing diffutils-0:3.12-3 100% | 111.5 MiB/s |   1.6 MiB |  00m00s
+[197/362] Installing gettext-devel-0:0. 100% |  86.9 MiB/s |   1.3 MiB |  00m00s
+[198/362] Installing libpkgconf-0:2.3.0 100% |  77.4 MiB/s |  79.2 KiB |  00m00s
+[199/362] Installing pkgconf-0:2.3.0-3. 100% |   8.1 MiB/s |  91.0 KiB |  00m00s
+[200/362] Installing pkgconf-m4-0:2.3.0 100% |   0.0   B/s |  14.8 KiB |  00m00s
+[201/362] Installing pkgconf-pkg-config 100% | 161.2 KiB/s |   1.8 KiB |  00m00s
+[202/362] Installing xorg-x11-proto-dev 100% | 162.1 MiB/s |   1.8 MiB |  00m00s
+[203/362] Installing zlib-ng-compat-dev 100% | 106.0 MiB/s | 108.6 KiB |  00m00s
+[204/362] Installing libpng-devel-2:1.6 100% |  72.6 MiB/s | 891.6 KiB |  00m00s
+[205/362] Installing fribidi-devel-0:1. 100% |  80.0 MiB/s |  81.9 KiB |  00m00s
+[206/362] Installing pixman-devel-0:0.4 100% |   0.0   B/s |  56.9 KiB |  00m00s
+[207/362] Installing libffi-devel-0:3.5 100% |  34.7 MiB/s |  35.6 KiB |  00m00s
+[208/362] Installing wayland-devel-0:1. 100% |  48.9 MiB/s | 700.4 KiB |  00m00s
+[209/362] Installing pcre2-devel-0:10.4 100% | 151.4 MiB/s |   2.1 MiB |  00m00s
+[210/362] Installing lzo-devel-0:2.10-1 100% | 105.1 MiB/s | 215.3 KiB |  00m00s
+[211/362] Installing libXau-devel-0:1.0 100% |   1.5 MiB/s |   9.4 KiB |  00m00s
+[212/362] Installing libxcb-devel-0:1.1 100% | 161.5 MiB/s |   3.1 MiB |  00m00s
+[213/362] Installing libX11-devel-0:1.8 100% | 186.6 MiB/s |   1.1 MiB |  00m00s
+[214/362] Installing libXext-devel-0:1. 100% |  54.2 MiB/s | 110.9 KiB |  00m00s
+[215/362] Installing libXrender-devel-0 100% |   0.0   B/s |  51.0 KiB |  00m00s
+[216/362] Installing libXfixes-devel-0: 100% |   0.0   B/s |   9.9 KiB |  00m00s
+[217/362] Installing libXi-devel-0:1.8. 100% | 141.2 MiB/s | 144.6 KiB |  00m00s
+[218/362] Installing libXtst-devel-0:1. 100% |   0.0   B/s |  14.0 KiB |  00m00s
+[219/362] Installing libXcomposite-deve 100% |   0.0   B/s |  10.5 KiB |  00m00s
+[220/362] Installing libXcursor-devel-0 100% |  32.0 MiB/s |  32.8 KiB |  00m00s
+[221/362] Installing libXdamage-devel-0 100% |   0.0   B/s |   3.1 KiB |  00m00s
+[222/362] Installing libXrandr-devel-0: 100% |   0.0   B/s |  24.7 KiB |  00m00s
+[223/362] Installing libXinerama-devel- 100% |   0.0   B/s |   8.5 KiB |  00m00s
+[224/362] Installing gc-devel-0:8.2.6-5 100% | 196.0 MiB/s | 401.4 KiB |  00m00s
+[225/362] Installing gmp-devel-1:6.3.0- 100% | 345.8 MiB/s | 354.1 KiB |  00m00s
+[226/362] Installing vulkan-loader-deve 100% |   8.9 MiB/s |   9.1 KiB |  00m00s
+[227/362] Installing libcloudproviders- 100% | 186.8 MiB/s | 382.6 KiB |  00m00s
+[228/362] Installing brotli-devel-0:1.2 100% |  66.8 MiB/s |  68.4 KiB |  00m00s
+[229/362] Installing bzip2-devel-0:1.0. 100% |   0.0   B/s | 310.7 KiB |  00m00s
+[230/362] Installing graphite2-devel-0: 100% |  49.6 MiB/s |  50.8 KiB |  00m00s
+[231/362] Installing libicu-devel-0:77. 100% | 141.2 MiB/s |   5.1 MiB |  00m00s
+[232/362] Installing libsepol-devel-0:3 100% |  31.5 MiB/s | 128.9 KiB |  00m00s
+[233/362] Installing libselinux-devel-0 100% |  79.2 MiB/s | 162.1 KiB |  00m00s
+[234/362] Installing sysprof-capture-de 100% | 262.5 MiB/s | 806.5 KiB |  00m00s
+[235/362] Installing xz-devel-1:5.8.1-4 100% | 128.2 MiB/s | 262.6 KiB |  00m00s
+[236/362] Installing libxml2-devel-0:2. 100% | 189.8 MiB/s |   3.4 MiB |  00m00s
+[237/362] Installing libxkbcommon-devel 100% | 188.1 MiB/s | 385.1 KiB |  00m00s
+[238/362] Installing libdatrie-devel-0: 100% |  42.5 MiB/s | 565.3 KiB |  00m00s
+[239/362] Installing libthai-devel-0:0. 100% | 320.5 MiB/s | 656.3 KiB |  00m00s
+[240/362] Installing libglvnd-core-deve 100% |   0.0   B/s |  41.1 KiB |  00m00s
+[241/362] Installing libglvnd-devel-1:1 100% | 424.1 MiB/s |   2.1 MiB |  00m00s
+[242/362] Installing libepoxy-devel-0:1 100% | 529.8 MiB/s |   1.6 MiB |  00m00s
+[243/362] Installing libcap-devel-0:2.7 100% |  24.3 MiB/s |  49.8 KiB |  00m00s
+[244/362] Installing systemd-devel-0:25 100% | 121.8 MiB/s | 748.3 KiB |  00m00s
+[245/362] Installing dbus-devel-1:1.16. 100% |  66.6 MiB/s | 136.5 KiB |  00m00s
+[246/362] Installing libblkid-devel-0:2 100% |  45.0 MiB/s |  46.0 KiB |  00m00s
+[247/362] Installing libmount-devel-0:2 100% |  32.5 MiB/s |  66.5 KiB |  00m00s
+[248/362] Installing glib2-devel-0:2.86 100% | 276.9 MiB/s |  15.8 MiB |  00m00s
+[249/362] Installing atk-devel-0:2.58.3 100% | 670.5 MiB/s |   6.0 MiB |  00m00s
+[250/362] Installing harfbuzz-devel-0:1 100% | 266.7 MiB/s |   5.3 MiB |  00m00s
+[251/362] Installing freetype-devel-0:2 100% | 406.8 MiB/s |   8.5 MiB |  00m00s
+[252/362] Installing fontconfig-devel-0 100% |  77.8 MiB/s | 159.4 KiB |  00m00s
+[253/362] Installing cairo-devel-0:1.18 100% | 763.6 MiB/s |   2.3 MiB |  00m00s
+[254/362] Installing cairo-gobject-deve 100% |   0.0   B/s |   7.6 KiB |  00m00s
+[255/362] Installing libXft-devel-0:2.3 100% |  43.2 MiB/s |  44.3 KiB |  00m00s
+[256/362] Installing pango-devel-0:1.57 100% | 304.7 MiB/s |   1.5 MiB |  00m00s
+[257/362] Installing graphene-devel-0:1 100% | 390.2 MiB/s |   2.3 MiB |  00m00s
+[258/362] Installing appstream-devel-0: 100% | 898.3 MiB/s |  12.6 MiB |  00m00s
+[259/362] Installing at-spi2-core-devel 100% | 725.6 MiB/s |   4.4 MiB |  00m00s
+[260/362] Installing at-spi2-atk-devel- 100% |   0.0   B/s |   2.1 KiB |  00m00s
+[261/362] Installing lcms2-devel-0:2.16 100% | 133.2 MiB/s | 136.4 KiB |  00m00s
+[262/362] Installing libseccomp-devel-0 100% |   9.8 MiB/s | 121.0 KiB |  00m00s
+[263/362] Installing glycin-devel-0:2.0 100% | 124.3 MiB/s | 127.3 KiB |  00m00s
+[264/362] Installing gdk-pixbuf2-devel- 100% | 105.4 MiB/s |   2.3 MiB |  00m00s
+[265/362] Installing gtk4-devel-0:4.20. 100% | 307.5 MiB/s |  22.8 MiB |  00m00s
+[266/362] Installing libxcrypt-devel-0: 100% |  16.3 MiB/s |  33.4 KiB |  00m00s
+[267/362] Installing glibc-devel-0:2.42 100% |  75.9 MiB/s |   2.4 MiB |  00m00s
+[268/362] Installing less-0:679-2.fc43. 100% |  28.6 MiB/s | 409.4 KiB |  00m00s
+[269/362] Installing git-core-0:2.53.0- 100% | 415.6 MiB/s |  24.1 MiB |  00m00s
+[270/362] Installing git-core-doc-0:2.5 100% |   1.2 GiB/s |  18.8 MiB |  00m00s
+[271/362] Installing pciutils-libs-0:3. 100% |  98.1 MiB/s | 100.5 KiB |  00m00s
+[272/362] Installing kmod-libs-0:34.2-2 100% | 133.0 MiB/s | 136.2 KiB |  00m00s
+[273/362] Installing ncurses-0:6.5-7.20 100% |  46.3 MiB/s | 616.4 KiB |  00m00s
+[274/362] Installing perl-Digest-0:1.20 100% |  36.2 MiB/s |  37.1 KiB |  00m00s
+[275/362] Installing perl-FileHandle-0: 100% |   0.0   B/s |   9.8 KiB |  00m00s
+[276/362] Installing perl-B-0:1.89-521. 100% | 246.4 MiB/s | 504.7 KiB |  00m00s
+[277/362] Installing perl-Digest-MD5-0: 100% |  60.1 MiB/s |  61.6 KiB |  00m00s
+[278/362] Installing perl-libnet-0:3.15 100% |  28.8 MiB/s | 294.7 KiB |  00m00s
+[279/362] Installing perl-Data-Dumper-0 100% | 114.8 MiB/s | 117.5 KiB |  00m00s
+[280/362] Installing perl-MIME-Base32-0 100% |   6.3 MiB/s |  32.2 KiB |  00m00s
+[281/362] Installing perl-URI-0:5.34-2. 100% |  39.3 MiB/s | 281.8 KiB |  00m00s
+[282/362] Installing perl-AutoLoader-0: 100% |   0.0   B/s |  21.0 KiB |  00m00s
+[283/362] Installing perl-IO-Socket-IP- 100% |  99.8 MiB/s | 102.2 KiB |  00m00s
+[284/362] Installing perl-IO-Socket-SSL 100% | 233.9 MiB/s | 718.6 KiB |  00m00s
+[285/362] Installing perl-Net-SSLeay-0: 100% | 169.8 MiB/s |   1.4 MiB |  00m00s
+[286/362] Installing perl-if-0:0.61.000 100% |   0.0   B/s |   6.2 KiB |  00m00s
+[287/362] Installing perl-locale-0:1.13 100% |   0.0   B/s |   6.5 KiB |  00m00s
+[288/362] Installing perl-Pod-Escapes-1 100% |   0.0   B/s |  25.9 KiB |  00m00s
+[289/362] Installing perl-File-Path-0:2 100% |   0.0   B/s |  64.5 KiB |  00m00s
+[290/362] Installing perl-Text-Tabs+Wra 100% |   0.0   B/s |  23.9 KiB |  00m00s
+[291/362] Installing perl-Time-Local-2: 100% |  68.9 MiB/s |  70.6 KiB |  00m00s
+[292/362] Installing perl-HTTP-Tiny-0:0 100% | 152.8 MiB/s | 156.4 KiB |  00m00s
+[293/362] Installing perl-Pod-Simple-1: 100% |  70.2 MiB/s | 574.9 KiB |  00m00s
+[294/362] Installing perl-File-Temp-1:0 100% |  80.1 MiB/s | 164.1 KiB |  00m00s
+[295/362] Installing perl-Class-Struct- 100% |  25.3 MiB/s |  25.9 KiB |  00m00s
+[296/362] Installing perl-IPC-Open3-0:1 100% |  13.9 MiB/s |  28.5 KiB |  00m00s
+[297/362] Installing perl-POSIX-0:2.23- 100% |  75.1 MiB/s | 230.8 KiB |  00m00s
+[298/362] Installing perl-Term-Cap-0:1. 100% |  29.9 MiB/s |  30.6 KiB |  00m00s
+[299/362] Installing perl-Term-ANSIColo 100% |  96.9 MiB/s |  99.2 KiB |  00m00s
+[300/362] Installing perl-SelectSaver-0 100% |   2.6 MiB/s |   2.6 KiB |  00m00s
+[301/362] Installing perl-Pod-Perldoc-0 100% |  11.0 MiB/s | 169.2 KiB |  00m00s
+[302/362] Installing perl-podlators-1:6 100% |  20.9 MiB/s | 321.4 KiB |  00m00s
+[303/362] Installing perl-File-stat-0:1 100% |   0.0   B/s |  13.1 KiB |  00m00s
+[304/362] Installing perl-Symbol-0:1.09 100% |   0.0   B/s |   7.3 KiB |  00m00s
+[305/362] Installing perl-Socket-4:2.04 100% | 119.4 MiB/s | 122.3 KiB |  00m00s
+[306/362] Installing perl-IO-0:1.55-521 100% |  74.0 MiB/s | 151.7 KiB |  00m00s
+[307/362] Installing perl-Pod-Usage-4:2 100% |   7.8 MiB/s |  87.9 KiB |  00m00s
+[308/362] Installing perl-overloading-0 100% |   0.0   B/s |   5.6 KiB |  00m00s
+[309/362] Installing perl-mro-0:1.29-52 100% |  41.7 MiB/s |  42.7 KiB |  00m00s
+[310/362] Installing perl-Fcntl-0:1.20- 100% |  48.7 MiB/s |  49.9 KiB |  00m00s
+[311/362] Installing perl-base-0:2.27-5 100% |   0.0   B/s |  13.0 KiB |  00m00s
+[312/362] Installing perl-Text-ParseWor 100% |   0.0   B/s |  14.6 KiB |  00m00s
+[313/362] Installing perl-Getopt-Long-1 100% | 143.8 MiB/s | 147.2 KiB |  00m00s
+[314/362] Installing perl-overload-0:1. 100% |   0.0   B/s |  72.0 KiB |  00m00s
+[315/362] Installing perl-Getopt-Std-0: 100% |   0.0   B/s |  11.8 KiB |  00m00s
+[316/362] Installing perl-Storable-1:3. 100% | 113.7 MiB/s | 232.8 KiB |  00m00s
+[317/362] Installing perl-vars-0:1.05-5 100% |   0.0   B/s |   4.3 KiB |  00m00s
+[318/362] Installing perl-File-Basename 100% |   0.0   B/s |  14.6 KiB |  00m00s
+[319/362] Installing perl-Errno-0:1.38- 100% |   0.0   B/s |   8.8 KiB |  00m00s
+[320/362] Installing perl-MIME-Base64-0 100% |  43.2 MiB/s |  44.3 KiB |  00m00s
+[321/362] Installing perl-parent-1:0.24 100% |   0.0   B/s |  11.0 KiB |  00m00s
+[322/362] Installing perl-Scalar-List-U 100% |  72.6 MiB/s | 148.7 KiB |  00m00s
+[323/362] Installing perl-constant-0:1. 100% |   0.0   B/s |  27.4 KiB |  00m00s
+[324/362] Installing perl-Carp-0:1.54-5 100% |  46.6 MiB/s |  47.7 KiB |  00m00s
+[325/362] Installing perl-Encode-4:3.21 100% | 187.8 MiB/s |   4.7 MiB |  00m00s
+[326/362] Installing perl-DynaLoader-0: 100% |   0.0   B/s |  32.5 KiB |  00m00s
+[327/362] Installing perl-PathTools-0:3 100% |  90.1 MiB/s | 184.6 KiB |  00m00s
+[328/362] Installing perl-Exporter-0:5. 100% |  27.1 MiB/s |  55.6 KiB |  00m00s
+[329/362] Installing perl-libs-4:5.42.0 100% | 159.6 MiB/s |  11.6 MiB |  00m00s
+[330/362] Installing perl-interpreter-4 100% |   9.8 MiB/s | 120.3 KiB |  00m00s
+[331/362] Installing perl-threads-1:2.4 100% | 114.4 MiB/s | 117.1 KiB |  00m00s
+[332/362] Installing perl-File-Compare- 100% |   0.0   B/s |   6.2 KiB |  00m00s
+[333/362] Installing perl-File-Copy-0:2 100% |   0.0   B/s |  20.2 KiB |  00m00s
+[334/362] Installing perl-threads-share 100% |  83.9 MiB/s |  85.9 KiB |  00m00s
+[335/362] Installing perl-Thread-Queue- 100% |   0.0   B/s |  30.4 KiB |  00m00s
+[336/362] Installing perl-TermReadKey-0 100% |  64.6 MiB/s |  66.2 KiB |  00m00s
+[337/362] Installing perl-Error-1:0.170 100% |  39.0 MiB/s |  80.0 KiB |  00m00s
+[338/362] Installing perl-Text-Unidecod 100% |  36.9 MiB/s | 491.8 KiB |  00m00s
+[339/362] Installing perl-Unicode-EastA 100% |   0.0   B/s |  33.9 KiB |  00m00s
+[340/362] Installing perl-Unicode-Norma 100% | 159.0 MiB/s | 488.4 KiB |  00m00s
+[341/362] Installing perl-libintl-perl- 100% | 275.4 MiB/s |   4.1 MiB |  00m00s
+[342/362] Installing perl-File-Find-0:1 100% |   0.0   B/s |  42.5 KiB |  00m00s
+[343/362] Installing perl-lib-0:0.65-52 100% |   0.0   B/s |   8.9 KiB |  00m00s
+[344/362] Installing git-0:2.53.0-1.fc4 100% |  56.4 MiB/s |  57.7 KiB |  00m00s
+[345/362] Installing perl-Git-0:2.53.0- 100% |   0.0   B/s |  65.4 KiB |  00m00s
+[346/362] Installing emacs-filesystem-1 100% |   0.0   B/s | 544.0   B |  00m00s
+[347/362] Installing autoconf-0:2.72-7. 100% | 140.2 MiB/s |   2.8 MiB |  00m00s
+[348/362] Installing automake-0:1.18.1- 100% |  83.5 MiB/s |   1.8 MiB |  00m00s
+[349/362] Installing make-1:4.4.1-11.fc 100% | 120.0 MiB/s |   1.8 MiB |  00m00s
+[350/362] Installing gcc-0:15.2.1-7.fc4 100% | 444.7 MiB/s | 112.1 MiB |  00m00s
+[351/362] Installing libtool-0:2.5.4-8. 100% | 171.6 MiB/s |   2.7 MiB |  00m00s
+[352/362] Installing gobject-introspect 100% | 120.7 MiB/s |   3.1 MiB |  00m00s
+[353/362] Installing vala-0:0.56.18-3.f 100% | 219.3 MiB/s |  10.3 MiB |  00m00s
+[354/362] Installing libadwaita-devel-0 100% | 302.9 MiB/s |   2.4 MiB |  00m00s
+[355/362] Installing gcc-c++-0:15.2.1-7 100% | 341.9 MiB/s |  41.4 MiB |  00m00s
+[356/362] Installing texinfo-0:7.2-7.fc 100% | 294.4 MiB/s |   7.4 MiB |  00m00s
+[357/362] Installing pciutils-0:3.14.0- 100% |  18.7 MiB/s | 286.9 KiB |  00m00s
+[358/362] Installing gtk3-devel-0:3.24. 100% | 386.2 MiB/s |  34.4 MiB |  00m00s
+[359/362] Installing guile30-devel-0:3. 100% |  20.1 MiB/s | 473.8 KiB |  00m00s
+[360/362] Installing vulkan-tools-0:1.4 100% |  78.3 MiB/s |   1.6 MiB |  00m00s
+[361/362] Installing mesa-vulkan-driver 100% | 517.8 MiB/s | 152.7 MiB |  00m00s
+[362/362] Installing wget2-wget-0:2.2.1 100% | 963.0   B/s | 444.0   B |  00m00s
+Complete!
+Removed 18 files, 12 directories (total of 94 MiB). 0 errors occurred.
+--> d3d1f38b69cb
+STEP 11/26: ENV LANG=en_US.UTF-8
+--> 38c06ff07719
+STEP 12/26: ENV LC_ALL=en_US.UTF-8
+--> 29f8318810b8
+STEP 13/26: RUN ln -sf /usr/bin/guile3.0 /usr/bin/guile &&     ln -sf /usr/bin/guild3.0  /usr/bin/guild
+--> fbb0c74378b4
+STEP 14/26: RUN set -e &&     git clone --depth 1 --branch "${GGOLF_REF}" "${GGOLF_REPO}" /tmp/g-golf &&     cd /tmp/g-golf &&     ./autogen.sh &&     ./configure         --prefix=/usr         --libdir=/usr/lib64         --with-guile-site=yes         GUILE=/usr/bin/guile3.0         GUILD=/usr/bin/guild3.0 &&     make -j"$(nproc)" &&     make install &&     cd / && rm -rf /tmp/g-golf &&     ldconfig
+Cloning into '/tmp/g-golf'...
+warning: refs/tags/v0.8.3 2926347a172463defbf25f41ce6fdc43cf633ec6 is not a commit!
+Note: switching to '3e775a61f263896237a145a76b9ed1ace78c00a8'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+autoreconf: export WARNINGS=
+autoreconf: Entering directory '.'
+autoreconf: configure.ac: not using Gettext
+autoreconf: running: aclocal --force -I m4
+autoreconf: configure.ac: tracing
+autoreconf: running: libtoolize --copy --force
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
+libtoolize: copying file 'build-aux/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+autoreconf: configure.ac: not using Intltool
+autoreconf: configure.ac: not using Gtkdoc
+autoreconf: running: autopoint --force
+Copying file ABOUT-NLS
+Copying file build-aux/config.rpath
+Copying file m4/build-to-host.m4
+Copying file m4/gettext.m4
+Copying file m4/host-cpu-c-abi.m4
+Copying file m4/iconv.m4
+Copying file m4/intlmacosx.m4
+Copying file m4/lib-ld.m4
+Copying file m4/lib-link.m4
+Copying file m4/lib-prefix.m4
+Copying file m4/nls.m4
+Copying file m4/po.m4
+Copying file m4/progtest.m4
+Creating directory po
+Copying file po/Makefile.in.in
+Copying file po/Makevars.template
+Copying file po/Rules-quot
+Copying file po/boldquot.sed
+Copying file po/en@boldquot.header
+Copying file po/en@quot.header
+Copying file po/insert-header.sed
+Copying file po/quot.sed
+Copying file po/remove-potcdate.sed
+autoreconf: running: aclocal --force -I m4
+autoreconf: running: /usr/bin/autoconf --force
+autoreconf: configure.ac: not using Autoheader
+autoreconf: running: automake --add-missing --copy --force-missing
+configure.ac:47: installing 'build-aux/compile'
+configure.ac:48: installing 'build-aux/config.guess'
+configure.ac:48: installing 'build-aux/config.sub'
+configure.ac:42: installing 'build-aux/install-sh'
+configure.ac:42: installing 'build-aux/missing'
+doc/Makefile.am:26: installing 'build-aux/mdate-sh'
+doc/Makefile.am:26: installing 'build-aux/texinfo.tex'
+libg-golf/Makefile.am: installing 'build-aux/depcomp'
+autoreconf: Leaving directory '.'
+
+Now run ./configure [--prefix=/your/prefix] [--with-guile-site]
+configure: loading site script /usr/share/config.site
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking xargs -n works... yes
+checking whether UID '0' is supported by ustar format... yes
+checking whether GID '0' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of gcc... gcc3
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for file... :
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ranlib... ranlib
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... no
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/bin/ld) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking for makeinfo... /usr/bin/makeinfo
+checking for Makeinfo version >= 6.6... 7.2
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+configure: checking for guile 3.0
+configure: found guile 3.0
+checking for guile-2.0.14... /usr/bin/guile3.0
+checking for Guile version >= 2.0.14... 3.0.9
+checking for guild3.0... /usr/bin/guild3.0
+checking for guile-config3.0... /usr/bin/guile-config3.0
+checking for Guile-3 version >= 3.0.7... 3.0.9
+checking for Guile site directory... /usr/share/guile/site/3.0
+checking for Guile site-ccache directory using pkgconfig... /usr/lib64/guile/3.0/site-ccache
+checking for Guile extensions directory... /usr/lib64/guile/3.0/extensions
+checking for Guile global site directory... /usr/share/guile/site
+checking for ld... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for shared library run path origin... done
+checking 32-bit host C ABI... no
+checking how to run the C preprocessor... gcc -E
+checking for egrep -e... (cached) /usr/bin/grep -E
+checking for ELF binary format... yes
+checking for the common suffixes of directories in the library search path... lib,lib,lib64
+checking for guile-3.0... yes
+checking for gobject-introspection-1.0 >= 1.72.0... yes
+checking for glib-2.0 >= 2.73.0... yes
+checking for gobject-2.0 >= 2.73.0... yes
+checking for libffi >= 3.3.0... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating pre-inst-env
+config.status: creating meta/g-golf-1.0.pc
+config.status: creating Makefile
+config.status: creating libg-golf/Makefile
+config.status: creating doc/Makefile
+config.status: creating test-suite/Makefile
+config.status: creating examples/Makefile
+config.status: creating examples/gtk-4/Makefile
+config.status: creating examples/adw-1/Makefile
+config.status: executing depfiles commands
+config.status: executing libtool commands
+configure:
+
+  prefix=/usr
+  exec_prefix=${prefix}
+  libdir=/usr/lib64
+  datarootdir=${prefix}/share
+  datadir=${datarootdir}
+
+  --with-guile-site="yes"
+
+  sitedir (source code): /usr/share/guile/site
+  siteccachedir (compiled modules): /usr/lib64/guile/3.0/site-ccache
+  
+Making all in libg-golf
+make[1]: Entering directory '/tmp/g-golf/libg-golf'
+  CC       libg_golf_la-gg-const.lo
+  CC       libg_golf_la-gg-ffi.lo
+  CC       libg_golf_la-gg-utils.lo
+  CC       libg_golf_la-gg-glib.lo
+  CC       libg_golf_la-gg-gobject.lo
+  CC       libg_golf_la-gg-test-suite.lo
+  CC       libg_golf_la-gg-callback.lo
+  CC       libg_golf_la-g-golf.lo
+  CCLD     libg-golf.la
+make[1]: Leaving directory '/tmp/g-golf/libg-golf'
+Making all in test-suite
+make[1]: Entering directory '/tmp/g-golf/test-suite'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/tmp/g-golf/test-suite'
+Making all in doc
+make[1]: Entering directory '/tmp/g-golf/doc'
+Updating ./version.texi
+  MAKEINFO g-golf.info
+g-golf.texi:53: warning: @ should not occur at end of argument to line command
+make[1]: Leaving directory '/tmp/g-golf/doc'
+Making all in examples
+make[1]: Entering directory '/tmp/g-golf/examples'
+Making all in gtk-4
+make[2]: Entering directory '/tmp/g-golf/examples/gtk-4'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/tmp/g-golf/examples/gtk-4'
+Making all in adw-1
+make[2]: Entering directory '/tmp/g-golf/examples/adw-1'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/tmp/g-golf/examples/adw-1'
+make[2]: Entering directory '/tmp/g-golf/examples'
+make[2]: Nothing to be done for 'all-am'.
+make[2]: Leaving directory '/tmp/g-golf/examples'
+make[1]: Leaving directory '/tmp/g-golf/examples'
+make[1]: Entering directory '/tmp/g-golf'
+  GEN      g-golf/support/libg-golf.go
+wrote `g-golf/support/libg-golf.go'
+;;; note: auto-compilation is enabled, set GUILE_AUTO_COMPILE=0
+;;;       or pass the --no-auto-compile argument to disable.
+;;; compiling /usr/bin/guild3.0
+;;; compiled /root/.cache/guile/ccache/3.0-LE-8-4.6/usr/bin/guild3.0.go
+  GEN      g-golf/support/const.go
+wrote `g-golf/support/const.go'
+  GEN      g-golf/support/float.go
+wrote `g-golf/support/float.go'
+  GEN      g-golf/support/module.go
+wrote `g-golf/support/module.go'
+  GEN      g-golf/support/goops.go
+wrote `g-golf/support/goops.go'
+  GEN      g-golf/support/g-export.go
+wrote `g-golf/support/g-export.go'
+  GEN      g-golf/support/utils.go
+wrote `g-golf/support/utils.go'
+  GEN      g-golf/support/push.go
+wrote `g-golf/support/push.go'
+  GEN      g-golf/support/keyword.go
+wrote `g-golf/support/keyword.go'
+  GEN      g-golf/support/enum.go
+wrote `g-golf/support/enum.go'
+  GEN      g-golf/support/flags.go
+wrote `g-golf/support/flags.go'
+  GEN      g-golf/support/struct.go
+wrote `g-golf/support/struct.go'
+  GEN      g-golf/support/union.go
+wrote `g-golf/support/union.go'
+  GEN      g-golf/support/bytevector.go
+wrote `g-golf/support/bytevector.go'
+  GEN      g-golf/support/ffi.go
+wrote `g-golf/support/ffi.go'
+  GEN      g-golf/support/sxml.go
+wrote `g-golf/support/sxml.go'
+  GEN      g-golf/support/color.go
+wrote `g-golf/support/color.go'
+  GEN      g-golf/support.go
+wrote `g-golf/support.go'
+  GEN      g-golf/init.go
+wrote `g-golf/init.go'
+  GEN      g-golf/glib/version-information.go
+wrote `g-golf/glib/version-information.go'
+  GEN      g-golf/glib/mem-alloc.go
+wrote `g-golf/glib/mem-alloc.go'
+  GEN      g-golf/glib/main-event-loop.go
+wrote `g-golf/glib/main-event-loop.go'
+  GEN      g-golf/glib/io-channels.go
+wrote `g-golf/glib/io-channels.go'
+  GEN      g-golf/glib/misc-util-funcs.go
+wrote `g-golf/glib/misc-util-funcs.go'
+  GEN      g-golf/glib/unix-utils.go
+wrote `g-golf/glib/unix-utils.go'
+  GEN      g-golf/glib/glist.go
+wrote `g-golf/glib/glist.go'
+  GEN      g-golf/glib/gslist.go
+wrote `g-golf/glib/gslist.go'
+  GEN      g-golf/glib/byte-arrays.go
+wrote `g-golf/glib/byte-arrays.go'
+  GEN      g-golf/glib/quarks.go
+wrote `g-golf/glib/quarks.go'
+  GEN      g-golf/glib/simple-xml-subset-parser.go
+wrote `g-golf/glib/simple-xml-subset-parser.go'
+  GEN      g-golf/glib/date-and-time-functions.go
+wrote `g-golf/glib/date-and-time-functions.go'
+  GEN      g-golf/glib/type-conversion.go
+wrote `g-golf/glib/type-conversion.go'
+  GEN      g-golf/glib.go
+wrote `g-golf/glib.go'
+  GEN      g-golf/gobject/type-info.go
+wrote `g-golf/gobject/type-info.go'
+  GEN      g-golf/gobject/gobject.go
+wrote `g-golf/gobject/gobject.go'
+  GEN      g-golf/gobject/enum-flags.go
+wrote `g-golf/gobject/enum-flags.go'
+  GEN      g-golf/gobject/boxed-types.go
+wrote `g-golf/gobject/boxed-types.go'
+  GEN      g-golf/gobject/generic-values.go
+wrote `g-golf/gobject/generic-values.go'
+  GEN      g-golf/gobject/params-vals.go
+wrote `g-golf/gobject/params-vals.go'
+  GEN      g-golf/gobject/param-spec.go
+wrote `g-golf/gobject/param-spec.go'
+  GEN      g-golf/gobject/closures.go
+wrote `g-golf/gobject/closures.go'
+  GEN      g-golf/gobject/signals.go
+wrote `g-golf/gobject/signals.go'
+  GEN      g-golf/gobject.go
+wrote `g-golf/gobject.go'
+  GEN      g-golf/gi/utils.go
+wrote `g-golf/gi/utils.go'
+  GEN      g-golf/gi/cache-gi.go
+wrote `g-golf/gi/cache-gi.go'
+  GEN      g-golf/gi/cache-others.go
+wrote `g-golf/gi/cache-others.go'
+  GEN      g-golf/gi/repository.go
+wrote `g-golf/gi/repository.go'
+  GEN      g-golf/gi/typelib.go
+wrote `g-golf/gi/typelib.go'
+  GEN      g-golf/gi/version.go
+wrote `g-golf/gi/version.go'
+  GEN      g-golf/gi/common-types.go
+wrote `g-golf/gi/common-types.go'
+  GEN      g-golf/gi/base-info.go
+wrote `g-golf/gi/base-info.go'
+  GEN      g-golf/gi/callable-info.go
+wrote `g-golf/gi/callable-info.go'
+  GEN      g-golf/gi/function-info.go
+wrote `g-golf/gi/function-info.go'
+  GEN      g-golf/gi/signal-info.go
+wrote `g-golf/gi/signal-info.go'
+  GEN      g-golf/gi/vfunc-info.go
+wrote `g-golf/gi/vfunc-info.go'
+  GEN      g-golf/gi/registered-type-info.go
+wrote `g-golf/gi/registered-type-info.go'
+  GEN      g-golf/gi/enum-info.go
+wrote `g-golf/gi/enum-info.go'
+  GEN      g-golf/gi/struct-info.go
+wrote `g-golf/gi/struct-info.go'
+  GEN      g-golf/gi/union-info.go
+wrote `g-golf/gi/union-info.go'
+  GEN      g-golf/gi/object-info.go
+wrote `g-golf/gi/object-info.go'
+  GEN      g-golf/gi/interface-info.go
+wrote `g-golf/gi/interface-info.go'
+  GEN      g-golf/gi/arg-info.go
+wrote `g-golf/gi/arg-info.go'
+  GEN      g-golf/gi/constant-info.go
+wrote `g-golf/gi/constant-info.go'
+  GEN      g-golf/gi/field-info.go
+wrote `g-golf/gi/field-info.go'
+  GEN      g-golf/gi/property-info.go
+wrote `g-golf/gi/property-info.go'
+  GEN      g-golf/gi/type-info.go
+wrote `g-golf/gi/type-info.go'
+  GEN      g-golf/gi/gir-ffi.go
+wrote `g-golf/gi/gir-ffi.go'
+  GEN      g-golf/gi.go
+wrote `g-golf/gi.go'
+  GEN      g-golf/gdk/events.go
+wrote `g-golf/gdk/events.go'
+  GEN      g-golf/gdk.go
+wrote `g-golf/gdk.go'
+  GEN      g-golf/hl-api/n-decl.go
+wrote `g-golf/hl-api/n-decl.go'
+  GEN      g-golf/hl-api/ccc.go
+wrote `g-golf/hl-api/ccc.go'
+  GEN      g-golf/hl-api/argument.go
+wrote `g-golf/hl-api/argument.go'
+  GEN      g-golf/hl-api/gtype.go
+wrote `g-golf/hl-api/gtype.go'
+  GEN      g-golf/hl-api/gparam.go
+wrote `g-golf/hl-api/gparam.go'
+  GEN      g-golf/hl-api/iface.go
+wrote `g-golf/hl-api/iface.go'
+  GEN      g-golf/hl-api/gobject.go
+wrote `g-golf/hl-api/gobject.go'
+  GEN      g-golf/hl-api/events.go
+wrote `g-golf/hl-api/events.go'
+  GEN      g-golf/hl-api/callable.go
+wrote `g-golf/hl-api/callable.go'
+  GEN      g-golf/hl-api/callback.go
+wrote `g-golf/hl-api/callback.go'
+  GEN      g-golf/hl-api/function.go
+wrote `g-golf/hl-api/function.go'
+  GEN      g-golf/hl-api/vfunc.go
+wrote `g-golf/hl-api/vfunc.go'
+  GEN      g-golf/hl-api/object.go
+wrote `g-golf/hl-api/object.go'
+  GEN      g-golf/hl-api/closure.go
+wrote `g-golf/hl-api/closure.go'
+  GEN      g-golf/hl-api/signal.go
+wrote `g-golf/hl-api/signal.go'
+  GEN      g-golf/hl-api/glib.go
+wrote `g-golf/hl-api/glib.go'
+  GEN      g-golf/hl-api/import.go
+wrote `g-golf/hl-api/import.go'
+  GEN      g-golf/hl-api/utils.go
+wrote `g-golf/hl-api/utils.go'
+  GEN      g-golf/hl-api.go
+wrote `g-golf/hl-api.go'
+  GEN      g-golf/override/override.go
+wrote `g-golf/override/override.go'
+  GEN      g-golf/override/gdk.go
+wrote `g-golf/override/gdk.go'
+  GEN      g-golf/override/gtk.go
+wrote `g-golf/override/gtk.go'
+  GEN      g-golf/override.go
+wrote `g-golf/override.go'
+  GEN      g-golf.go
+wrote `g-golf.go'
+make[1]: Leaving directory '/tmp/g-golf'
+Making install in libg-golf
+make[1]: Entering directory '/tmp/g-golf/libg-golf'
+make[2]: Entering directory '/tmp/g-golf/libg-golf'
+ /usr/bin/mkdir -p '/usr/lib64'
+ /bin/sh ../libtool   --mode=install /usr/bin/install -c   libg-golf.la '/usr/lib64'
+libtool: install: /usr/bin/install -c .libs/libg-golf.so.0.0.0 /usr/lib64/libg-golf.so.0.0.0
+libtool: install: (cd /usr/lib64 && { ln -s -f libg-golf.so.0.0.0 libg-golf.so.0 || { rm -f libg-golf.so.0 && ln -s libg-golf.so.0.0.0 libg-golf.so.0; }; })
+libtool: install: (cd /usr/lib64 && { ln -s -f libg-golf.so.0.0.0 libg-golf.so || { rm -f libg-golf.so && ln -s libg-golf.so.0.0.0 libg-golf.so; }; })
+libtool: install: /usr/bin/install -c .libs/libg-golf.lai /usr/lib64/libg-golf.la
+libtool: finish: PATH="/usr/local/bin:/usr/bin:/sbin" ldconfig -n /usr/lib64
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /usr/lib64
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/tmp/g-golf/libg-golf'
+make[1]: Leaving directory '/tmp/g-golf/libg-golf'
+Making install in test-suite
+make[1]: Entering directory '/tmp/g-golf/test-suite'
+make[2]: Entering directory '/tmp/g-golf/test-suite'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/tmp/g-golf/test-suite'
+make[1]: Leaving directory '/tmp/g-golf/test-suite'
+Making install in doc
+make[1]: Entering directory '/tmp/g-golf/doc'
+make[2]: Entering directory '/tmp/g-golf/doc'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/usr/share/info'
+ /usr/bin/install -c -m 644 ./g-golf.info ./g-golf.info-1 ./g-golf.info-2 '/usr/share/info'
+ /usr/bin/mkdir -p '/usr/share/doc/g-golf'
+ /usr/bin/mkdir -p '/usr/share/doc/g-golf/images'
+ /usr/bin/install -c -m 644  images/hello-world-1.png images/hello-world-2.png '/usr/share/doc/g-golf/images'
+ /usr/bin/mkdir -p '/usr/share/doc/g-golf/css'
+ /usr/bin/install -c -m 644  css/manual.css '/usr/share/doc/g-golf/css'
+make[2]: Leaving directory '/tmp/g-golf/doc'
+make[1]: Leaving directory '/tmp/g-golf/doc'
+Making install in examples
+make[1]: Entering directory '/tmp/g-golf/examples'
+Making install in gtk-4
+make[2]: Entering directory '/tmp/g-golf/examples/gtk-4'
+make[3]: Entering directory '/tmp/g-golf/examples/gtk-4'
+make[3]: Nothing to be done for 'install-exec-am'.
+make[3]: Nothing to be done for 'install-data-am'.
+make[3]: Leaving directory '/tmp/g-golf/examples/gtk-4'
+make[2]: Leaving directory '/tmp/g-golf/examples/gtk-4'
+Making install in adw-1
+make[2]: Entering directory '/tmp/g-golf/examples/adw-1'
+make[3]: Entering directory '/tmp/g-golf/examples/adw-1'
+make[3]: Nothing to be done for 'install-exec-am'.
+make[3]: Nothing to be done for 'install-data-am'.
+make[3]: Leaving directory '/tmp/g-golf/examples/adw-1'
+make[2]: Leaving directory '/tmp/g-golf/examples/adw-1'
+make[2]: Entering directory '/tmp/g-golf/examples'
+make[3]: Entering directory '/tmp/g-golf/examples'
+make[3]: Nothing to be done for 'install-exec-am'.
+make[3]: Nothing to be done for 'install-data-am'.
+make[3]: Leaving directory '/tmp/g-golf/examples'
+make[2]: Leaving directory '/tmp/g-golf/examples'
+make[1]: Leaving directory '/tmp/g-golf/examples'
+make[1]: Entering directory '/tmp/g-golf'
+make[2]: Entering directory '/tmp/g-golf'
+make[2]: Nothing to be done for 'install-exec-am'.
+for f in g-golf/gdk/event-structures.scm g-golf/gdk/event-class.scm g-golf/gdk/key-values.scm g-golf/support/modules.scm g-golf/support/flag.scm g-golf/gi/cache.scm; do	\
+          if [ -e /usr/share/guile/site/$f ]; then		\
+    rm /usr/share/guile/site/$f;			\
+  fi;					\
+done
+for f in g-golf/gdk/event-structures.go g-golf/gdk/event-class.go g-golf/gdk/key-values.go g-golf/support/modules.go g-golf/support/flag.go g-golf/gi/cache.go; do 	\
+  if [ -e /usr/lib64/guile/3.0/site-ccache/$f ]; then		\
+    rm /usr/lib64/guile/3.0/site-ccache/$f;			\
+  fi;					\
+done
+ /usr/bin/mkdir -p '/usr/share/guile/site'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf/gi'
+ /usr/bin/install -c -m 644  g-golf/gi/utils.scm g-golf/gi/cache-gi.scm g-golf/gi/cache-others.scm g-golf/gi/repository.scm g-golf/gi/typelib.scm g-golf/gi/version.scm g-golf/gi/common-types.scm g-golf/gi/base-info.scm g-golf/gi/callable-info.scm g-golf/gi/function-info.scm g-golf/gi/signal-info.scm g-golf/gi/vfunc-info.scm g-golf/gi/registered-type-info.scm g-golf/gi/enum-info.scm g-golf/gi/struct-info.scm g-golf/gi/union-info.scm g-golf/gi/object-info.scm g-golf/gi/interface-info.scm g-golf/gi/arg-info.scm g-golf/gi/constant-info.scm g-golf/gi/field-info.scm g-golf/gi/property-info.scm g-golf/gi/type-info.scm g-golf/gi/gir-ffi.scm '/usr/share/guile/site/g-golf/gi'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf/gobject'
+ /usr/bin/install -c -m 644  g-golf/gobject/type-info.scm g-golf/gobject/gobject.scm g-golf/gobject/enum-flags.scm g-golf/gobject/boxed-types.scm g-golf/gobject/generic-values.scm g-golf/gobject/params-vals.scm g-golf/gobject/param-spec.scm g-golf/gobject/closures.scm g-golf/gobject/signals.scm '/usr/share/guile/site/g-golf/gobject'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf/override'
+ /usr/bin/install -c -m 644  g-golf/override/override.scm g-golf/override/gdk.scm g-golf/override/gtk.scm '/usr/share/guile/site/g-golf/override'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf/gdk'
+ /usr/bin/install -c -m 644  g-golf/gdk/events.scm '/usr/share/guile/site/g-golf/gdk'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf/support'
+ /usr/bin/install -c -m 644  g-golf/support/libg-golf.scm g-golf/support/const.scm g-golf/support/float.scm g-golf/support/module.scm g-golf/support/goops.scm g-golf/support/g-export.scm g-golf/support/utils.scm g-golf/support/push.scm g-golf/support/keyword.scm g-golf/support/enum.scm g-golf/support/flags.scm g-golf/support/struct.scm g-golf/support/union.scm g-golf/support/bytevector.scm g-golf/support/ffi.scm g-golf/support/sxml.scm g-golf/support/color.scm '/usr/share/guile/site/g-golf/support'
+ /usr/bin/install -c -m 644  g-golf.scm '/usr/share/guile/site/.'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf'
+ /usr/bin/install -c -m 644  g-golf/support.scm g-golf/init.scm g-golf/glib.scm g-golf/gobject.scm g-golf/gi.scm g-golf/gdk.scm g-golf/hl-api.scm g-golf/override.scm '/usr/share/guile/site/g-golf'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf/glib'
+ /usr/bin/install -c -m 644  g-golf/glib/version-information.scm g-golf/glib/mem-alloc.scm g-golf/glib/main-event-loop.scm g-golf/glib/io-channels.scm g-golf/glib/misc-util-funcs.scm g-golf/glib/unix-utils.scm g-golf/glib/glist.scm g-golf/glib/gslist.scm g-golf/glib/byte-arrays.scm g-golf/glib/quarks.scm g-golf/glib/simple-xml-subset-parser.scm g-golf/glib/date-and-time-functions.scm g-golf/glib/type-conversion.scm '/usr/share/guile/site/g-golf/glib'
+ /usr/bin/mkdir -p '/usr/share/guile/site/g-golf/hl-api'
+ /usr/bin/install -c -m 644  g-golf/hl-api/n-decl.scm g-golf/hl-api/ccc.scm g-golf/hl-api/argument.scm g-golf/hl-api/gtype.scm g-golf/hl-api/gparam.scm g-golf/hl-api/iface.scm g-golf/hl-api/gobject.scm g-golf/hl-api/events.scm g-golf/hl-api/callable.scm g-golf/hl-api/callback.scm g-golf/hl-api/function.scm g-golf/hl-api/vfunc.scm g-golf/hl-api/object.scm g-golf/hl-api/closure.scm g-golf/hl-api/signal.scm g-golf/hl-api/glib.scm g-golf/hl-api/import.scm g-golf/hl-api/utils.scm '/usr/share/guile/site/g-golf/hl-api'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf/gi'
+ /usr/bin/install -c -m 644  g-golf/gi/utils.go g-golf/gi/cache-gi.go g-golf/gi/cache-others.go g-golf/gi/repository.go g-golf/gi/typelib.go g-golf/gi/version.go g-golf/gi/common-types.go g-golf/gi/base-info.go g-golf/gi/callable-info.go g-golf/gi/function-info.go g-golf/gi/signal-info.go g-golf/gi/vfunc-info.go g-golf/gi/registered-type-info.go g-golf/gi/enum-info.go g-golf/gi/struct-info.go g-golf/gi/union-info.go g-golf/gi/object-info.go g-golf/gi/interface-info.go g-golf/gi/arg-info.go g-golf/gi/constant-info.go g-golf/gi/field-info.go g-golf/gi/property-info.go g-golf/gi/type-info.go g-golf/gi/gir-ffi.go '/usr/lib64/guile/3.0/site-ccache/g-golf/gi'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf/gobject'
+ /usr/bin/install -c -m 644  g-golf/gobject/type-info.go g-golf/gobject/gobject.go g-golf/gobject/enum-flags.go g-golf/gobject/boxed-types.go g-golf/gobject/generic-values.go g-golf/gobject/params-vals.go g-golf/gobject/param-spec.go g-golf/gobject/closures.go g-golf/gobject/signals.go '/usr/lib64/guile/3.0/site-ccache/g-golf/gobject'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf/override'
+ /usr/bin/install -c -m 644  g-golf/override/override.go g-golf/override/gdk.go g-golf/override/gtk.go '/usr/lib64/guile/3.0/site-ccache/g-golf/override'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf/gdk'
+ /usr/bin/install -c -m 644  g-golf/gdk/events.go '/usr/lib64/guile/3.0/site-ccache/g-golf/gdk'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf/support'
+ /usr/bin/install -c -m 644  g-golf/support/libg-golf.go g-golf/support/const.go g-golf/support/float.go g-golf/support/module.go g-golf/support/goops.go g-golf/support/g-export.go g-golf/support/utils.go g-golf/support/push.go g-golf/support/keyword.go g-golf/support/enum.go g-golf/support/flags.go g-golf/support/struct.go g-golf/support/union.go g-golf/support/bytevector.go g-golf/support/ffi.go g-golf/support/sxml.go g-golf/support/color.go '/usr/lib64/guile/3.0/site-ccache/g-golf/support'
+ /usr/bin/install -c -m 644  g-golf.go '/usr/lib64/guile/3.0/site-ccache/.'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf'
+ /usr/bin/install -c -m 644  g-golf/support.go g-golf/init.go g-golf/glib.go g-golf/gobject.go g-golf/gi.go g-golf/gdk.go g-golf/hl-api.go g-golf/override.go '/usr/lib64/guile/3.0/site-ccache/g-golf'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf/glib'
+ /usr/bin/install -c -m 644  g-golf/glib/version-information.go g-golf/glib/mem-alloc.go g-golf/glib/main-event-loop.go g-golf/glib/io-channels.go g-golf/glib/misc-util-funcs.go g-golf/glib/unix-utils.go g-golf/glib/glist.go g-golf/glib/gslist.go g-golf/glib/byte-arrays.go g-golf/glib/quarks.go g-golf/glib/simple-xml-subset-parser.go g-golf/glib/date-and-time-functions.go g-golf/glib/type-conversion.go '/usr/lib64/guile/3.0/site-ccache/g-golf/glib'
+ /usr/bin/mkdir -p '/usr/lib64/guile/3.0/site-ccache/g-golf/hl-api'
+ /usr/bin/install -c -m 644  g-golf/hl-api/n-decl.go g-golf/hl-api/ccc.go g-golf/hl-api/argument.go g-golf/hl-api/gtype.go g-golf/hl-api/gparam.go g-golf/hl-api/iface.go g-golf/hl-api/gobject.go g-golf/hl-api/events.go g-golf/hl-api/callable.go g-golf/hl-api/callback.go g-golf/hl-api/function.go g-golf/hl-api/vfunc.go g-golf/hl-api/object.go g-golf/hl-api/closure.go g-golf/hl-api/signal.go g-golf/hl-api/glib.go g-golf/hl-api/import.go g-golf/hl-api/utils.go '/usr/lib64/guile/3.0/site-ccache/g-golf/hl-api'
+ /usr/bin/mkdir -p '/usr/lib64/pkgconfig'
+ /usr/bin/install -c -m 644 meta/g-golf-1.0.pc '/usr/lib64/pkgconfig'
+make[2]: Leaving directory '/tmp/g-golf'
+make[1]: Leaving directory '/tmp/g-golf'
+--> 371002ac6a2a
+STEP 15/26: ENV GUILE_LOAD_PATH="/usr/share/guile/site/3.0"
+--> 549209fcf199
+STEP 16/26: ENV GUILE_LOAD_COMPILED_PATH="/usr/lib64/guile/3.0/ccache"
+--> 1e063a0936d8
+STEP 17/26: ENV GUILE_EXTENSIONS_PATH="/usr/lib64/guile/3.0/extensions"
+--> 0aea0aedc708
+STEP 18/26: RUN set -e &&         echo "=== Guile ===" &&     guile --version &&     guile -c "(display \"Guile OK\n\")" &&     guile -c "(use-modules (g-golf)) (display \"G-Golf OK\n\")" &&         echo "=== GLib2 ===" &&     pkg-config --modversion glib-2.0 &&     pkg-config --atleast-version=2.73.0 glib-2.0 &&     echo "GLib2 version OK (>= 2.73.0)" &&     echo "#include <glib.h>" | gcc -x c - -c -o /dev/null $(pkg-config --cflags glib-2.0) &&     echo "GLib2 headers OK" &&     guile -c "(use-modules (g-golf glib)) (display \"GLib2 via G-Golf OK\n\")" &&         echo "=== Gettext / i18n ===" &&     guile -c "       (use-modules (ice-9 i18n))       (display \"ice-9 i18n OK\n\")       (setlocale LC_ALL \"en_US.UTF-8\")       (display (string-append \"locale: \" (setlocale LC_ALL) \"\n\"))       (bindtextdomain \"test\" \"/tmp\")       (textdomain \"test\")       (display \"bindtextdomain/textdomain OK\n\")     " &&         echo "=== GObject Introspection ===" &&     guile -c "       (use-modules (g-golf))       (display \"g-golf OK\n\")       (g-irepository-require \"GObject\" #:version \"2.0\")       (display \"GObject-2.0 typelib loaded OK\n\")       (let* ((n   (g-irepository-get-n-infos \"GObject\"))              (ver (g-irepository-get-version \"GObject\")))         (display (string-append \"GObject version: \" ver \"\n\"))         (display (string-append \"GObject entries: \" (number->string n) \"\n\")))     " &&         echo "=== GTK4 ===" &&     pkg-config --modversion gtk4 &&     pkg-config --atleast-version=4.8.0 gtk4 &&     echo "GTK4 version OK (>= 4.8.0)" &&     guile -c "       (use-modules (oop goops))       (default-duplicate-binding-handler         '(merge-generics replace warn-override-core warn last))       (use-modules (g-golf))       (g-irepository-require \"Gtk\" #:version \"4.0\")       (display \"Gtk-4.0 typelib loaded OK\n\")       (for-each (lambda (name) (gi-import-by-name \"Gtk\" name))                 '(\"Application\" \"ApplicationWindow\" \"Box\" \"Label\" \"Button\"))       (display \"GTK4 classes introspected OK\n\")     " &&         echo "=== Adwaita ===" &&     pkg-config --modversion libadwaita-1 &&     pkg-config --atleast-version=1.8.0 libadwaita-1 &&     echo "Adwaita version OK (>= 1.8.0)" &&     guile -c "       (use-modules (oop goops))       (default-duplicate-binding-handler         '(merge-generics replace warn-override-core warn last))       (use-modules (g-golf))       (g-irepository-require \"Adw\" #:version \"1\")       (display \"Adw-1 typelib loaded OK\n\")       (for-each (lambda (name) (gi-import-by-name \"Adw\" name))                 '(\"Application\" \"ApplicationWindow\" \"HeaderBar\" \"ToolbarView\"))       (display \"Adwaita classes introspected OK\n\")     " &&         echo "=== Vulkan ===" &&     vulkaninfo --summary 2>&1 | grep -E "Vulkan Instance|apiVersion|driverVersion|deviceName|deviceType" &&     echo "Vulkan loader OK" &&     pkg-config --modversion vulkan &&     pkg-config --atleast-version=1.3.0 vulkan &&     echo "Vulkan headers OK (>= 1.3.0)" &&         echo "=== Todos os sanity checks passaram ==="
+=== Guile ===
+guile (GNU Guile) 3.0.9
+Copyright (C) 2023 Free Software Foundation, Inc.
+
+License LGPLv3+: GNU LGPL 3 or later <http://gnu.org/licenses/lgpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Guile OK
+G-Golf OK
+=== GLib2 ===
+2.86.4
+GLib2 version OK (>= 2.73.0)
+GLib2 headers OK
+GLib2 via G-Golf OK
+=== Gettext / i18n ===
+ice-9 i18n OK
+locale: en_US.UTF-8
+bindtextdomain/textdomain OK
+=== GObject Introspection ===
+g-golf OK
+GObject-2.0 typelib loaded OK
+GObject version: 2.0
+GObject entries: 312
+=== GTK4 ===
+4.20.2
+GTK4 version OK (>= 4.8.0)
+Gtk-4.0 typelib loaded OK
+GTK4 classes introspected OK
+=== Adwaita ===
+1.8.4
+Adwaita version OK (>= 1.8.0)
+Adw-1 typelib loaded OK
+Adwaita classes introspected OK
+=== Vulkan ===
+Vulkan Instance Version: 1.4.341
+	apiVersion         = 1.4.328
+	driverVersion      = 25.3.5
+	deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+	deviceName         = llvmpipe (LLVM 21.1.8, 256 bits)
+Vulkan loader OK
+1.4.341
+Vulkan headers OK (>= 1.3.0)
+=== Todos os sanity checks passaram ===
+--> 4773e2b80fdf
+STEP 19/26: ENV GDK_BACKEND=wayland
+--> a07c2da0e151
+STEP 20/26: ENV GSK_RENDERER=vulkan
+--> 4fecdc33dd85
+STEP 21/26: ENV QT_QPA_PLATFORM=wayland
+--> 4d3b76c6005c
+STEP 22/26: ENV XDG_SESSION_TYPE=wayland
+--> 9932435714be
+STEP 23/26: RUN useradd -m -s /bin/bash dev
+--> c72737a70d96
+STEP 24/26: USER dev
+--> a51ae691bddb
+STEP 25/26: WORKDIR /home/dev
+--> bca2a1219673
+STEP 26/26: CMD ["/bin/bash"]
+COMMIT guile-gtk-dev
+--> 4e37a00aede2
+Successfully tagged localhost/guile-gtk-dev:latest
+4e37a00aede2a3a1046d5223d74b9a843d9c83870c6abd2142700737fa066fb3
+Error: no container with name or ID "guile-gtk-dev" found: no such container
+Creating 'guile-gtk-dev' using image localhost/guile-gtk-dev:latest	[32m [ OK ]
+[0mDistrobox 'guile-gtk-dev' successfully created.
+To enter, run:
+
+distrobox enter guile-gtk-dev
+
+=== Build finalizado em Sun Feb 22 12:37:24 PM -03 2026 ===
